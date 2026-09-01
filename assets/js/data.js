@@ -58,7 +58,7 @@ const CATEGORIES = [
     id: "animation",
     title: "Animations",
     year: "2019 – 2025",
-    cover: null,
+    cover: "assets/img/animation/think-outside-the-box.webp",
     divider: { after: 4, text: "Take a look at the other animation Projects I’ve made" },
     projects: [
       {
@@ -66,15 +66,18 @@ const CATEGORIES = [
         description: "An experimental audiovisual animation created with an oscilloscope, exploring the sensations and emotions experienced by a swimmer before and during a competition. I created the abstract visuals and designed the soundscape, combining oscilloscope-generated sounds with other SFX such as breathing, heartbeat, water movement, and the referee’s signal. The project focuses on using rhythm, sound, and abstract imagery to communicate tension and immersion, allowing the viewer to experience the psychological intensity of a competitive swimmer."
       },
       {
-        title: "Think outside the box", year: "2024", type: "video", image: null,
+        title: "Think outside the box", year: "2024", type: "video",
+        image: "assets/img/animation/think-outside-the-box.webp",
         description: "A short 3D animated film exploring character animation and storytelling through body language. I created the robot, modeled the environment, animated the character, directed the camera, and developed the lighting and sound design. The project focused on giving personality and comedic expression to a non-human character by using body language and precise timing."
       },
       {
-        title: "Elemental Animals Animation", year: "2023", type: "video", image: null,
+        title: "Elemental Animals Animation", year: "2023", type: "video",
+        image: "assets/img/animation/elemental-animals.webp",
         description: "An experimental 2D animation project exploring how movement changes when characters are composed of unusual materials. I designed and animated each character while considering how their elemental properties would influence their movements. I was responsible for the character design, animation, coloring, and sound design."
       },
       {
-        title: "Bachelor Thesis project excerpt", year: "2023", type: "video", image: null,
+        title: "Bachelor Thesis project excerpt", year: "2023", type: "video",
+        image: "assets/img/animation/bachelor-thesis.webp",
         description: "2D animated short film that explores themes of empathy, family, and personal growth. The story follows a girl who is transported into different fictional worlds, each represented through a unique animation style. I developed the project independently, creating the story, characters, backgrounds, animation, sound design, and camera work. Although the project was not fully completed, it allowed me to explore long-form storytelling, world-building, and the relationship between visual style and narrative."
       },
       {
