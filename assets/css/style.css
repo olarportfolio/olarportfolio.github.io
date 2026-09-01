@@ -123,6 +123,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ratio-16x9 { aspect-ratio: 16 / 9; }
 .ratio-3x4  { aspect-ratio: 3 / 4; }
 .ratio-1x1  { aspect-ratio: 1 / 1; }
+.ratio-a4   { aspect-ratio: 1273 / 1800; }  /* portrait poster / A-series page */
+.ratio-3x2  { aspect-ratio: 3 / 2; }        /* landscape spread */
 
 .ph {
   position: absolute; inset: 0;

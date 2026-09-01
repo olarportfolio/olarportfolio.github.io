@@ -141,12 +141,19 @@ const CATEGORIES = [
     id: "graphic-design",
     title: "Graphic Design",
     year: "2020",
-    cover: null,
+    cover: "assets/img/graphic-design/step-up.webp",
     projects: [
-      { title: "Project 01", type: "image", image: null },
-      { title: "Project 02", type: "image", image: null },
-      { title: "Project 03", type: "image", image: null },
-      { title: "Project 04", type: "image", image: null }
+      // Typography series. `ratio` keeps each piece at its true shape
+      // instead of being cropped to 16:9.
+      { title: "Waverider I",                    type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
+      { title: "Waverider II",                   type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-2.webp" },
+      { title: "Illusion Heavens",               type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/illusion-heavens.webp" },
+      { title: "Spyral Abyss",                   type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/spyral-abyss.webp" },
+      { title: "Words on Paper I",               type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-1.webp" },
+      { title: "Words on Paper II",              type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
+      { title: "Move Fast",                      type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
+      { title: "The day u stop racing",          type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
+      { title: "Step Up",                        type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
     ]
   },
   {

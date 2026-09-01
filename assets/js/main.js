@@ -129,15 +129,15 @@ function renderCategory() {
       ? `<p class="divider-note">${cat.divider.text}</p>` : '';
     const play = p.type === 'video' ? `<div class="play">${ICON.play}</div>` : '';
     const year = p.year ? ` <span class="g-year">${p.year}</span>` : '';
-    const caption = (p.description || p.year) ? `
+    const caption = `
       <figcaption class="g-caption">
         <h3>${p.title}${year}</h3>
         ${p.description ? `<p>${p.description}</p>` : ''}
-      </figcaption>` : '';
+      </figcaption>`;
     return note + `
       <figure class="g-item">
         <div class="g-media">
-          ${thumb(p.image, 'ratio-16x9', caption ? '' : p.title)}
+          ${thumb(p.image, p.ratio || 'ratio-16x9', '')}
           ${play}
         </div>
         ${caption}
