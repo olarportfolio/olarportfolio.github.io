@@ -125,6 +125,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .ratio-1x1  { aspect-ratio: 1 / 1; }
 .ratio-a4   { aspect-ratio: 1273 / 1800; }  /* portrait poster / A-series page */
 .ratio-3x2  { aspect-ratio: 3 / 2; }        /* landscape spread */
+/* image keeps its own shape - for sets with mixed dimensions */
+.ratio-auto { aspect-ratio: auto; }
+.ratio-auto img { height: auto; object-fit: contain; }
+.ratio-auto .ph { position: static; min-height: 220px; }
 
 .ph {
   position: absolute; inset: 0;
@@ -165,7 +169,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .page-head h1 { font-size: var(--fs-h1); }
 
 .gallery {
-  display: grid; grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  grid-template-columns: repeat(var(--gallery-cols, 2), 1fr);
   column-gap: 12px; row-gap: 52px;
   padding: 0 96px;
 }
@@ -284,6 +289,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 @media (max-width: 900px) {
   :root { --header-h: 92px; }
   .work-grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .gallery { --gallery-cols: 2; }
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
   .about-photo { max-width: 300px; }
@@ -296,7 +302,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .nav-social svg { width: 20px; height: 20px; }
   .logo svg { width: 118px; }
   .work-grid { grid-template-columns: 1fr; gap: 16px; }
-  .gallery { grid-template-columns: 1fr; padding: 0 20px; row-gap: 34px; }
+  .gallery { --gallery-cols: 1; padding: 0 20px; row-gap: 34px; }
   .also-strip { grid-template-columns: repeat(2, 1fr); }
   .to-top { right: 20px; bottom: 20px; width: 48px; height: 48px; }
   .play { width: 54px; height: 54px; }

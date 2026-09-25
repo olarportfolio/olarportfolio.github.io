@@ -123,6 +123,7 @@ function renderCategory() {
 
   document.title = `${cat.title} - ${SITE.name}`;
   $('#category-title').textContent = cat.title;
+  if (cat.cols) el.style.setProperty('--gallery-cols', cat.cols);
 
   const items = cat.projects.map((p, i) => {
     const note = (cat.divider && i === cat.divider.after)

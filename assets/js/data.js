@@ -8,6 +8,9 @@
    TO KEEP A PLACEHOLDER: leave  image: null
    TO REMOVE A CATEGORY:  delete its whole { ... } block
    TO REORDER:            move blocks up or down
+
+   ratio:  ratio-16x9 (default) | ratio-a4 | ratio-3x2
+           ratio-1x1 | ratio-auto (image keeps its own shape)
    ============================================================ */
 
 const SITE = {
@@ -51,6 +54,9 @@ const SITE = {
    year    : shown under the title on hover
    cover   : the grid thumbnail (null = placeholder rectangle)
    divider : optional line of text partway down the gallery
+
+   NOTE: every `image` below is a POSTER FRAME or still. The
+   videos themselves are not hosted yet — see NEEDS-VIDEO marks.
    ------------------------------------------------------------ */
 
 const CATEGORIES = [
@@ -58,11 +64,12 @@ const CATEGORIES = [
     id: "animation",
     title: "Animations",
     year: "2019 – 2025",
-    cover: "assets/img/animation/think-outside-the-box.webp",
+    cover: "assets/img/animation/car-world.webp",
     divider: { after: 4, text: "Take a look at the other animation Projects I’ve made" },
     projects: [
       {
-        title: "Mente de Nadador – 100m Libre", year: "2025", type: "video", image: null,
+        title: "Mente de Nadador – 100m Libre", year: "2025", type: "video",
+        image: "assets/img/animation/av-design-ii-mdma05.webp",
         description: "An experimental audiovisual animation created with an oscilloscope, exploring the sensations and emotions experienced by a swimmer before and during a competition. I created the abstract visuals and designed the soundscape, combining oscilloscope-generated sounds with other SFX such as breathing, heartbeat, water movement, and the referee’s signal. The project focuses on using rhythm, sound, and abstract imagery to communicate tension and immersion, allowing the viewer to experience the psychological intensity of a competitive swimmer."
       },
       {
@@ -81,105 +88,177 @@ const CATEGORIES = [
         description: "2D animated short film that explores themes of empathy, family, and personal growth. The story follows a girl who is transported into different fictional worlds, each represented through a unique animation style. I developed the project independently, creating the story, characters, backgrounds, animation, sound design, and camera work. Although the project was not fully completed, it allowed me to explore long-form storytelling, world-building, and the relationship between visual style and narrative."
       },
       {
-        title: "LSE intro Variations – Riverty", year: "2023", type: "video", image: null,
-        description: "Another example of my work as a student assistant at Arvato Financial Solutions."
-      },
-      {
-        title: "Paigo wird zu Riverty", year: "2022", type: "video", image: null,
-        description: "As a student assistant I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
-      },
-      {
-        title: "Car-World-Animation", year: "2022", type: "video", image: null,
+        title: "Car-World-Animation", year: "2022", type: "video",
+        image: "assets/img/animation/car-world.webp",
         description: "A short Blender animation exploring 3D modeling, texturing, lighting, and animation. I created a stylized low-poly car and a miniature planet environment using Blender’s particle system to distribute vegetation. The project allowed me to experiment with contrasting visual styles, cinematic lighting, and dynamic movement."
       },
       {
-        title: "Resentment, a Poison for Life", year: "2021", type: "video", image: null,
+        title: "Resentment, a Poison for Life", year: "2021", type: "video",
+        image: "assets/img/animation/resentment.webp",
         description: "A 2D animated short film about how resentment can evolve into cycles of prejudice and violence. I created every aspect of the project, from the story and visual concept to the character designs, backgrounds, animation, and editing. The minimalist geometric character designs were chosen to support efficient animation and reinforce the film’s visual identity."
       },
       {
-        title: "Two cups with toothbrushes", year: "2021", type: "video", image: null,
+        title: "Two cups with toothbrushes", year: "2021", type: "video",
+        image: "assets/img/animation/two-cups-toothbrushes.webp",
         description: "Created a photorealistic 3D scene in Blender by modeling everyday objects, developing procedural materials with Geometry/Shader Nodes, setting up realistic lighting, and animating the camera with dynamic focus transitions."
       },
       {
-        title: "Advanced Animations", year: "2019", type: "video", image: null,
+        title: "Advanced Animations", year: "2019", type: "video",
+        image: "assets/img/animation/advanced-animations.webp",
         description: "For this project I had to apply what I learned previously and make more elaborate animations."
       },
       {
-        title: "My first 3D animations", year: "2019", type: "video", image: null,
+        // NEEDS-CONFIRM: poster came from Escudero_Oliver_3D_Ani_hd_prueba.avi
+        title: "My first 3D animations", year: "2019", type: "video",
+        image: "assets/img/animation/3d-ani-prueba.webp",
         description: "These are some exercises I did to learn to animate 3D in Maya."
       },
       {
-        title: "Hypothetical 2D animated Festival Trailer", year: "2019", type: "video", image: null,
+        title: "Hypothetical 2D animated Festival Trailer", year: "2019", type: "video",
+        image: "assets/img/animation/festival-trailer.webp",
         description: "This project was created as a visual identity piece for a fictional cultural festival celebrating Mesoamerican heritage. I developed the project from concept to animation, creating the characters, environments, illustrations, and motion design. Using Adobe After Effects, I rigged 2D characters and animated them using the Puppet Pin Tool, combining character movement, typography, and composition to communicate the atmosphere and purpose of the festival."
+      },
+      {
+        // NEEDS-DESCRIPTION + NEEDS-YEAR. Source: Altar_demo_video.mov
+        title: "Day of the Dead Altar", year: "", type: "video",
+        image: "assets/img/animation/altar-demo.webp"
       }
     ]
   },
-  {
-    id: "3d-modelling",
-    title: "3D Modelling",
-    year: "2020",
-    cover: null,
-    projects: [
-      { title: "Project 01", type: "image", image: null },
-      { title: "Project 02", type: "image", image: null },
-      { title: "Project 03", type: "image", image: null },
-      { title: "Project 04", type: "image", image: null }
-    ]
-  },
-  {
-    id: "web-design",
-    title: "Web Design",
-    year: "2020",
-    cover: null,
-    projects: [
-      {
-        title: "Dog Shelter Brunswick", year: "2019", type: "video", image: null,
-        description: "A responsive website prototype designed for a fictional animal rescue organization. Developed entirely with HTML and CSS, the project focuses on creating an accessible, user-friendly interface that communicates the organization’s mission while making information easy to navigate."
-      },
-      { title: "Project 02", type: "image", image: null },
-      { title: "Project 03", type: "image", image: null }
-    ]
-  },
-  {
-    id: "graphic-design",
-    title: "Graphic Design",
-    year: "2020",
-    cover: "assets/img/graphic-design/step-up.webp",
-    projects: [
-      // Typography series. `ratio` keeps each piece at its true shape
-      // instead of being cropped to 16:9.
-      { title: "Waverider I",                    type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
-      { title: "Waverider II",                   type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-2.webp" },
-      { title: "Illusion Heavens",               type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/illusion-heavens.webp" },
-      { title: "Spyral Abyss",                   type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/spyral-abyss.webp" },
-      { title: "Words on Paper I",               type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-1.webp" },
-      { title: "Words on Paper II",              type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
-      { title: "Move Fast",                      type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
-      { title: "The day u stop racing",          type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
-      { title: "Step Up",                        type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
-    ]
-  },
+
   {
     id: "character-design",
     title: "Character Design",
-    year: "2020",
-    cover: null,
+    cols: 4,                                  // small square pieces - denser grid
+    year: "",                                 // NEEDS-YEAR
+    cover: "assets/img/character-design/axolotl.webp",
+    // NEEDS-DESCRIPTION for the set (or per character).
     projects: [
-      { title: "Project 01", type: "image", image: null },
-      { title: "Project 02", type: "image", image: null },
-      { title: "Project 03", type: "image", image: null }
+      { title: "Axolotl",           type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/axolotl.webp" },
+      { title: "La Catarina",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cat-la-catarina.webp" },
+      { title: "Croissant",         type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croissant.webp" },
+      { title: "Kaffee-Affe",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/kaffee-affe.webp" },
+      { title: "Smoothie Criminal", type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/smoothie-criminal.webp" },
+      { title: "Take Whisks",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/take-whisks.webp" },
+      { title: "Happy Worm",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/happy-worm.webp" },
+      { title: "Hungry Chick",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/chick-hungry-right.webp" },
+      { title: "Cozy Penguin",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cozy-penguin-mirrored.webp" },
+      { title: "Sleepy Seal",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sleepy-seal.webp" },
+      { title: "Sled Sloth",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sled-sloth.webp" },
+      { title: "Travel Cat",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/travel-cat.webp" },
+      { title: "Elephant",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/elefant.webp" },
+      { title: "Croc",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croc.webp" },
+      { title: "Tortoise",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/tortoise-no-bg.webp" },
+      { title: "Bunny",             type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/bunny-pic.webp" },
+      { title: "Nikolaus",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/nikoolaus.webp" },
+      { title: "Santa Impossible",  type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/santa-impossible.webp" },
+      { title: "Reno",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/reno.webp" }
     ]
   },
+
+  {
+    id: "3d-modelling",
+    title: "3D Modelling",
+    year: "",                                 // NEEDS-YEAR
+    cover: "assets/img/3d-modelling/mechanical-spider-3d-model.webp",
+    // NEEDS-DESCRIPTION for every item below.
+    projects: [
+      { title: "Mechanical Spider",   type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mechanical-spider-3d-model.webp" },
+      { title: "World Road",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/world-road-modell.webp" },
+      { title: "Blue King Car",       type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/auto-azul-rey-finish.webp" },
+      { title: "Guitar",              type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/guitarra-modell.webp" },
+      { title: "Mariachi Hat",        type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mariachi-hat-modell.webp" },
+      { title: "Pan de Muerto",       type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/pan-de-muerto-modell.webp" },
+      { title: "Avocado",             type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/avocado-modell.webp" },
+      { title: "Toothbrush",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/cepillo-modell.webp" },
+      { title: "Still 01",            type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/escudero-oliver-still1.webp" }  // NEEDS-TITLE
+    ]
+  },
+
+  {
+    id: "graphic-design",
+    title: "Graphic Design",
+    year: "2020",                             // NEEDS-CONFIRM
+    cover: "assets/img/graphic-design/step-up.webp",
+    // NEEDS-DESCRIPTION for the typography series.
+    projects: [
+      { title: "Waverider I",           type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
+      { title: "Waverider II",          type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-2.webp" },
+      { title: "Illusion Heavens",      type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/illusion-heavens.webp" },
+      { title: "Spyral Abyss",          type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/spyral-abyss.webp" },
+      { title: "Words on Paper I",      type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-1.webp" },
+      { title: "Words on Paper II",     type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
+      { title: "Move Fast",             type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
+      { title: "The day u stop racing", type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
+      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" },
+      // NEEDS-TITLE + NEEDS-DESCRIPTION — unclear which project these belong to.
+      { title: "Cover",                 type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/cover-official.webp" },
+      { title: "Spiral Jamaica",        type: "image", ratio: "ratio-1x1", image: "assets/img/graphic-design/spiral-jamaica.webp" }
+    ]
+  },
+
+  {
+    id: "corporate-design",
+    title: "Corporate Design",
+    cols: 3,
+    year: "2022 – 2023",
+    cover: "assets/img/corporate-design/paigo-riverty.webp",
+    projects: [
+      {
+        title: "LSE intro Variations – Riverty", year: "2023", type: "video",
+        image: "assets/img/corporate-design/lse-intro-riverty.webp",
+        description: "Another example of my work as a student assistant at Arvato Financial Solutions."
+      },
+      {
+        title: "Paigo wird zu Riverty", year: "2022", type: "video",
+        image: "assets/img/corporate-design/paigo-riverty.webp",
+        description: "As a student assistant I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
+      },
+      // NEEDS-DESCRIPTION + NEEDS-YEAR for everything below.
+      { title: "Furryfit — Logo 3D",       type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-3d.webp" },
+      { title: "Furryfit — Dog Walk",      type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-dogwalk.webp" },
+      { title: "Furryfit — Bone",          type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone.webp" },
+      { title: "Furryfit — Bone, Var. 2",  type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone-2nd-var.webp" },
+      { title: "Furryfit — Logo, Var. 3",  type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furry-logo-3rd.webp" },
+      { title: "Horse Analytics — Logo",   type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logo-horseanalytics-correct.webp" },
+      { title: "Horse Analytics — Logotype", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logotyp-final.webp" },
+      { title: "Horse Analytics — Run Cycle", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/gif-horse-run.webp" }
+    ]
+  },
+
+  {
+    id: "web-design",
+    title: "Web Design",
+    year: "2019",
+    cover: "assets/img/web-design/animal-shelter-screentest.webp",
+    projects: [
+      {
+        title: "Dog Shelter Brunswick", year: "2019", type: "video",
+        image: "assets/img/web-design/animal-shelter-screentest.webp",
+        description: "A responsive website prototype designed for a fictional animal rescue organization. Developed entirely with HTML and CSS, the project focuses on creating an accessible, user-friendly interface that communicates the organization’s mission while making information easy to navigate."
+      },
+      // NEEDS-DESCRIPTION + NEEDS-YEAR.
+      { title: "Dog Shelter — Alternative Layout", type: "image", ratio: "ratio-auto", image: "assets/img/web-design/tierheim-layout-alternative-var.webp" },
+      { title: "Personal Website Design I",        type: "image", ratio: "ratio-auto", image: "assets/img/web-design/other-personal-websitedesign-1.webp" },
+      { title: "Personal Website Design II",       type: "image", ratio: "ratio-auto", image: "assets/img/web-design/other-personal-websitedesign-2.webp" }
+    ]
+  },
+
   {
     id: "game-design",
     title: "Game Design",
     year: "2026",
-    cover: null,
+    cover: "assets/img/game-design/jaguar-mainscene.webp",
     projects: [
       {
-        title: "Jaguar — Master’s Thesis", year: "2026 – in progress", type: "video", image: null,
+        title: "Jaguar — Master’s Thesis", year: "2026 – in progress", type: "video",
+        image: "assets/img/game-design/jaguar-mainscene.webp",
         description: "A prototype platformer game exploring how interactive media can be used to communicate wildlife conservation topics. The project focuses on creating an immersive experience based on jaguar movement and behavior, combining level design, gameplay mechanics, and procedural animation techniques. Currently in development, the prototype explores systems for naturalistic animal locomotion — running, jumping, climbing, and swimming — with the goal of creating a more natural connection between player movement and animal behavior."
-      }
+      },
+      // NEEDS-DESCRIPTION.
+      { title: "Jaguar — Locomotion Lab", year: "2026", type: "video", image: "assets/img/game-design/jaguar-lab.webp" },
+      { title: "Parkour Game",            year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp" },
+      { title: "Pelota de Fuego",         year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp" }
     ]
   }
 
