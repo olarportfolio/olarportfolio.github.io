@@ -56,7 +56,7 @@ const SITE = {
    divider : optional line of text partway down the gallery
 
    NOTE: every `image` below is a POSTER FRAME or still. The
-   videos themselves are not hosted yet — see NEEDS-VIDEO marks.
+   videos themselves are not hosted yet — the videos are not hosted yet.
    ------------------------------------------------------------ */
 
 const CATEGORIES = [
@@ -108,7 +108,6 @@ const CATEGORIES = [
         description: "For this project I had to apply what I learned previously and make more elaborate animations."
       },
       {
-        // NEEDS-CONFIRM: poster came from Escudero_Oliver_3D_Ani_hd_prueba.avi
         title: "My first 3D animations", year: "2019", type: "video",
         image: "assets/img/animation/3d-ani-prueba.webp",
         description: "These are some exercises I did to learn to animate 3D in Maya."
@@ -119,7 +118,7 @@ const CATEGORIES = [
         description: "This project was created as a visual identity piece for a fictional cultural festival celebrating Mesoamerican heritage. I developed the project from concept to animation, creating the characters, environments, illustrations, and motion design. Using Adobe After Effects, I rigged 2D characters and animated them using the Puppet Pin Tool, combining character movement, typography, and composition to communicate the atmosphere and purpose of the festival."
       },
       {
-        title: "Altar del Día de Muertos", year: "", type: "video",   // NEEDS-YEAR
+        title: "Altar del Día de Muertos", year: "2020", type: "video",
         image: "assets/img/animation/altar-demo.webp",
         description: "A camera animation built to show the whole scenery from every angle. Nothing here is rendered and nothing but the camera moves — the piece exists purely to walk around the set and present the modelling from all sides."
       }
@@ -159,35 +158,34 @@ const CATEGORIES = [
   {
     id: "3d-modelling",
     title: "3D Modelling",
-    year: "",                                 // NEEDS-YEAR
+    year: "2020 – 2024",
     cover: "assets/img/3d-modelling/mechanical-spider-3d-model.webp",
     intro: "Models I built myself and used across different animation projects.",
     projects: [
-      { title: "Mechanical Spider",   type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mechanical-spider-3d-model.webp" },
-      { title: "World Road",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/world-road-modell.webp" },
-      { title: "Blue King Car",       type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/auto-azul-rey-finish.webp" },
-      { title: "Guitar",              type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/guitarra-modell.webp" },
-      { title: "Mariachi Hat",        type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mariachi-hat-modell.webp" },
-      { title: "Pan de Muerto",       type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/pan-de-muerto-modell.webp" },
-      { title: "Avocado",             type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/avocado-modell.webp" },
-      { title: "Toothbrush",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/cepillo-modell.webp" },
+      // --- Altar del Día de Muertos, 2020 -------------------------
       {
-        title: "Altar del Día de Muertos", type: "image", ratio: "ratio-auto",
+        title: "Altar del Día de Muertos", year: "2020", type: "image", ratio: "ratio-auto",
         image: "assets/img/3d-modelling/escudero-oliver-still1.webp",
         description: "A scenery project made to understand rendering, lighting and texturing — what it takes to bring 3D models to life. The scene combines models I built myself with downloaded assets."
-      }
+      },
+      { title: "Guitar",            year: "2020", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/guitarra-modell.webp",     description: "Built for the Altar del Día de Muertos scene." },
+      { title: "Mariachi Hat",      year: "2020", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mariachi-hat-modell.webp", description: "Built for the Altar del Día de Muertos scene." },
+      { title: "Pan de Muerto",     year: "2020", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/pan-de-muerto-modell.webp", description: "Built for the Altar del Día de Muertos scene." },
+      { title: "Avocado",           year: "2020", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/avocado-modell.webp",      description: "Built for the Altar del Día de Muertos scene." },
+      // --- other projects -----------------------------------------
+      { title: "Toothbrush",        year: "2021", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/cepillo-modell.webp",      description: "Modelled for Two cups with toothbrushes." },
+      { title: "Blue King Car",     year: "2022", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/auto-azul-rey-finish.webp", description: "Modelled for Car-World-Animation." },
+      { title: "World Road",        year: "2022", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/world-road-modell.webp",   description: "Modelled for Car-World-Animation." },
+      { title: "Mechanical Spider", year: "2024", type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mechanical-spider-3d-model.webp", description: "Modelled for Think outside the box." }
     ]
   },
 
   {
     id: "graphic-design",
     title: "Graphic Design",
-    year: "2020",                             // NEEDS-CONFIRM
+    year: "2024",
     cover: "assets/img/graphic-design/step-up.webp",
     intro: "Typography Experimental Bookazine — a series of designs exploring different forms, colour palettes, styles and typography.",
-    dividers: [
-      { after: 10, text: "A separate project: a personal Visitenkarte built around my own OLAR mark." }
-    ],
     projects: [
       { title: "Cover",                 type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/cover-official.webp" },
       { title: "Waverider I",           type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
@@ -198,10 +196,7 @@ const CATEGORIES = [
       { title: "Words on Paper II",     type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
       { title: "Move Fast",             type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
       { title: "The day u stop racing", type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
-      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" },
-      // Only the logo side is published — the other side carries a phone
-      // number and personal email address. See notes before adding it.
-      { title: "Visitenkarte",          type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/visitenkarte.webp" }
+      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
     ]
   },
 
@@ -209,31 +204,36 @@ const CATEGORIES = [
     id: "corporate-design",
     title: "Corporate Design",
     cols: 3,
-    year: "2022 – 2023",
+    year: "2021 – 2023",
     cover: "assets/img/corporate-design/paigo-riverty.webp",
     dividers: [
       { after: 2, text: "Made during my internship at HorseAnalytics, where I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced these animated GIFs for the company to use in Instagram stories and similar formats." }
     ],
     projects: [
       {
-        title: "LSE intro Variations – Riverty", year: "2023", type: "video",
-        image: "assets/img/corporate-design/lse-intro-riverty.webp",
-        description: "Another example of my work as a student assistant at Arvato Financial Solutions."
-      },
-      {
         title: "Paigo wird zu Riverty", year: "2022", type: "video",
         image: "assets/img/corporate-design/paigo-riverty.webp",
-        description: "As a student assistant I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
+        description: "As a student assistant at Arvato Financial Solutions I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
       },
-      // HorseAnalytics internship work - context is in `dividers` above. NEEDS-YEAR.
-      { title: "Furryfit — Logo 3D",       type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-3d.webp" },
-      { title: "Furryfit — Dog Walk",      type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-dogwalk.webp" },
-      { title: "Furryfit — Bone",          type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone.webp" },
-      { title: "Furryfit — Bone, Var. 2",  type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone-2nd-var.webp" },
-      { title: "Furryfit — Logo, Var. 3",  type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furry-logo-3rd.webp" },
-      { title: "Horse Analytics — Logo",   type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logo-horseanalytics-correct.webp" },
-      { title: "Horse Analytics — Logotype", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logotyp-final.webp" },
-      { title: "Horse Analytics — Run Cycle", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/gif-horse-run.webp" }
+      {
+        title: "LSE intro Variations – Riverty", year: "2023", type: "video",
+        image: "assets/img/corporate-design/lse-intro-riverty.webp",
+        description: "Another example of the work I made while I was there."
+      },
+      // HorseAnalytics internship work - context is in `dividers` above.
+      {
+        title: "Instagram feed", year: "2021", type: "image", ratio: "ratio-auto",
+        image: "assets/img/corporate-design/instagram-ha-posts.webp",
+        description: "A view of the account, showing the kind of content I produced for it alongside the animated GIFs."
+      },
+      { title: "Furryfit — Logo 3D",          year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-3d.webp" },
+      { title: "Furryfit — Dog Walk",         year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-dogwalk.webp" },
+      { title: "Furryfit — Bone",             year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone.webp" },
+      { title: "Furryfit — Bone, Var. 2",     year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone-2nd-var.webp" },
+      { title: "Furryfit — Logo, Var. 3",     year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furry-logo-3rd.webp" },
+      { title: "Horse Analytics — Logo",      year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logo-horseanalytics-correct.webp" },
+      { title: "Horse Analytics — Logotype",  year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/logotyp-final.webp" },
+      { title: "Horse Analytics — Run Cycle", year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/gif-horse-run.webp" }
     ]
   },
 
@@ -254,12 +254,12 @@ const CATEGORIES = [
         description: "My first version of the shelter site. I came back to the project later, with more web design experience behind me, and rebuilt it into the version above."
       },
       {
-        title: "Portfolio Concept I", type: "image", ratio: "ratio-auto",
+        title: "Portfolio Concept I", year: "2021", type: "image", ratio: "ratio-auto",
         image: "assets/img/web-design/other-personal-websitedesign-1.webp",
         description: "A concept for my own portfolio site, designed in Adobe XD — the direct precursor to the site you are reading this on."
       },
       {
-        title: "Portfolio Concept II", type: "image", ratio: "ratio-auto",
+        title: "Portfolio Concept II", year: "2021", type: "image", ratio: "ratio-auto",
         image: "assets/img/web-design/other-personal-websitedesign-2.webp",
         description: "A second Adobe XD concept for the same portfolio, exploring an alternative layout before the design was built in HTML and CSS."
       }

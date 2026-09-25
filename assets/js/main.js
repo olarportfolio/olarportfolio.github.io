@@ -14,26 +14,10 @@ const ICON = {
 };
 
 /* ---------- Logo -------------------------------------------------
-   Redrawn from the Visitenkarte artwork: a rounded diamond carrying
-   an S-swash, over geometric OLAR letterforms (the real wordmark is
-   constructed shapes, not a typeface). Replace with the original
-   vector file when you have it to hand.
+   The real OLAR lockup, exported white-on-transparent from the
+   corporate design files (CD of OLAR / Afg-2-Finale-Logo).
    ----------------------------------------------------------------- */
-const LOGO_SVG = `
-<svg viewBox="0 0 200 104" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OLAR">
-  <!-- mark: rounded diamond + S swash -->
-  <rect x="76" y="6" width="48" height="48" rx="11" transform="rotate(45 100 30)" fill="#F7F5F2"/>
-  <path d="M108 15c-9-3-17 2-15 9 1.6 5.6 11 7 12 13 1.2 7-7 11-14 8"
-        stroke="#1A1A1A" stroke-width="6.4" stroke-linecap="round" fill="none"/>
-  <!-- wordmark: constructed letterforms -->
-  <g stroke="#C9C9C9" stroke-width="1.6" fill="none" stroke-linejoin="round">
-    <ellipse cx="30" cy="84" rx="20" ry="14"/>
-    <path d="M68 70v28h22"/>
-    <path d="M105 98l14-28 14 28z"/>
-    <path d="M154 98V70h13l10 9-10 9h-13"/>
-    <path d="M167 88l12 10"/>
-  </g>
-</svg>`;
+const LOGO_SVG = `<img src="assets/img/logo-olar.webp" alt="OLAR" width="700" height="288">`;
 
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);

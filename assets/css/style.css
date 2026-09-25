@@ -65,7 +65,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-main a.is-active { font-weight: 700; opacity: 1; }
 
 .logo { justify-self: center; display: block; }
-.logo svg { width: 178px; height: auto; }
+.logo svg,
+.logo img { width: 178px; height: auto; }
 
 .nav-social { justify-self: end; display: flex; gap: 26px; align-items: center; }
 .nav-social a { color: var(--text); opacity: .9; transition: opacity .2s var(--ease); }
