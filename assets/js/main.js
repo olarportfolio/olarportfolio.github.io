@@ -123,7 +123,12 @@ function renderCategory() {
   const items = cat.projects.map((p, i) => {
     const d = dividers.find(x => x.after === i);
     const note = d ? `<p class="divider-note">${d.text}</p>` : '';
-    const play = p.type === 'video' ? `<div class="play">${ICON.play}</div>` : '';
+    // The play button appears only once a video is actually linked,
+    // so un-linked projects never show a button that does nothing.
+    const play = p.video ? `<div class="play">${ICON.play}</div>` : '';
+    const hook = p.video
+      ? ` data-video="${p.video}" role="button" tabindex="0" aria-label="Play ${p.title}"`
+      : '';
     const year = p.year ? ` <span class="g-year">${p.year}</span>` : '';
     const caption = `
       <figcaption class="g-caption">
@@ -132,7 +137,7 @@ function renderCategory() {
       </figcaption>`;
     return note + `
       <figure class="g-item">
-        <div class="g-media">
+        <div class="g-media"${hook}>
           ${thumb(p.image, p.ratio || 'ratio-16x9', '')}
           ${play}
         </div>
@@ -141,6 +146,24 @@ function renderCategory() {
   }).join('');
 
   el.innerHTML = items;
+
+  // Click the poster to swap in the player. Nothing is loaded from
+  // YouTube until then, so the gallery stays fast and tracker-free.
+  el.querySelectorAll('[data-video]').forEach(media => {
+    const open = () => {
+      media.innerHTML =
+        `<iframe class="g-embed" src="https://www.youtube-nocookie.com/embed/${media.dataset.video}?autoplay=1&rel=0"
+                 title="${media.getAttribute('aria-label') || 'Video'}" loading="lazy"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                 allowfullscreen></iframe>`;
+      media.removeAttribute('data-video');
+    };
+    media.addEventListener('click', open);
+    media.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+
   renderAlsoLike(cat.id);
 }
 

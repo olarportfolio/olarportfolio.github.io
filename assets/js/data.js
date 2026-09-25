@@ -70,26 +70,31 @@ const CATEGORIES = [
       {
         title: "Mente de Nadador – 100m Libre", year: "2025", type: "video",
         image: "assets/img/animation/av-design-ii-mdma05.webp",
+        video: "dhB072E0B8U",
         description: "An experimental audiovisual animation created with an oscilloscope, exploring the sensations and emotions experienced by a swimmer before and during a competition. I created the abstract visuals and designed the soundscape, combining oscilloscope-generated sounds with other SFX such as breathing, heartbeat, water movement, and the referee’s signal. The project focuses on using rhythm, sound, and abstract imagery to communicate tension and immersion, allowing the viewer to experience the psychological intensity of a competitive swimmer."
       },
       {
         title: "Think outside the box", year: "2024", type: "video",
         image: "assets/img/animation/think-outside-the-box.webp",
+        video: "fkRyhkpjMDE",
         description: "A short 3D animated film exploring character animation and storytelling through body language. I created the robot, modeled the environment, animated the character, directed the camera, and developed the lighting and sound design. The project focused on giving personality and comedic expression to a non-human character by using body language and precise timing."
       },
       {
         title: "Elemental Animals Animation", year: "2023", type: "video",
         image: "assets/img/animation/elemental-animals.webp",
+        video: "XbL13Qv9itQ",
         description: "An experimental 2D animation project exploring how movement changes when characters are composed of unusual materials. I designed and animated each character while considering how their elemental properties would influence their movements. I was responsible for the character design, animation, coloring, and sound design."
       },
       {
         title: "Bachelor Thesis project excerpt", year: "2023", type: "video",
         image: "assets/img/animation/bachelor-thesis.webp",
+        video: "D_3u5vnaqYo",
         description: "2D animated short film that explores themes of empathy, family, and personal growth. The story follows a girl who is transported into different fictional worlds, each represented through a unique animation style. I developed the project independently, creating the story, characters, backgrounds, animation, sound design, and camera work. Although the project was not fully completed, it allowed me to explore long-form storytelling, world-building, and the relationship between visual style and narrative."
       },
       {
         title: "Car-World-Animation", year: "2022", type: "video",
         image: "assets/img/animation/car-world.webp",
+        video: "efJYOpYn83c",
         description: "A short Blender animation exploring 3D modeling, texturing, lighting, and animation. I created a stylized low-poly car and a miniature planet environment using Blender’s particle system to distribute vegetation. The project allowed me to experiment with contrasting visual styles, cinematic lighting, and dynamic movement."
       },
       {
@@ -100,21 +105,25 @@ const CATEGORIES = [
       {
         title: "Two cups with toothbrushes", year: "2021", type: "video",
         image: "assets/img/animation/two-cups-toothbrushes.webp",
+        video: "HKTFVjT3kCs",
         description: "Created a photorealistic 3D scene in Blender by modeling everyday objects, developing procedural materials with Geometry/Shader Nodes, setting up realistic lighting, and animating the camera with dynamic focus transitions."
       },
       {
         title: "Advanced Animations", year: "2019", type: "video",
         image: "assets/img/animation/advanced-animations.webp",
+        video: "080mNrSeyHY",
         description: "For this project I had to apply what I learned previously and make more elaborate animations."
       },
       {
         title: "My first 3D animations", year: "2019", type: "video",
         image: "assets/img/animation/3d-ani-prueba.webp",
+        video: "0MtxM8eEMjo",
         description: "These are some exercises I did to learn to animate 3D in Maya."
       },
       {
         title: "Hypothetical 2D animated Festival Trailer", year: "2019", type: "video",
         image: "assets/img/animation/festival-trailer.webp",
+        video: "DvIFDYdo4so",
         description: "This project was created as a visual identity piece for a fictional cultural festival celebrating Mesoamerican heritage. I developed the project from concept to animation, creating the characters, environments, illustrations, and motion design. Using Adobe After Effects, I rigged 2D characters and animated them using the Puppet Pin Tool, combining character movement, typography, and composition to communicate the atmosphere and purpose of the festival."
       },
       {

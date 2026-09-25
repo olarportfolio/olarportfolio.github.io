@@ -183,6 +183,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gallery { align-items: start; }
 .g-item { margin: 0; }
 .g-media { position: relative; }
+.g-media[data-video] { cursor: pointer; }
+.g-media[data-video]:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.g-embed { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
 /* keep the placeholder caption clear of the play button */
 .gallery .ph { align-items: end; }
 .gallery .ph-label { padding-bottom: 16px; }
