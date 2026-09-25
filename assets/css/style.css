@@ -167,6 +167,11 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    ============================================================ */
 .page-head { padding: calc(var(--header-h) + 90px) var(--pad-x) 84px; text-align: center; }
 .page-head h1 { font-size: var(--fs-h1); }
+.page-intro {
+  max-width: 68ch; margin: 1.5em auto 0;
+  font-size: var(--fs-lead); color: var(--text-body); line-height: 1.6;
+}
+.page-intro:empty { display: none; }
 
 .gallery {
   display: grid;

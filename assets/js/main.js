@@ -123,11 +123,15 @@ function renderCategory() {
 
   document.title = `${cat.title} - ${SITE.name}`;
   $('#category-title').textContent = cat.title;
+  $('#category-intro').textContent = cat.intro || '';
   if (cat.cols) el.style.setProperty('--gallery-cols', cat.cols);
 
+  // `dividers` is a list; `divider` (singular) still works for one.
+  const dividers = cat.dividers || (cat.divider ? [cat.divider] : []);
+
   const items = cat.projects.map((p, i) => {
-    const note = (cat.divider && i === cat.divider.after)
-      ? `<p class="divider-note">${cat.divider.text}</p>` : '';
+    const d = dividers.find(x => x.after === i);
+    const note = d ? `<p class="divider-note">${d.text}</p>` : '';
     const play = p.type === 'video' ? `<div class="play">${ICON.play}</div>` : '';
     const year = p.year ? ` <span class="g-year">${p.year}</span>` : '';
     const caption = `

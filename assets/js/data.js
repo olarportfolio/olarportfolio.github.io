@@ -119,9 +119,9 @@ const CATEGORIES = [
         description: "This project was created as a visual identity piece for a fictional cultural festival celebrating Mesoamerican heritage. I developed the project from concept to animation, creating the characters, environments, illustrations, and motion design. Using Adobe After Effects, I rigged 2D characters and animated them using the Puppet Pin Tool, combining character movement, typography, and composition to communicate the atmosphere and purpose of the festival."
       },
       {
-        // NEEDS-DESCRIPTION + NEEDS-YEAR. Source: Altar_demo_video.mov
-        title: "Day of the Dead Altar", year: "", type: "video",
-        image: "assets/img/animation/altar-demo.webp"
+        title: "Altar del Día de Muertos", year: "", type: "video",   // NEEDS-YEAR
+        image: "assets/img/animation/altar-demo.webp",
+        description: "A scenery project made to understand rendering, lighting and texturing — what it takes to bring 3D models to life. The scene combines models I built myself with downloaded assets."
       }
     ]
   },
@@ -132,7 +132,7 @@ const CATEGORIES = [
     cols: 4,                                  // small square pieces - denser grid
     year: "",                                 // NEEDS-YEAR
     cover: "assets/img/character-design/axolotl.webp",
-    // NEEDS-DESCRIPTION for the set (or per character).
+    intro: "A set of animated stickers made for WhatsApp, created as part of a personalised Adventskalender — each day revealed a new character carrying a positive message.",
     projects: [
       { title: "Axolotl",           type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/axolotl.webp" },
       { title: "La Catarina",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cat-la-catarina.webp" },
@@ -161,7 +161,7 @@ const CATEGORIES = [
     title: "3D Modelling",
     year: "",                                 // NEEDS-YEAR
     cover: "assets/img/3d-modelling/mechanical-spider-3d-model.webp",
-    // NEEDS-DESCRIPTION for every item below.
+    intro: "Models I built myself and used across different animation projects.",
     projects: [
       { title: "Mechanical Spider",   type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/mechanical-spider-3d-model.webp" },
       { title: "World Road",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/world-road-modell.webp" },
@@ -171,7 +171,11 @@ const CATEGORIES = [
       { title: "Pan de Muerto",       type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/pan-de-muerto-modell.webp" },
       { title: "Avocado",             type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/avocado-modell.webp" },
       { title: "Toothbrush",          type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/cepillo-modell.webp" },
-      { title: "Still 01",            type: "image", ratio: "ratio-auto", image: "assets/img/3d-modelling/escudero-oliver-still1.webp" }  // NEEDS-TITLE
+      {
+        title: "Altar del Día de Muertos", type: "image", ratio: "ratio-auto",
+        image: "assets/img/3d-modelling/escudero-oliver-still1.webp",
+        description: "A scenery project made to understand rendering, lighting and texturing — what it takes to bring 3D models to life. The scene combines models I built myself with downloaded assets."
+      }
     ]
   },
 
@@ -180,8 +184,9 @@ const CATEGORIES = [
     title: "Graphic Design",
     year: "2020",                             // NEEDS-CONFIRM
     cover: "assets/img/graphic-design/step-up.webp",
-    // NEEDS-DESCRIPTION for the typography series.
+    intro: "Typography Experimental Bookazine — a series of designs exploring different forms, colour palettes, styles and typography.",
     projects: [
+      { title: "Cover",                 type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/cover-official.webp" },
       { title: "Waverider I",           type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
       { title: "Waverider II",          type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-2.webp" },
       { title: "Illusion Heavens",      type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/illusion-heavens.webp" },
@@ -190,10 +195,7 @@ const CATEGORIES = [
       { title: "Words on Paper II",     type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
       { title: "Move Fast",             type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
       { title: "The day u stop racing", type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
-      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" },
-      // NEEDS-TITLE + NEEDS-DESCRIPTION — unclear which project these belong to.
-      { title: "Cover",                 type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/cover-official.webp" },
-      { title: "Spiral Jamaica",        type: "image", ratio: "ratio-1x1", image: "assets/img/graphic-design/spiral-jamaica.webp" }
+      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
     ]
   },
 
@@ -203,6 +205,9 @@ const CATEGORIES = [
     cols: 3,
     year: "2022 – 2023",
     cover: "assets/img/corporate-design/paigo-riverty.webp",
+    dividers: [
+      { after: 2, text: "Made during my internship at HorseAnalytics, where I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced these animated GIFs for the company to use in Instagram stories and similar formats." }
+    ],
     projects: [
       {
         title: "LSE intro Variations – Riverty", year: "2023", type: "video",
@@ -214,7 +219,7 @@ const CATEGORIES = [
         image: "assets/img/corporate-design/paigo-riverty.webp",
         description: "As a student assistant I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
       },
-      // NEEDS-DESCRIPTION + NEEDS-YEAR for everything below.
+      // HorseAnalytics internship work - context is in `dividers` above. NEEDS-YEAR.
       { title: "Furryfit — Logo 3D",       type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-3d.webp" },
       { title: "Furryfit — Dog Walk",      type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-dogwalk.webp" },
       { title: "Furryfit — Bone",          type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone.webp" },
@@ -249,16 +254,19 @@ const CATEGORIES = [
     title: "Game Design",
     year: "2026",
     cover: "assets/img/game-design/jaguar-mainscene.webp",
+    dividers: [
+      { after: 2, text: "Experiments in building my own games with Claude Code. Both are works in progress, but they show how I have learned to use Claude Code to actually create something playable." }
+    ],
     projects: [
       {
         title: "Jaguar — Master’s Thesis", year: "2026 – in progress", type: "video",
         image: "assets/img/game-design/jaguar-mainscene.webp",
         description: "A prototype platformer game exploring how interactive media can be used to communicate wildlife conservation topics. The project focuses on creating an immersive experience based on jaguar movement and behavior, combining level design, gameplay mechanics, and procedural animation techniques. Currently in development, the prototype explores systems for naturalistic animal locomotion — running, jumping, climbing, and swimming — with the goal of creating a more natural connection between player movement and animal behavior."
       },
-      // NEEDS-DESCRIPTION.
+      // NEEDS-DESCRIPTION
       { title: "Jaguar — Locomotion Lab", year: "2026", type: "video", image: "assets/img/game-design/jaguar-lab.webp" },
-      { title: "Parkour Game",            year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp" },
-      { title: "Pelota de Fuego",         year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp" }
+      { title: "Parkour Game",    year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp" },
+      { title: "Pelota de Fuego", year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp" }
     ]
   }
 
