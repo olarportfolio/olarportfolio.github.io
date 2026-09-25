@@ -100,6 +100,7 @@ const CATEGORIES = [
       {
         title: "Resentment, a Poison for Life", year: "2021", type: "video",
         image: "assets/img/animation/resentment.webp",
+        video: "vJ_LvF487LQ",
         description: "A 2D animated short film about how resentment can evolve into cycles of prejudice and violence. I created every aspect of the project, from the story and visual concept to the character designs, backgrounds, animation, and editing. The minimalist geometric character designs were chosen to support efficient animation and reinforce the film’s visual identity."
       },
       {
