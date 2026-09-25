@@ -121,7 +121,7 @@ const CATEGORIES = [
       {
         title: "Altar del Día de Muertos", year: "", type: "video",   // NEEDS-YEAR
         image: "assets/img/animation/altar-demo.webp",
-        description: "A scenery project made to understand rendering, lighting and texturing — what it takes to bring 3D models to life. The scene combines models I built myself with downloaded assets."
+        description: "A camera animation built to show the whole scenery from every angle. Nothing here is rendered and nothing but the camera moves — the piece exists purely to walk around the set and present the modelling from all sides."
       }
     ]
   },
@@ -130,7 +130,7 @@ const CATEGORIES = [
     id: "character-design",
     title: "Character Design",
     cols: 4,                                  // small square pieces - denser grid
-    year: "",                                 // NEEDS-YEAR
+    year: "2023",
     cover: "assets/img/character-design/axolotl.webp",
     intro: "A set of animated stickers made for WhatsApp, created as part of a personalised Adventskalender — each day revealed a new character carrying a positive message.",
     projects: [
@@ -185,6 +185,9 @@ const CATEGORIES = [
     year: "2020",                             // NEEDS-CONFIRM
     cover: "assets/img/graphic-design/step-up.webp",
     intro: "Typography Experimental Bookazine — a series of designs exploring different forms, colour palettes, styles and typography.",
+    dividers: [
+      { after: 10, text: "A separate project: a personal Visitenkarte built around my own OLAR mark." }
+    ],
     projects: [
       { title: "Cover",                 type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/cover-official.webp" },
       { title: "Waverider I",           type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/waverider-1.webp" },
@@ -195,7 +198,10 @@ const CATEGORIES = [
       { title: "Words on Paper II",     type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/words-on-paper-2.webp" },
       { title: "Move Fast",             type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
       { title: "The day u stop racing", type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
-      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
+      { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" },
+      // Only the logo side is published — the other side carries a phone
+      // number and personal email address. See notes before adding it.
+      { title: "Visitenkarte",          type: "image", ratio: "ratio-a4",  image: "assets/img/graphic-design/visitenkarte.webp" }
     ]
   },
 
@@ -242,10 +248,21 @@ const CATEGORIES = [
         image: "assets/img/web-design/animal-shelter-screentest.webp",
         description: "A responsive website prototype designed for a fictional animal rescue organization. Developed entirely with HTML and CSS, the project focuses on creating an accessible, user-friendly interface that communicates the organization’s mission while making information easy to navigate."
       },
-      // NEEDS-DESCRIPTION + NEEDS-YEAR.
-      { title: "Dog Shelter — Alternative Layout", type: "image", ratio: "ratio-auto", image: "assets/img/web-design/tierheim-layout-alternative-var.webp" },
-      { title: "Personal Website Design I",        type: "image", ratio: "ratio-auto", image: "assets/img/web-design/other-personal-websitedesign-1.webp" },
-      { title: "Personal Website Design II",       type: "image", ratio: "ratio-auto", image: "assets/img/web-design/other-personal-websitedesign-2.webp" }
+      {
+        title: "Dog Shelter — First Layout", type: "image", ratio: "ratio-auto",
+        image: "assets/img/web-design/tierheim-layout-alternative-var.webp",
+        description: "My first version of the shelter site. I came back to the project later, with more web design experience behind me, and rebuilt it into the version above."
+      },
+      {
+        title: "Portfolio Concept I", type: "image", ratio: "ratio-auto",
+        image: "assets/img/web-design/other-personal-websitedesign-1.webp",
+        description: "A concept for my own portfolio site, designed in Adobe XD — the direct precursor to the site you are reading this on."
+      },
+      {
+        title: "Portfolio Concept II", type: "image", ratio: "ratio-auto",
+        image: "assets/img/web-design/other-personal-websitedesign-2.webp",
+        description: "A second Adobe XD concept for the same portfolio, exploring an alternative layout before the design was built in HTML and CSS."
+      }
     ]
   },
 
@@ -263,8 +280,11 @@ const CATEGORIES = [
         image: "assets/img/game-design/jaguar-mainscene.webp",
         description: "A prototype platformer game exploring how interactive media can be used to communicate wildlife conservation topics. The project focuses on creating an immersive experience based on jaguar movement and behavior, combining level design, gameplay mechanics, and procedural animation techniques. Currently in development, the prototype explores systems for naturalistic animal locomotion — running, jumping, climbing, and swimming — with the goal of creating a more natural connection between player movement and animal behavior."
       },
-      // NEEDS-DESCRIPTION
-      { title: "Jaguar — Locomotion Lab", year: "2026", type: "video", image: "assets/img/game-design/jaguar-lab.webp" },
+      {
+        title: "Jaguar — Locomotion Lab", year: "2026", type: "video",
+        image: "assets/img/game-design/jaguar-lab.webp",
+        description: "The continuation of the thesis project, and the point where it stopped being a traditional 2D platformer and became a physics-based game. The jaguar is not keyframed: it is driven by procedural animation, with the rig’s proportions and gait fitted against measurements of real jaguar movement so that walking, running and footfall timing follow the animal’s actual anatomy rather than an approximation. This lab scene is where that locomotion system is built and tested. Still a work in progress."
+      },
       { title: "Parkour Game",    year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp" },
       { title: "Pelota de Fuego", year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp" }
     ]

@@ -14,18 +14,25 @@ const ICON = {
 };
 
 /* ---------- Logo -------------------------------------------------
-   PLACEHOLDER. Approximated from the screenshot so the layout is
-   correct. Swap this whole string for your real SVG when you have it.
+   Redrawn from the Visitenkarte artwork: a rounded diamond carrying
+   an S-swash, over geometric OLAR letterforms (the real wordmark is
+   constructed shapes, not a typeface). Replace with the original
+   vector file when you have it to hand.
    ----------------------------------------------------------------- */
 const LOGO_SVG = `
-<svg viewBox="0 0 200 92" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OLAR">
-  <!-- mark (sits above the wordmark) -->
-  <path d="M100 4c10 14 15.5 21.5 15.5 27.5 0 5-3.3 8.5-8.5 11 5 2.6 8 5.8 8 10.2 0 6.1-5 12.2-15 18.3-10-6.1-15-12.2-15-18.3 0-4.4 3-7.6 8-10.2-5.2-2.5-8.5-6-8.5-11 0-6 5.5-13.5 15.5-27.5Z" fill="#E3E3E3"/>
-  <path d="M100 18c-4.5 6-6.8 9.8-6.8 12.8 0 3.3 2.7 5.7 6.8 7.8 4.1-2.1 6.8-4.5 6.8-7.8 0-3-2.3-6.8-6.8-12.8Z" fill="#222222"/>
-  <!-- wordmark -->
-  <text x="106" y="88" text-anchor="middle" fill="#C9C9C9"
-        font-family="Quicksand, 'Trebuchet MS', sans-serif"
-        font-size="25" font-weight="300" letter-spacing="13">OLAR</text>
+<svg viewBox="0 0 200 104" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="OLAR">
+  <!-- mark: rounded diamond + S swash -->
+  <rect x="76" y="6" width="48" height="48" rx="11" transform="rotate(45 100 30)" fill="#F7F5F2"/>
+  <path d="M108 15c-9-3-17 2-15 9 1.6 5.6 11 7 12 13 1.2 7-7 11-14 8"
+        stroke="#1A1A1A" stroke-width="6.4" stroke-linecap="round" fill="none"/>
+  <!-- wordmark: constructed letterforms -->
+  <g stroke="#C9C9C9" stroke-width="1.6" fill="none" stroke-linejoin="round">
+    <ellipse cx="30" cy="84" rx="20" ry="14"/>
+    <path d="M68 70v28h22"/>
+    <path d="M105 98l14-28 14 28z"/>
+    <path d="M154 98V70h13l10 9-10 9h-13"/>
+    <path d="M167 88l12 10"/>
+  </g>
 </svg>`;
 
 /* ---------- Helpers ---------- */
