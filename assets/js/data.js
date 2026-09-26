@@ -230,6 +230,7 @@ const CATEGORIES = [
       {
         title: "LSE intro Variations – Riverty", year: "2023", type: "video",
         image: "assets/img/corporate-design/lse-intro-riverty.webp",
+        video: "mI35iovcZ7I",
         description: "Another example of the work I made while I was there."
       },
       // HorseAnalytics internship work - context is in `dividers` above.
