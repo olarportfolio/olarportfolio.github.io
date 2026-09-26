@@ -61,6 +61,32 @@ const SITE = {
 
 const CATEGORIES = [
   {
+    id: "game-design",
+    title: "Game Design",
+    year: "2026",
+    cover: "assets/img/game-design/jaguar-mainscene.webp",
+    dividers: [
+      { after: 4, text: "Parkour Game and Pelota de Fuego are two experiments I did using Claude Code to start developing my own games. Both are works in progress, but they show how I have learned to use Claude Code to create something playable." }
+    ],
+    projects: [
+      {
+        title: "JaguarPhysics - Master Thesis phase 1", year: "2026", type: "video",
+        image: "assets/img/game-design/jaguar-mainscene.webp",
+        video: "wSgGpMtthH0",
+        description: "Where the project started: a prototype platformer exploring how interactive media can communicate wildlife conservation topics, built with conventional animation. This version gave me the level design and gameplay fundamentals the project needed. Once I found a way to approach procedural animation, I set it aside and rebuilt the idea around that instead."
+      },
+      {
+        title: "JaguarPhysics - Master Thesis phase 2", year: "2026 – in progress", type: "video",
+        image: "assets/img/game-design/jaguar-lab.webp",
+        video: "qEeo2MBMn-c",
+        description: "The continuation of the thesis project, and the point where it stopped being a traditional 2D platformer and became a physics-based game. The jaguar is not keyframed: it is driven by procedural animation, with the rig’s proportions and gait fitted against measurements of real jaguar movement so that walking, running and footfall timing follow the animal’s actual anatomy rather than an approximation. This lab scene is where that locomotion system is built and tested. Still a work in progress."
+      },
+      { title: "Parkour Game",    year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp", video: "zJFsbuq1CBM" },
+      { title: "Pelota de Fuego", year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp", video: "NqJFVClN-Zw" }
+    ]
+  },
+
+  {
     id: "animation",
     title: "Animations",
     year: "2019 – 2025",
@@ -137,36 +163,6 @@ const CATEGORIES = [
   },
 
   {
-    id: "character-design",
-    title: "Character Design",
-    layout: "carousel",
-    year: "2023",
-    cover: "assets/img/character-design/axolotl.webp",
-    intro: "A set of animated stickers made for WhatsApp, created as part of a personalised Adventskalender — each day revealed a new character carrying a positive message.",
-    projects: [
-      { title: "Axolotl",           type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/axolotl.webp" },
-      { title: "La Catarina",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cat-la-catarina.webp" },
-      { title: "Croissant",         type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croissant.webp" },
-      { title: "Kaffee-Affe",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/kaffee-affe.webp" },
-      { title: "Smoothie Criminal", type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/smoothie-criminal.webp" },
-      { title: "Take Whisks",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/take-whisks.webp" },
-      { title: "Happy Worm",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/happy-worm.webp" },
-      { title: "Hungry Chick",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/chick-hungry-right.webp" },
-      { title: "Cozy Penguin",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cozy-penguin-mirrored.webp" },
-      { title: "Sleepy Seal",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sleepy-seal.webp" },
-      { title: "Sled Sloth",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sled-sloth.webp" },
-      { title: "Travel Cat",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/travel-cat.webp" },
-      { title: "Elephant",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/elefant.webp" },
-      { title: "Croc",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croc.webp" },
-      { title: "Tortoise",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/tortoise-no-bg.webp" },
-      { title: "Bunny",             type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/bunny-pic.webp" },
-      { title: "Nicoolaus",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/nikoolaus.webp" },
-      { title: "Santa Impossible",  type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/santa-impossible.webp" },
-      { title: "Reno",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/reno.webp" }
-    ]
-  },
-
-  {
     id: "3d-modelling",
     title: "3D Modelling",
     layout: "carousel",
@@ -209,6 +205,36 @@ const CATEGORIES = [
       { title: "Move Fast",             type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/move-fast.webp" },
       { title: "The day u stop racing", type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/day-u-stop-racing.webp" },
       { title: "Step Up",               type: "image", ratio: "ratio-3x2", image: "assets/img/graphic-design/step-up.webp" }
+    ]
+  },
+
+  {
+    id: "character-design",
+    title: "Character Design",
+    layout: "carousel",
+    year: "2023",
+    cover: "assets/img/character-design/axolotl.webp",
+    intro: "A set of animated stickers made for WhatsApp, created as part of a personalised Adventskalender — each day revealed a new character carrying a positive message.",
+    projects: [
+      { title: "Axolotl",           type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/axolotl.webp" },
+      { title: "La Catarina",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cat-la-catarina.webp" },
+      { title: "Croissant",         type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croissant.webp" },
+      { title: "Kaffee-Affe",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/kaffee-affe.webp" },
+      { title: "Smoothie Criminal", type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/smoothie-criminal.webp" },
+      { title: "Take Whisks",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/take-whisks.webp" },
+      { title: "Happy Worm",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/happy-worm.webp" },
+      { title: "Hungry Chick",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/chick-hungry-right.webp" },
+      { title: "Cozy Penguin",      type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/cozy-penguin-mirrored.webp" },
+      { title: "Sleepy Seal",       type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sleepy-seal.webp" },
+      { title: "Sled Sloth",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/sled-sloth.webp" },
+      { title: "Travel Cat",        type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/travel-cat.webp" },
+      { title: "Elephant",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/elefant.webp" },
+      { title: "Croc",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croc.webp" },
+      { title: "Tortoise",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/tortoise-no-bg.webp" },
+      { title: "Bunny",             type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/bunny-pic.webp" },
+      { title: "Nicoolaus",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/nikoolaus.webp" },
+      { title: "Santa Impossible",  type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/santa-impossible.webp" },
+      { title: "Reno",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/reno.webp" }
     ]
   },
 
@@ -279,32 +305,6 @@ const CATEGORIES = [
         image: "assets/img/web-design/other-personal-websitedesign-2.webp",
         description: "A second Adobe XD concept for the same portfolio, exploring an alternative layout before the design was built in HTML and CSS."
       }
-    ]
-  },
-
-  {
-    id: "game-design",
-    title: "Game Design",
-    year: "2026",
-    cover: "assets/img/game-design/jaguar-mainscene.webp",
-    dividers: [
-      { after: 4, text: "Parkour Game and Pelota de Fuego are two experiments I did using Claude Code to start developing my own games. Both are works in progress, but they show how I have learned to use Claude Code to create something playable." }
-    ],
-    projects: [
-      {
-        title: "JaguarPhysics - Master Thesis phase 1", year: "2026", type: "video",
-        image: "assets/img/game-design/jaguar-mainscene.webp",
-        video: "wSgGpMtthH0",
-        description: "Where the project started: a prototype platformer exploring how interactive media can communicate wildlife conservation topics, built with conventional animation. This version gave me the level design and gameplay fundamentals the project needed. Once I found a way to approach procedural animation, I set it aside and rebuilt the idea around that instead."
-      },
-      {
-        title: "JaguarPhysics - Master Thesis phase 2", year: "2026 – in progress", type: "video",
-        image: "assets/img/game-design/jaguar-lab.webp",
-        video: "qEeo2MBMn-c",
-        description: "The continuation of the thesis project, and the point where it stopped being a traditional 2D platformer and became a physics-based game. The jaguar is not keyframed: it is driven by procedural animation, with the rig’s proportions and gait fitted against measurements of real jaguar movement so that walking, running and footfall timing follow the animal’s actual anatomy rather than an approximation. This lab scene is where that locomotion system is built and tested. Still a work in progress."
-      },
-      { title: "Parkour Game",    year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp", video: "zJFsbuq1CBM" },
-      { title: "Pelota de Fuego", year: "2026", type: "video", image: "assets/img/game-design/pelota-de-fuego.webp", video: "NqJFVClN-Zw" }
     ]
   }
 
