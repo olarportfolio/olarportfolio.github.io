@@ -246,14 +246,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .feature {
   grid-column: 1 / -1;
   display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: 44px; max-width: 980px; margin: 0 auto;
+  gap: 48px; max-width: 1180px; margin: 0 auto;
   padding: 84px 0 64px;
 }
+/* text takes roughly three quarters of the row, so it reads in a few
+   lines rather than a narrow column */
 .feature-text {
-  flex: 1 1 440px; max-width: 540px; margin: 0;
-  font-size: var(--fs-lead); color: var(--text-body); line-height: 1.65;
+  flex: 1 1 520px; max-width: none; margin: 0; text-align: left;
+  font-size: var(--fs-lead); color: var(--text-body); line-height: 1.6;
 }
-.feature-media { flex: 0 0 230px; }
+.feature-media { flex: 0 0 min(250px, 24%); }
 .feature-media img { width: 100%; height: auto; display: block; }
 
 /* ---- Compact: small thumbs, generous breathing room ---- */
