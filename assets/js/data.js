@@ -21,7 +21,7 @@ const SITE = {
   /* Contact page. Any link left as null is simply not rendered,
      so the page stays clean until you fill things in. */
   contact: {
-    email: "your.email@example.com",        // TODO: replace
+    email: "oliver.sat@hotmail.com",
     availability: "Open to internships and freelance work in animation and 3D.",
     cv: null,                               // e.g. "assets/cv-oliver-armando.pdf"
     links: {
