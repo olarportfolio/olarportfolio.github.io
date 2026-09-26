@@ -259,6 +259,7 @@ const CATEGORIES = [
       {
         title: "Dog Shelter Brunswick", year: "2019", type: "video",
         image: "assets/img/web-design/animal-shelter-screentest.webp",
+        video: "t5ZD8nflGlM",
         description: "A responsive website prototype designed for a fictional animal rescue organization. Developed entirely with HTML and CSS, the project focuses on creating an accessible, user-friendly interface that communicates the organization’s mission while making information easy to navigate."
       },
       {
