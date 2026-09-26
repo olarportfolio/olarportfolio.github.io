@@ -263,7 +263,7 @@ const CATEGORIES = [
         description: "A responsive website prototype designed for a fictional animal rescue organization. Developed entirely with HTML and CSS, the project focuses on creating an accessible, user-friendly interface that communicates the organization’s mission while making information easy to navigate."
       },
       {
-        title: "Dog Shelter — First Layout", type: "image", ratio: "ratio-auto",
+        title: "Dog Shelter — First Layout", year: "2019", type: "image", ratio: "ratio-auto",
         image: "assets/img/web-design/tierheim-layout-alternative-var.webp",
         description: "My first version of the shelter site. I came back to the project later, with more web design experience behind me, and rebuilt it into the version above."
       },
