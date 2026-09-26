@@ -224,6 +224,7 @@ const CATEGORIES = [
       {
         title: "Paigo wird zu Riverty", year: "2022", type: "video",
         image: "assets/img/corporate-design/paigo-riverty.webp",
+        video: "-ObSt3j0J94",
         description: "As a student assistant at Arvato Financial Solutions I worked on visual communication projects for internal company use, creating motion graphics, presentation designs, and visual materials for employee training and intranet platforms."
       },
       {
