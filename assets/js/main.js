@@ -138,7 +138,11 @@ function renderCategory() {
   const note = d => d.image
     ? `<div class="feature">
          <p class="feature-text">${d.text}</p>
-         <div class="feature-media"><img src="${d.image}" alt="" loading="lazy"></div>
+         <div class="feature-media" data-zoom="${d.image}" data-caption="${d.caption || ''}"
+              role="button" tabindex="0" aria-label="View larger">
+           <img src="${d.image}" alt="" loading="lazy">
+           <span class="zoom-hint">Expand view</span>
+         </div>
        </div>`
     : `<p class="divider-note">${d.text}</p>`;
 
@@ -210,7 +214,8 @@ function wireMedia(root) {
   root.querySelectorAll('[data-zoom]').forEach(media => {
     const open = () => openLightbox(
       media.dataset.zoom,
-      media.closest('.g-item')?.querySelector('h3')?.textContent || ''
+      media.dataset.caption ||
+        media.closest('.g-item')?.querySelector('h3')?.textContent.trim() || ''
     );
     media.addEventListener('click', open);
     media.addEventListener('keydown', e => {
@@ -269,7 +274,7 @@ function openLightbox(src, caption) {
   }
 
   const i = ZOOMS.findIndex(z => z.src === src);
-  zoomAt = i >= 0 ? i : 0;
+  zoomAt = i;                       // -1 marks a one-off image
   paintLightbox(src, caption);
 
   const many = ZOOMS.length > 1 && i >= 0;
@@ -288,7 +293,8 @@ function paintLightbox(src, caption) {
 }
 
 function stepLightbox(dir) {
-  if (!ZOOMS.length) return;
+  // a one-off image (a feature block) has no set to page through
+  if (!ZOOMS.length || zoomAt < 0) return;
   zoomAt = (zoomAt + dir + ZOOMS.length) % ZOOMS.length;   // wraps around
   paintLightbox(ZOOMS[zoomAt].src, ZOOMS[zoomAt].caption);
 }

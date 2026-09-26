@@ -183,18 +183,18 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gallery { align-items: start; }
 .g-item { margin: 0; }
 .g-media { position: relative; }
-.g-media[data-video], .g-media[data-zoom] { cursor: pointer; }
+.g-media[data-video], [data-zoom] { cursor: pointer; }
 .g-media[data-video]:focus-visible,
-.g-media[data-zoom]:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+[data-zoom]:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 
 /* Clickable stills: darken and name the action, so it reads as clickable */
-.g-media[data-zoom]::after {
+[data-zoom]::after {
   content: ""; position: absolute; inset: 0;
   background: rgba(0,0,0,.45);
   opacity: 0; transition: opacity .25s var(--ease);
   pointer-events: none;
 }
-.g-media[data-zoom] .zoom-hint {
+[data-zoom] .zoom-hint {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(.96);
   z-index: 2; pointer-events: none;
   padding: 9px 18px; border-radius: 999px;
@@ -202,16 +202,16 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-size: 13px; font-weight: 700; letter-spacing: .04em; white-space: nowrap;
   opacity: 0; transition: opacity .25s var(--ease), transform .25s var(--ease);
 }
-.g-media[data-zoom]:hover::after,
-.g-media[data-zoom]:focus-visible::after { opacity: 1; }
-.g-media[data-zoom]:hover .zoom-hint,
-.g-media[data-zoom]:focus-visible .zoom-hint {
+[data-zoom]:hover::after,
+[data-zoom]:focus-visible::after { opacity: 1; }
+[data-zoom]:hover .zoom-hint,
+[data-zoom]:focus-visible .zoom-hint {
   opacity: 1; transform: translate(-50%,-50%) scale(1);
 }
 
 /* Touch devices get no hover, so state the affordance permanently */
 @media (hover: none) {
-  .g-media[data-zoom] .zoom-hint {
+  [data-zoom] .zoom-hint {
     opacity: 1; top: auto; bottom: 10px; transform: translate(-50%, 0) scale(1);
     background: rgba(255,255,255,.82); font-size: 12px; padding: 6px 13px;
   }
@@ -255,7 +255,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   flex: 1 1 520px; max-width: none; margin: 0; text-align: left;
   font-size: var(--fs-lead); color: var(--text-body); line-height: 1.6;
 }
-.feature-media { flex: 0 0 min(250px, 24%); }
+.feature-media { flex: 0 0 min(250px, 24%); position: relative; overflow: hidden; }
 .feature-media img { width: 100%; height: auto; display: block; }
 
 /* ---- Compact: small thumbs, generous breathing room ---- */
