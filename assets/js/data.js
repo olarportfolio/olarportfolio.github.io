@@ -222,7 +222,7 @@ const CATEGORIES = [
       {
         after: 2,
         image: "assets/img/corporate-design/instagram-ha-posts.webp",
-        text: "During my internship at HorseAnalytics, I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced some animated GIFs for the company to use in Instagram stories and similar formats."
+        text: "During my internship at HorseAnalytics, I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced some animated GIFs for the company to use in Instagram stories and similar formats (scroll down to see)."
       }
     ],
     projects: [

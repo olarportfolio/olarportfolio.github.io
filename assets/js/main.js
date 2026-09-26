@@ -130,6 +130,11 @@ function renderCategory() {
   // lets the page tighten its heading so a slide fits without scrolling
   document.body.classList.toggle('carousel-page', isCarousel);
 
+  // the set the lightbox can page through
+  ZOOMS = cat.projects
+    .filter(p => p.image && !p.video)
+    .map(p => ({ src: p.image, caption: p.title + (p.year ? ` ${p.year}` : '') }));
+
   const note = d => d.image
     ? `<div class="feature">
          <p class="feature-text">${d.text}</p>
@@ -146,13 +151,16 @@ function renderCategory() {
   // a divider past the last project sits at the end of the gallery
   dividers.filter(d => d.after >= cat.projects.length).forEach(d => { html += note(d); });
 
+  // The carousel loops, so the strip is tripled and the scroll position
+  // is wrapped back to the middle copy - you can turn it forever in
+  // either direction and never reach an end.
   el.innerHTML = isCarousel
-    ? `<div class="track">${html}</div>
+    ? `<div class="track">${html}${html}${html}</div>
        <button class="car-btn car-prev" aria-label="Previous">${ICON.caretLeft}</button>
        <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>`
     : html;
 
-  if (isCarousel) wireCarousel(el);
+  if (isCarousel) wireCarousel(el, cat.projects.length);
   wireMedia(el);
   renderAlsoLike(cat.id);
 }
@@ -211,19 +219,27 @@ function wireMedia(root) {
   });
 }
 
-/* ---------- Lightbox ---------- */
+/* ---------- Lightbox ----------
+   Holds the whole set, so you can move through the work without
+   closing it: arrows, the keyboard, or just scrolling.               */
+let ZOOMS = [];       // [{src, caption}] for the category on screen
+let zoomAt = 0;
+
 function openLightbox(src, caption) {
   let lb = $('#lightbox');
   if (!lb) {
     document.body.insertAdjacentHTML('beforeend', `
       <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged view">
         <button class="lb-close" aria-label="Close">&times;</button>
+        <button class="lb-nav lb-prev" aria-label="Previous">${ICON.caretLeft}</button>
+        <button class="lb-nav lb-next" aria-label="Next">${ICON.caretRight}</button>
         <figure class="lb-figure">
           <img class="lb-img" alt="">
           <figcaption class="lb-caption"></figcaption>
         </figure>
       </div>`);
     lb = $('#lightbox');
+
     const close = () => {
       lb.classList.remove('is-open');
       document.documentElement.style.overflow = '';
@@ -231,15 +247,50 @@ function openLightbox(src, caption) {
     lb.addEventListener('click', e => {
       if (e.target === lb || e.target.closest('.lb-close')) close();
     });
+    $('.lb-prev', lb).addEventListener('click', e => { e.stopPropagation(); stepLightbox(-1); });
+    $('.lb-next', lb).addEventListener('click', e => { e.stopPropagation(); stepLightbox(1); });
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') close();
+      if (!lb.classList.contains('is-open')) return;
+      if (e.key === 'Escape')     close();
+      if (e.key === 'ArrowLeft')  stepLightbox(-1);
+      if (e.key === 'ArrowRight') stepLightbox(1);
     });
+
+    // scrolling inside the enlarged view moves through the set
+    let cooling = false;
+    lb.addEventListener('wheel', e => {
+      e.preventDefault();
+      if (cooling || Math.abs(e.deltaY) + Math.abs(e.deltaX) < 12) return;
+      cooling = true;
+      setTimeout(() => { cooling = false; }, 320);
+      stepLightbox((e.deltaY || e.deltaX) > 0 ? 1 : -1);
+    }, { passive: false });
   }
-  $('.lb-img', lb).src = src;
-  $('.lb-caption', lb).textContent = caption;
+
+  const i = ZOOMS.findIndex(z => z.src === src);
+  zoomAt = i >= 0 ? i : 0;
+  paintLightbox(src, caption);
+
+  const many = ZOOMS.length > 1 && i >= 0;
+  $('.lb-prev', lb).hidden = !many;
+  $('.lb-next', lb).hidden = !many;
+
   lb.classList.add('is-open');
   document.documentElement.style.overflow = 'hidden';
   $('.lb-close', lb).focus();
+}
+
+function paintLightbox(src, caption) {
+  const lb = $('#lightbox');
+  $('.lb-img', lb).src = src;
+  $('.lb-caption', lb).textContent = caption;
+}
+
+function stepLightbox(dir) {
+  if (!ZOOMS.length) return;
+  zoomAt = (zoomAt + dir + ZOOMS.length) % ZOOMS.length;   // wraps around
+  paintLightbox(ZOOMS[zoomAt].src, ZOOMS[zoomAt].caption);
 }
 
 /* ---------- Carousel ----------
@@ -247,50 +298,106 @@ function openLightbox(src, caption) {
    how far it sits from the centre, so neighbours tuck behind the piece
    in focus and fade out. Driven entirely by scroll position, so the
    wheel, a swipe and the arrows all produce the same motion.          */
-function wireCarousel(el) {
+function wireCarousel(el, realCount) {
   const track  = $('.track', el);
   const slides = [...track.querySelectorAll('.g-item')];
   const prev   = $('.car-prev', el);
   const next   = $('.car-next', el);
+  if (!slides.length) return;
 
-  const step = () => {
-    const s = slides[0];
-    return s ? s.getBoundingClientRect().width + 18 : track.clientWidth * 0.6;
-  };
+  // Measured in layout coordinates - getBoundingClientRect() would
+  // report the rotated box, which is not the slide's real width.
+  const gap  = parseFloat(getComputedStyle(track).columnGap) || 18;
+  const step = () => slides[0].offsetWidth + gap;
+  const loop = () => realCount * step();          // width of one full turn
+  const centreOf = s => (s.offsetLeft - track.offsetLeft) + s.offsetWidth / 2;
+  const mid  = () => track.scrollLeft + track.clientWidth / 2;
 
   let ticking = false;
   const paint = () => {
     ticking = false;
-    const box = track.getBoundingClientRect();
-    const mid = box.left + box.width / 2;
+    const centre = mid();
     const unit = step();
+    let best = null, bestDist = Infinity;
 
     slides.forEach(s => {
-      const r = s.getBoundingClientRect();
-      const d = Math.max(-3, Math.min(3, (r.left + r.width / 2 - mid) / unit));
+      const dist = centreOf(s) - centre;
+      const d = Math.max(-3, Math.min(3, dist / unit));
       const a = Math.abs(d);
       s.style.transform =
         `translateX(${-d * 52}px) rotateY(${-d * 27}deg) ` +
         `translateZ(${-a * 80}px) scale(${1 - a * 0.12})`;
       s.style.opacity = String(Math.max(0.2, 1 - a * 0.42));
       s.style.zIndex  = String(100 - Math.round(a * 10));
-      s.classList.toggle('is-focus', a < 0.4);
+      if (Math.abs(dist) < bestDist) { bestDist = Math.abs(dist); best = s; }
     });
-
-    const max = track.scrollWidth - track.clientWidth - 2;
-    prev.disabled = track.scrollLeft <= 2;
-    next.disabled = track.scrollLeft >= max;
+    // exactly one slide is ever active
+    slides.forEach(s => s.classList.toggle('is-focus', s === best));
   };
+
+  // Keep the scroll position inside the middle copy. Jumping by exactly
+  // one loop lands on an identical slide, so the seam is invisible.
+  const wrap = () => {
+    const L = loop();
+    if (L <= 0) return;
+    if (track.scrollLeft < L * 0.5)      track.scrollLeft += L;
+    else if (track.scrollLeft > L * 2.5) track.scrollLeft -= L;
+  };
+
+  // Settle onto whichever slide ended up nearest the centre, once the
+  // scrolling stops. Keeps exactly one slide active and centred.
+  let snapT;
+  const settle = () => {
+    const f = track.querySelector('.is-focus');
+    if (!f) return;
+    const delta = centreOf(f) - mid();
+    if (Math.abs(delta) > 1) track.scrollBy({ left: delta, behavior: 'smooth' });
+  };
+
   const onScroll = () => {
+    wrap();
     if (!ticking) { ticking = true; requestAnimationFrame(paint); }
+    clearTimeout(snapT);
+    snapT = setTimeout(settle, 140);
   };
 
   prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
   next.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
   track.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  // images settling can change slide widths
-  track.querySelectorAll('img').forEach(i => i.addEventListener('load', onScroll));
+  track.querySelectorAll('img').forEach(i => i.addEventListener('load', paint));
+
+  // Re-centre on the current slide when the viewport changes size,
+  // since the slide width is relative to it.
+  let resizeT;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => {
+      const f = track.querySelector('.is-focus');
+      if (f) track.scrollLeft += centreOf(f) - mid();
+      paint();
+    }, 120);
+  });
+
+  // Only the centred slide can be opened. Clicking any other one turns
+  // the carousel to it instead.
+  track.addEventListener('click', e => {
+    const item = e.target.closest('.g-item');
+    if (!item || item.classList.contains('is-focus')) return;
+    e.preventDefault();
+    e.stopPropagation();
+    track.scrollBy({ left: centreOf(item) - mid(), behavior: 'smooth' });
+  }, true);
+
+  // Start on the first real slide, in the middle copy. Waiting for
+  // layout matters: slide width is viewport-relative, so measuring
+  // before the stylesheet settles lands on the wrong slide.
+  const home = () => {
+    const first = slides[realCount];          // first slide of the middle copy
+    if (first) track.scrollLeft += centreOf(first) - mid();
+    paint();
+  };
+  requestAnimationFrame(() => requestAnimationFrame(home));
+  if (document.readyState !== 'complete') window.addEventListener('load', home, { once: true });
   paint();
 }
 
