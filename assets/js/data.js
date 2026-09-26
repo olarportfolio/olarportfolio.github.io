@@ -139,7 +139,7 @@ const CATEGORIES = [
   {
     id: "character-design",
     title: "Character Design",
-    cols: 4,                                  // small square pieces - denser grid
+    layout: "carousel",
     year: "2023",
     cover: "assets/img/character-design/axolotl.webp",
     intro: "A set of animated stickers made for WhatsApp, created as part of a personalised Adventskalender — each day revealed a new character carrying a positive message.",
@@ -169,6 +169,7 @@ const CATEGORIES = [
   {
     id: "3d-modelling",
     title: "3D Modelling",
+    layout: "carousel",
     year: "2020 – 2024",
     cover: "assets/img/3d-modelling/mechanical-spider-3d-model.webp",
     intro: "Models I built myself and used across different animation projects.",
@@ -218,7 +219,11 @@ const CATEGORIES = [
     year: "2021 – 2023",
     cover: "assets/img/corporate-design/paigo-riverty.webp",
     dividers: [
-      { after: 2, text: "Made during my internship at HorseAnalytics, where I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced these animated GIFs for the company to use in Instagram stories and similar formats." }
+      {
+        after: 2,
+        image: "assets/img/corporate-design/instagram-ha-posts.webp",
+        text: "During my internship at HorseAnalytics, I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced these animated GIFs for the company to use in Instagram stories and similar formats."
+      }
     ],
     projects: [
       {
@@ -234,11 +239,6 @@ const CATEGORIES = [
         description: "Another example of the work I made while I was there."
       },
       // HorseAnalytics internship work - context is in `dividers` above.
-      {
-        title: "Instagram feed", year: "2021", type: "image", ratio: "ratio-auto",
-        image: "assets/img/corporate-design/instagram-ha-posts.webp",
-        description: "A view of the account, showing the kind of content I produced for it alongside the animated GIFs."
-      },
       { title: "Furryfit — Logo 3D",          year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-3d.webp" },
       { title: "Furryfit — Dog Walk",         year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-dogwalk.webp" },
       { title: "Furryfit — Bone",             year: "2021", type: "image", ratio: "ratio-1x1", image: "assets/img/corporate-design/furryfit-bone.webp" },
@@ -253,6 +253,7 @@ const CATEGORIES = [
   {
     id: "web-design",
     title: "Web Design",
+    compact: true,
     year: "2019",
     cover: "assets/img/web-design/animal-shelter-screentest.webp",
     projects: [
@@ -286,7 +287,7 @@ const CATEGORIES = [
     year: "2026",
     cover: "assets/img/game-design/jaguar-mainscene.webp",
     dividers: [
-      { after: 2, text: "Experiments in building my own games with Claude Code. Both are works in progress, but they show how I have learned to use Claude Code to actually create something playable." }
+      { after: 4, text: "Parkour Game and Pelota de Fuego are two experiments I did using Claude Code to start developing my own games. Both are works in progress, but they show how I have learned to use Claude Code to create something playable." }
     ],
     projects: [
       {

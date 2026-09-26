@@ -10,7 +10,9 @@ const ICON = {
   chevron: '<svg viewBox="0 0 52 30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l23 24L49 3"/></svg>',
   play: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 3.6 20.4 12 6 20.4V3.6Z"/></svg>',
   arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"/><path d="M5 11l7-7 7 7"/></svg>',
-  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>'
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
+  caretLeft:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/></svg>',
+  caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>'
 };
 
 /* ---------- Logo -------------------------------------------------
@@ -118,38 +120,68 @@ function renderCategory() {
   if (cat.cols) el.style.setProperty('--gallery-cols', cat.cols);
 
   // `dividers` is a list; `divider` (singular) still works for one.
+  // A divider carrying an `image` renders as a standalone feature
+  // block instead of a plain line of text.
   const dividers = cat.dividers || (cat.divider ? [cat.divider] : []);
+  const isCarousel = cat.layout === 'carousel';
 
-  const items = cat.projects.map((p, i) => {
+  el.classList.toggle('is-carousel', isCarousel);
+  el.classList.toggle('is-compact', !!cat.compact);
+
+  const note = d => d.image
+    ? `<div class="feature">
+         <div class="feature-media"><img src="${d.image}" alt="" loading="lazy"></div>
+         <p class="feature-text">${d.text}</p>
+       </div>`
+    : `<p class="divider-note">${d.text}</p>`;
+
+  let html = '';
+  cat.projects.forEach((p, i) => {
     const d = dividers.find(x => x.after === i);
-    const note = d ? `<p class="divider-note">${d.text}</p>` : '';
-    // The play button appears only once a video is actually linked,
-    // so un-linked projects never show a button that does nothing.
-    const play = p.video ? `<div class="play">${ICON.play}</div>` : '';
-    const hook = p.video
-      ? ` data-video="${p.video}" role="button" tabindex="0" aria-label="Play ${p.title}"`
+    if (d) html += note(d);
+    html += galleryItem(p);
+  });
+  // a divider past the last project sits at the end of the gallery
+  dividers.filter(d => d.after >= cat.projects.length).forEach(d => { html += note(d); });
+
+  el.innerHTML = isCarousel
+    ? `<div class="track">${html}</div>
+       <button class="car-btn car-prev" aria-label="Previous">${ICON.caretLeft}</button>
+       <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>`
+    : html;
+
+  if (isCarousel) wireCarousel(el);
+  wireMedia(el);
+  renderAlsoLike(cat.id);
+}
+
+/* One gallery tile. */
+function galleryItem(p) {
+  // The play button appears only once a video is actually linked,
+  // so un-linked projects never show a button that does nothing.
+  const play = p.video ? `<div class="play">${ICON.play}</div>` : '';
+  const hook = p.video
+    ? ` data-video="${p.video}" role="button" tabindex="0" aria-label="Play ${p.title}"`
+    : p.image
+      ? ` data-zoom="${p.image}" role="button" tabindex="0" aria-label="View ${p.title} larger"`
       : '';
-    const year = p.year ? ` <span class="g-year">${p.year}</span>` : '';
-    const caption = `
+  const year = p.year ? ` <span class="g-year">${p.year}</span>` : '';
+  return `
+    <figure class="g-item">
+      <div class="g-media"${hook}>
+        ${thumb(p.image, p.ratio || 'ratio-16x9', '')}
+        ${play}
+      </div>
       <figcaption class="g-caption">
         <h3>${p.title}${year}</h3>
         ${p.description ? `<p>${p.description}</p>` : ''}
-      </figcaption>`;
-    return note + `
-      <figure class="g-item">
-        <div class="g-media"${hook}>
-          ${thumb(p.image, p.ratio || 'ratio-16x9', '')}
-          ${play}
-        </div>
-        ${caption}
-      </figure>`;
-  }).join('');
+      </figcaption>
+    </figure>`;
+}
 
-  el.innerHTML = items;
-
-  // Click the poster to swap in the player. Nothing is loaded from
-  // YouTube until then, so the gallery stays fast and tracker-free.
-  el.querySelectorAll('[data-video]').forEach(media => {
+/* Click a poster to load the player; click a still to enlarge it. */
+function wireMedia(root) {
+  root.querySelectorAll('[data-video]').forEach(media => {
     const open = () => {
       media.innerHTML =
         `<iframe class="g-embed" src="https://www.youtube-nocookie.com/embed/${media.dataset.video}?autoplay=1&rel=0"
@@ -164,7 +196,68 @@ function renderCategory() {
     });
   });
 
-  renderAlsoLike(cat.id);
+  root.querySelectorAll('[data-zoom]').forEach(media => {
+    const open = () => openLightbox(
+      media.dataset.zoom,
+      media.closest('.g-item')?.querySelector('h3')?.textContent || ''
+    );
+    media.addEventListener('click', open);
+    media.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+  });
+}
+
+/* ---------- Lightbox ---------- */
+function openLightbox(src, caption) {
+  let lb = $('#lightbox');
+  if (!lb) {
+    document.body.insertAdjacentHTML('beforeend', `
+      <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged view">
+        <button class="lb-close" aria-label="Close">&times;</button>
+        <figure class="lb-figure">
+          <img class="lb-img" alt="">
+          <figcaption class="lb-caption"></figcaption>
+        </figure>
+      </div>`);
+    lb = $('#lightbox');
+    const close = () => {
+      lb.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+    };
+    lb.addEventListener('click', e => {
+      if (e.target === lb || e.target.closest('.lb-close')) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  }
+  $('.lb-img', lb).src = src;
+  $('.lb-caption', lb).textContent = caption;
+  lb.classList.add('is-open');
+  document.documentElement.style.overflow = 'hidden';
+  $('.lb-close', lb).focus();
+}
+
+/* ---------- Carousel ---------- */
+function wireCarousel(el) {
+  const track = $('.track', el);
+  const step = () => {
+    const slide = track.querySelector('.g-item');
+    return slide ? slide.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
+  };
+  $('.car-prev', el).addEventListener('click', () =>
+    track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  $('.car-next', el).addEventListener('click', () =>
+    track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+  const update = () => {
+    const max = track.scrollWidth - track.clientWidth - 2;
+    $('.car-prev', el).disabled = track.scrollLeft <= 2;
+    $('.car-next', el).disabled = track.scrollLeft >= max;
+  };
+  track.addEventListener('scroll', update, { passive: true });
+  update();
 }
 
 /* ---------- "You may also like" ---------- */

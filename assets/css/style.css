@@ -211,6 +211,75 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 96px 0 44px;
 }
 
+/* ---- Feature block: a standalone image paired with its text ---- */
+.feature {
+  grid-column: 1 / -1;
+  display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  gap: 56px; align-items: center;
+  padding: 90px 0 70px;
+}
+.feature-media img { width: 100%; height: auto; display: block; }
+.feature-text {
+  margin: 0; font-size: var(--fs-lead); color: var(--text-body);
+  line-height: 1.65; max-width: 60ch;
+}
+
+/* ---- Compact: small thumbs, generous breathing room ---- */
+.gallery.is-compact { row-gap: 110px; }
+.gallery.is-compact .thumb { max-height: 360px; background: none; }
+.gallery.is-compact .thumb img { height: 100%; object-fit: contain; object-position: left top; }
+
+/* ---- Carousel: scroll sideways, one piece in focus ---- */
+.gallery.is-carousel {
+  display: block; position: relative; padding: 0;
+}
+.gallery.is-carousel .track {
+  display: flex; gap: 24px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 0 max(24px, calc((100% - 820px) / 2)) 10px;
+  scrollbar-width: thin;
+}
+.gallery.is-carousel .g-item {
+  flex: 0 0 min(820px, 84vw);
+  scroll-snap-align: center;
+}
+.gallery.is-carousel .g-caption { text-align: center; max-width: none; }
+
+.car-btn {
+  position: absolute; top: 40%; transform: translateY(-50%); z-index: 5;
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--surface-raised); color: var(--text);
+  display: grid; place-items: center; opacity: .85;
+  transition: opacity .25s var(--ease), background .25s var(--ease);
+}
+.car-btn:hover { opacity: 1; background: #4A4A4A; }
+.car-btn:disabled { opacity: .18; cursor: default; }
+.car-btn svg { width: 22px; height: 22px; }
+.car-prev { left: 18px; }
+.car-next { right: 18px; }
+
+/* ---- Lightbox ---- */
+.lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(14,14,14,.94);
+  display: none; place-items: center; padding: 56px 24px;
+}
+.lightbox.is-open { display: grid; }
+.lb-figure { margin: 0; max-width: 100%; max-height: 100%; text-align: center; }
+.lb-img {
+  max-width: min(1400px, 94vw); max-height: 82vh;
+  width: auto; height: auto; margin: 0 auto;
+}
+.lb-caption { margin-top: 16px; color: var(--text-body); font-size: 15px; }
+.lb-close {
+  position: absolute; top: 22px; right: 28px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--surface-raised); color: var(--text);
+  font-size: 28px; line-height: 1;
+  display: grid; place-items: center;
+}
+.lb-close:hover { background: #4A4A4A; }
+
 /* --- "You may also like" strip --- */
 .also { padding: 150px 0 0; }
 .also h2 { text-align: center; font-size: clamp(22px, 2vw, 30px); margin-bottom: 46px; }
@@ -312,6 +381,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .logo svg { width: 118px; }
   .work-grid { grid-template-columns: 1fr; gap: 16px; }
   .gallery { --gallery-cols: 1; padding: 0 20px; row-gap: 34px; }
+  .gallery.is-compact { row-gap: 64px; }
+  .feature { grid-template-columns: 1fr; gap: 28px; padding: 56px 0 40px; }
+  .feature-media { max-width: 260px; margin: 0 auto; }
+  .feature-text { text-align: center; }
+  .car-btn { width: 42px; height: 42px; }
+  .car-prev { left: 6px; }
+  .car-next { right: 6px; }
   .also-strip { grid-template-columns: repeat(2, 1fr); }
   .to-top { right: 20px; bottom: 20px; width: 48px; height: 48px; }
   .play { width: 54px; height: 54px; }
