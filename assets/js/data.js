@@ -296,7 +296,7 @@ const CATEGORIES = [
         description: "Where the project started: a prototype platformer exploring how interactive media can communicate wildlife conservation topics, built with conventional animation. This version gave me the level design and gameplay fundamentals the project needed. Once I found a way to approach procedural animation, I set it aside and rebuilt the idea around that instead."
       },
       {
-        title: "Jaguar — Locomotion Lab", year: "2026", type: "video",
+        title: "JaguarPhysics - Master Thesis phase 2", year: "2026 – in progress", type: "video",
         image: "assets/img/game-design/jaguar-lab.webp",
         description: "The continuation of the thesis project, and the point where it stopped being a traditional 2D platformer and became a physics-based game. The jaguar is not keyframed: it is driven by procedural animation, with the rig’s proportions and gait fitted against measurements of real jaguar movement so that walking, running and footfall timing follow the animal’s actual anatomy rather than an approximation. This lab scene is where that locomotion system is built and tested. Still a work in progress."
       },
