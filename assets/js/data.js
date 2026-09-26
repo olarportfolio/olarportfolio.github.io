@@ -298,6 +298,7 @@ const CATEGORIES = [
       {
         title: "JaguarPhysics - Master Thesis phase 2", year: "2026 – in progress", type: "video",
         image: "assets/img/game-design/jaguar-lab.webp",
+        video: "qEeo2MBMn-c",
         description: "The continuation of the thesis project, and the point where it stopped being a traditional 2D platformer and became a physics-based game. The jaguar is not keyframed: it is driven by procedural animation, with the rig’s proportions and gait fitted against measurements of real jaguar movement so that walking, running and footfall timing follow the animal’s actual anatomy rather than an approximation. This lab scene is where that locomotion system is built and tested. Still a work in progress."
       },
       { title: "Parkour Game",    year: "2026", type: "video", image: "assets/img/game-design/parkour-game.webp", video: "zJFsbuq1CBM" },
