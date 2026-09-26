@@ -160,7 +160,7 @@ const CATEGORIES = [
       { title: "Croc",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/croc.webp" },
       { title: "Tortoise",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/tortoise-no-bg.webp" },
       { title: "Bunny",             type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/bunny-pic.webp" },
-      { title: "Nikolaus",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/nikoolaus.webp" },
+      { title: "Nicoolaus",          type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/nikoolaus.webp" },
       { title: "Santa Impossible",  type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/santa-impossible.webp" },
       { title: "Reno",              type: "image", ratio: "ratio-1x1", image: "assets/img/character-design/reno.webp" }
     ]
@@ -222,7 +222,7 @@ const CATEGORIES = [
       {
         after: 2,
         image: "assets/img/corporate-design/instagram-ha-posts.webp",
-        text: "During my internship at HorseAnalytics, I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced these animated GIFs for the company to use in Instagram stories and similar formats."
+        text: "During my internship at HorseAnalytics, I developed content for their social media — mostly tutorials on using their app — and later, on my own initiative, produced some animated GIFs for the company to use in Instagram stories and similar formats."
       }
     ],
     projects: [

@@ -183,8 +183,39 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gallery { align-items: start; }
 .g-item { margin: 0; }
 .g-media { position: relative; }
-.g-media[data-video] { cursor: pointer; }
-.g-media[data-video]:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.g-media[data-video], .g-media[data-zoom] { cursor: pointer; }
+.g-media[data-video]:focus-visible,
+.g-media[data-zoom]:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+/* Clickable stills: darken and name the action, so it reads as clickable */
+.g-media[data-zoom]::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(0,0,0,.45);
+  opacity: 0; transition: opacity .25s var(--ease);
+  pointer-events: none;
+}
+.g-media[data-zoom] .zoom-hint {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(.96);
+  z-index: 2; pointer-events: none;
+  padding: 9px 18px; border-radius: 999px;
+  background: rgba(255,255,255,.92); color: #222;
+  font-size: 13px; font-weight: 700; letter-spacing: .04em; white-space: nowrap;
+  opacity: 0; transition: opacity .25s var(--ease), transform .25s var(--ease);
+}
+.g-media[data-zoom]:hover::after,
+.g-media[data-zoom]:focus-visible::after { opacity: 1; }
+.g-media[data-zoom]:hover .zoom-hint,
+.g-media[data-zoom]:focus-visible .zoom-hint {
+  opacity: 1; transform: translate(-50%,-50%) scale(1);
+}
+
+/* Touch devices get no hover, so state the affordance permanently */
+@media (hover: none) {
+  .g-media[data-zoom] .zoom-hint {
+    opacity: 1; top: auto; bottom: 10px; transform: translate(-50%, 0) scale(1);
+    background: rgba(255,255,255,.82); font-size: 12px; padding: 6px 13px;
+  }
+}
 .g-embed { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
 /* keep the placeholder caption clear of the play button */
 .gallery .ph { align-items: end; }
@@ -211,10 +242,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   padding: 96px 0 44px;
 }
 
-/* ---- Feature block: a standalone image paired with its text ---- */
+/* ---- Feature block: text on the left, image on the right ---- */
 .feature {
   grid-column: 1 / -1;
-  display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr);
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
   gap: 56px; align-items: center;
   padding: 90px 0 70px;
 }
@@ -229,21 +260,45 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .gallery.is-compact .thumb { max-height: 360px; background: none; }
 .gallery.is-compact .thumb img { height: 100%; object-fit: contain; object-position: left top; }
 
-/* ---- Carousel: scroll sideways, one piece in focus ---- */
-.gallery.is-carousel {
-  display: block; position: relative; padding: 0;
+/* ---- Carousel: a rotating coverflow, one piece in focus ---- */
+/* carousel pages trade heading space so a slide and its name fit on screen */
+.carousel-page .page-head {
+  padding: calc(var(--header-h) + 34px) var(--pad-x) 20px;
 }
+.carousel-page .page-head h1 { font-size: clamp(30px, 3.4vw, 46px); }
+.carousel-page .page-intro {
+  margin-top: .9em; font-size: clamp(15px, 1.1vw, 18px); max-width: 62ch;
+}
+
+.gallery.is-carousel { display: block; position: relative; padding: 0; }
 .gallery.is-carousel .track {
-  display: flex; gap: 24px;
+  display: flex; gap: 18px;
   overflow-x: auto; scroll-snap-type: x mandatory;
-  padding: 0 max(24px, calc((100% - 820px) / 2)) 10px;
-  scrollbar-width: thin;
+  padding: 26px max(16px, calc((100% - 380px) / 2)) 16px;
+  perspective: 1400px; perspective-origin: 50% 45%;
+  scrollbar-width: none;
 }
+.gallery.is-carousel .track::-webkit-scrollbar { display: none; }
+
 .gallery.is-carousel .g-item {
-  flex: 0 0 min(820px, 84vw);
+  flex: 0 0 min(380px, 58vw);
   scroll-snap-align: center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  transition: opacity .18s linear;
 }
-.gallery.is-carousel .g-caption { text-align: center; max-width: none; }
+/* uniform slide height keeps the row tidy and fits image + name on screen */
+.gallery.is-carousel .thumb {
+  aspect-ratio: auto; height: min(34vh, 290px);
+  background: none;
+}
+.gallery.is-carousel .thumb img { width: 100%; height: 100%; object-fit: contain; }
+.gallery.is-carousel .g-caption {
+  text-align: center; max-width: none; padding-top: 14px;
+}
+.gallery.is-carousel .g-caption p { font-size: 14px; }
+/* only the piece in focus is fully legible */
+.gallery.is-carousel .g-item:not(.is-focus) .g-caption { opacity: .45; }
 
 .car-btn {
   position: absolute; top: 40%; transform: translateY(-50%); z-index: 5;

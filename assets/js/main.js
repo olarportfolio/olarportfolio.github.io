@@ -127,11 +127,13 @@ function renderCategory() {
 
   el.classList.toggle('is-carousel', isCarousel);
   el.classList.toggle('is-compact', !!cat.compact);
+  // lets the page tighten its heading so a slide fits without scrolling
+  document.body.classList.toggle('carousel-page', isCarousel);
 
   const note = d => d.image
     ? `<div class="feature">
-         <div class="feature-media"><img src="${d.image}" alt="" loading="lazy"></div>
          <p class="feature-text">${d.text}</p>
+         <div class="feature-media"><img src="${d.image}" alt="" loading="lazy"></div>
        </div>`
     : `<p class="divider-note">${d.text}</p>`;
 
@@ -171,6 +173,7 @@ function galleryItem(p) {
       <div class="g-media"${hook}>
         ${thumb(p.image, p.ratio || 'ratio-16x9', '')}
         ${play}
+        ${!p.video && p.image ? '<span class="zoom-hint">Expand view</span>' : ''}
       </div>
       <figcaption class="g-caption">
         <h3>${p.title}${year}</h3>
@@ -239,25 +242,56 @@ function openLightbox(src, caption) {
   $('.lb-close', lb).focus();
 }
 
-/* ---------- Carousel ---------- */
+/* ---------- Carousel ----------
+   A rotating coverflow: each slide is turned and pushed back in 3D by
+   how far it sits from the centre, so neighbours tuck behind the piece
+   in focus and fade out. Driven entirely by scroll position, so the
+   wheel, a swipe and the arrows all produce the same motion.          */
 function wireCarousel(el) {
-  const track = $('.track', el);
-  const step = () => {
-    const slide = track.querySelector('.g-item');
-    return slide ? slide.getBoundingClientRect().width + 24 : track.clientWidth * 0.8;
-  };
-  $('.car-prev', el).addEventListener('click', () =>
-    track.scrollBy({ left: -step(), behavior: 'smooth' }));
-  $('.car-next', el).addEventListener('click', () =>
-    track.scrollBy({ left: step(), behavior: 'smooth' }));
+  const track  = $('.track', el);
+  const slides = [...track.querySelectorAll('.g-item')];
+  const prev   = $('.car-prev', el);
+  const next   = $('.car-next', el);
 
-  const update = () => {
-    const max = track.scrollWidth - track.clientWidth - 2;
-    $('.car-prev', el).disabled = track.scrollLeft <= 2;
-    $('.car-next', el).disabled = track.scrollLeft >= max;
+  const step = () => {
+    const s = slides[0];
+    return s ? s.getBoundingClientRect().width + 18 : track.clientWidth * 0.6;
   };
-  track.addEventListener('scroll', update, { passive: true });
-  update();
+
+  let ticking = false;
+  const paint = () => {
+    ticking = false;
+    const box = track.getBoundingClientRect();
+    const mid = box.left + box.width / 2;
+    const unit = step();
+
+    slides.forEach(s => {
+      const r = s.getBoundingClientRect();
+      const d = Math.max(-3, Math.min(3, (r.left + r.width / 2 - mid) / unit));
+      const a = Math.abs(d);
+      s.style.transform =
+        `translateX(${-d * 52}px) rotateY(${-d * 27}deg) ` +
+        `translateZ(${-a * 80}px) scale(${1 - a * 0.12})`;
+      s.style.opacity = String(Math.max(0.2, 1 - a * 0.42));
+      s.style.zIndex  = String(100 - Math.round(a * 10));
+      s.classList.toggle('is-focus', a < 0.4);
+    });
+
+    const max = track.scrollWidth - track.clientWidth - 2;
+    prev.disabled = track.scrollLeft <= 2;
+    next.disabled = track.scrollLeft >= max;
+  };
+  const onScroll = () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(paint); }
+  };
+
+  prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  next.addEventListener('click', () => track.scrollBy({ left:  step(), behavior: 'smooth' }));
+  track.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  // images settling can change slide widths
+  track.querySelectorAll('img').forEach(i => i.addEventListener('load', onScroll));
+  paint();
 }
 
 /* ---------- "You may also like" ---------- */
