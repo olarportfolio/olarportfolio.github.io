@@ -130,6 +130,7 @@ const CATEGORIES = [
       {
         title: "Altar del Día de Muertos", year: "2020", type: "video",
         image: "assets/img/animation/altar-demo.webp",
+        video: "slyQ9cN4N8g",
         description: "A camera animation built to show the whole scenery from every angle. Nothing here is rendered and nothing but the camera moves — the piece exists purely to walk around the set and present the modelling from all sides."
       }
     ]
