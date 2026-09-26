@@ -290,10 +290,10 @@ const CATEGORIES = [
     ],
     projects: [
       {
-        title: "JaguarPhysics - Master Thesis phase 1", year: "2026 – in progress", type: "video",
+        title: "JaguarPhysics - Master Thesis phase 1", year: "2026", type: "video",
         image: "assets/img/game-design/jaguar-mainscene.webp",
         video: "wSgGpMtthH0",
-        description: "A prototype platformer game exploring how interactive media can be used to communicate wildlife conservation topics. The project focuses on creating an immersive experience based on jaguar movement and behavior, combining level design, gameplay mechanics, and procedural animation techniques. Currently in development, the prototype explores systems for naturalistic animal locomotion — running, jumping, climbing, and swimming — with the goal of creating a more natural connection between player movement and animal behavior."
+        description: "Where the project started: a prototype platformer exploring how interactive media can communicate wildlife conservation topics, built with conventional animation. This version gave me the level design and gameplay fundamentals the project needed. Once I found a way to approach procedural animation, I set it aside and rebuilt the idea around that instead."
       },
       {
         title: "Jaguar — Locomotion Lab", year: "2026", type: "video",
