@@ -58,15 +58,47 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: grid; grid-template-columns: 1fr auto 1fr; align-items: center;
   padding: 0 var(--pad-x);
   background: var(--bg);
+  transition: height .32s var(--ease);
+}
+
+/* ---- Contracted header ----------------------------------------
+   Shrinks once you scroll away from the top, showing only the mark.
+   Returns to full size back at the top, or on hover.               */
+.site-header.is-compact { height: 58px; }
+/* width stays put: the lockup only fades, so the centre column keeps
+   its size and the nav never slides sideways during the transition */
+.site-header.is-compact .logo-full { opacity: 0; }
+.site-header.is-compact .logo-mark { opacity: 1; }
+.site-header.is-compact .nav-main  { font-size: clamp(14px, .95vw, 16px); }
+.site-header.is-compact .nav-social svg { width: 19px; height: 19px; }
+
+.site-header.is-compact:hover,
+.site-header.is-compact:focus-within { height: var(--header-h); }
+.site-header.is-compact:hover .logo-full,
+.site-header.is-compact:focus-within .logo-full { opacity: 1; }
+.site-header.is-compact:hover .logo-mark,
+.site-header.is-compact:focus-within .logo-mark { opacity: 0; }
+.site-header.is-compact:hover .nav-main,
+.site-header.is-compact:focus-within .nav-main { font-size: var(--fs-nav); }
+.site-header.is-compact:hover .nav-social svg,
+.site-header.is-compact:focus-within .nav-social svg { width: 23px; height: 23px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header, .logo-full, .logo-mark { transition: none; }
 }
 .nav-main { display: flex; gap: 34px; font-size: var(--fs-nav); white-space: nowrap; }
 .nav-main a { color: var(--text); opacity: .82; transition: opacity .2s var(--ease); }
 .nav-main a:hover { opacity: 1; }
 .nav-main a.is-active { font-weight: 700; opacity: 1; }
 
-.logo { justify-self: center; display: block; }
-.logo svg,
-.logo img { width: 178px; height: auto; }
+.logo { justify-self: center; display: grid; place-items: center; }
+/* both marks share one cell so swapping them cannot shift the layout */
+.logo-full, .logo-mark {
+  grid-area: 1 / 1;
+  height: auto; transition: opacity .28s var(--ease), width .32s var(--ease);
+}
+.logo-full { width: 178px; }
+.logo-mark { width: 34px; opacity: 0; }
 
 .nav-social { justify-self: end; display: flex; gap: 26px; align-items: center; }
 .nav-social a { color: var(--text); opacity: .9; transition: opacity .2s var(--ease); }

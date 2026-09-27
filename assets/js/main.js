@@ -18,8 +18,13 @@ const ICON = {
 /* ---------- Logo -------------------------------------------------
    The real OLAR lockup, exported white-on-transparent from the
    corporate design files (CD of OLAR / Afg-2-Finale-Logo).
+
+   Two versions: the full lockup, and the mark alone for when the
+   header contracts on scroll.
    ----------------------------------------------------------------- */
-const LOGO_SVG = `<img src="assets/img/logo-olar.webp" alt="OLAR" width="700" height="288">`;
+const LOGO_SVG = `
+  <img class="logo-full" src="assets/img/logo-olar.webp" alt="OLAR" width="700" height="288">
+  <img class="logo-mark" src="assets/img/logo-mark.webp" alt="" aria-hidden="true" width="320" height="324">`;
 
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -57,10 +62,18 @@ function renderChrome() {
     <button class="to-top" aria-label="Back to top">${ICON.arrowUp}</button>`);
 
   const toTop = $('.to-top');
+  const header = $('.site-header');
   toTop.addEventListener('click', () =>
     window.scrollTo({ top: 0, behavior: 'smooth' }));
-  window.addEventListener('scroll', () =>
-    toTop.classList.toggle('is-visible', window.scrollY > 600), { passive: true });
+
+  // The header contracts to just the mark once you leave the top, and
+  // expands again at the top or on hover (the hover half is CSS).
+  const onScroll = () => {
+    toTop.classList.toggle('is-visible', window.scrollY > 600);
+    header.classList.toggle('is-compact', window.scrollY > 90);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 /* ---------- Hero (fades out as you scroll) ---------- */
