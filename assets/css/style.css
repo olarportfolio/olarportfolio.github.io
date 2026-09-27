@@ -388,12 +388,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .about-photo::before,
 .about-photo::after {
   content: ""; position: absolute; inset: 0;
-  border: 1px solid var(--text-muted);
+  border: 2px solid var(--text-muted);
   pointer-events: none; z-index: -1;
 }
-.about-photo::after  { transform: translate(11px, 11px); opacity: .40; }
-.about-photo::before { transform: translate(22px, 22px); opacity: .18; }
-.about-photo .thumb { outline: 1px solid rgba(227, 227, 227, .55); }
+.about-photo::after  { transform: translate(14px, 14px); opacity: .70; }
+.about-photo::before { transform: translate(28px, 28px); opacity: .38; }
+.about-photo .thumb { outline: 2px solid rgba(227, 227, 227, .8); }
 
 /* ============================================================
    CONTACT
@@ -463,8 +463,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
   .about-photo { max-width: 300px; }
-  .about-photo::after  { transform: translate(8px, 8px); }
-  .about-photo::before { transform: translate(16px, 16px); }
+  .about-photo::after  { transform: translate(10px, 10px); }
+  .about-photo::before { transform: translate(20px, 20px); }
 }
 
 @media (max-width: 680px) {
