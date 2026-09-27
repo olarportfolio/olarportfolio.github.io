@@ -37,7 +37,7 @@ const SITE = {
   about: {
     heading: "About me",
     intro: "Hi, my name is Oliver Armando.",
-    photo: null,                            // e.g. "assets/img/portrait.jpg"
+    photo: "assets/img/portrait.webp",
     paragraphs: [
       "I am a Mexican designer who studied in Germany. I find great pleasure in telling stories through my designs, from original character concepts to short animated films. What motivates me is the belief that design can bring people closer together. Through my work, I hope to create designs that encourage understanding, curiosity, and dialogue across cultures and perspectives.",
       "I have a rich cultural background, having attended a bicultural school in Mexico, lived in Germany for almost eight years, and met people from all over the world. This experience has given me a broader sense of the world and its diversity, while also making me curious about other ways of thinking. I have always believed that good communication begins with understanding one another. As a designer, I have the opportunity to communicate ideas in ways that transcend language and cultural boundaries, so I strive to create designs that are understandable, adaptable, and universal.",
