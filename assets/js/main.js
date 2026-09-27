@@ -432,9 +432,9 @@ function renderAbout() {
   const a = SITE.about;
   el.innerHTML = `
     <h1>${a.heading}</h1>
+    <p class="about-intro">${a.intro}</p>
     <div class="about-grid">
       <div class="about-text">
-        <p class="about-intro">${a.intro}</p>
         ${a.paragraphs.map(p => `<p>${p}</p>`).join('')}
       </div>
       <div class="about-photo">

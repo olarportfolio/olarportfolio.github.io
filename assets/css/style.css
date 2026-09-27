@@ -374,9 +374,26 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   display: grid; grid-template-columns: minmax(0,1.35fr) minmax(0,.65fr);
   gap: 90px; align-items: start; padding-left: 76px;
 }
-.about-intro { font-size: clamp(20px, 1.7vw, 29px); color: var(--text); margin-bottom: 2.2em; }
+/* sits above the grid, so the portrait lines up with the body text
+   rather than with this opening line */
+.about-intro {
+  font-size: clamp(20px, 1.7vw, 29px); color: var(--text);
+  margin: 0 0 2.2em; padding-left: 76px;
+}
 .about-text p { max-width: 62ch; }
-.about-photo { width: 100%; max-width: 360px; }
+/* Frame drawn from the OLAR corporate identity: the Visitenkarte
+   stacks offset squares in hairline grey, so the portrait gets the
+   same receding stack plus the thin outline of the wordmark strokes. */
+.about-photo { width: 100%; max-width: 360px; position: relative; }
+.about-photo::before,
+.about-photo::after {
+  content: ""; position: absolute; inset: 0;
+  border: 1px solid var(--text-muted);
+  pointer-events: none; z-index: -1;
+}
+.about-photo::after  { transform: translate(11px, 11px); opacity: .40; }
+.about-photo::before { transform: translate(22px, 22px); opacity: .18; }
+.about-photo .thumb { outline: 1px solid rgba(227, 227, 227, .55); }
 
 /* ============================================================
    CONTACT
@@ -446,6 +463,8 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
   .about-photo { max-width: 300px; }
+  .about-photo::after  { transform: translate(8px, 8px); }
+  .about-photo::before { transform: translate(16px, 16px); }
 }
 
 @media (max-width: 680px) {
