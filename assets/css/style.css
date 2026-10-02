@@ -112,9 +112,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .burger {
   display: none;
   position: fixed; right: 0; top: 104px; z-index: 120;
-  width: 112px; height: 86px; padding: 0;
+  width: 104px; height: 96px; padding: 0;
   background: none;
+  transition: top .38s var(--ease);
 }
+/* tucks up out of the way once the carousel takes the middle of the
+   screen, so it never sits on top of a thumbnail */
+body.scrolled .burger { top: 10px; }
 .burger-drop {
   position: absolute; inset: 0; width: 100%; height: 100%;
   fill: var(--surface-raised);
@@ -123,8 +127,9 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .burger:hover .burger-drop, .burger:active .burger-drop { fill: #4A4A4A; }
 
 /* bars sit on the circle's centre, not the box's */
+/* centred on the big chamber, not on the box */
 .burger-bars {
-  position: absolute; left: 44px; top: 50%;
+  position: absolute; left: 34px; top: 58%;
   transform: translate(-50%, -50%);
   display: block; width: 28px;
 }

@@ -71,11 +71,11 @@ function renderChrome() {
     <!-- Outside the header on purpose: the header hides itself as you
          scroll, and the way back to the other pages must not go with it. -->
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
-      <svg class="burger-drop" viewBox="0 0 112 86" aria-hidden="true" focusable="false">
-        <circle cx="44" cy="43" r="34"/>
-        <!-- the neck: concave sides, so it reads as surface tension
-             holding the drop to the edge rather than a plain tab -->
-        <path d="M112 15C90 22 80 32 76 43c4 11 14 21 36 28z"/>
+      <!-- An organic blob in the Ciel manner: one big chamber holding the
+           icon, the rest running off the right edge as though it grew
+           out of it. Drawn, because border-radius cannot do this. -->
+      <svg class="burger-drop" viewBox="0 0 104 96" aria-hidden="true" focusable="false">
+        <path d="M104 12C84 4 66 14 57 29 48 44 6 33 4 56c-2 23 26 40 50 33 20-6 34 6 50 2z"/>
       </svg>
       <span class="burger-bars"><span></span><span></span><span></span></span>
     </button>
@@ -109,6 +109,7 @@ function renderChrome() {
     const y = window.scrollY;
     toTop.classList.toggle('is-visible', y > 600);
     header.classList.toggle('is-compact', y > 90);
+    document.body.classList.toggle('scrolled', y > 90);
 
     // Pages with a hero let the hero's own fade drive the header, so
     // the logo goes out exactly with the text. Everywhere else the
