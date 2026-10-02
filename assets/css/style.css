@@ -148,6 +148,17 @@ body.menu-open .burger-bars span:nth-child(1) { transform: translateY(8px) rotat
 body.menu-open .burger-bars span:nth-child(2) { opacity: 0; }
 body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
+/* Catches taps outside the panel so the menu can be dismissed without
+   aiming for the X, and stops a stray tap hitting the page behind. */
+.menu-backdrop {
+  display: none;
+  position: fixed; inset: 0; z-index: 105;
+  background: rgba(10, 10, 10, .55);
+  opacity: 0; pointer-events: none;
+  transition: opacity .26s var(--ease);
+}
+body.menu-open .menu-backdrop { opacity: 1; pointer-events: auto; }
+
 .menu-panel {
   display: none;
   position: fixed; inset: 0 0 auto 0; z-index: 110;
@@ -603,6 +614,7 @@ body.menu-open { overflow: hidden; }
   .site-header { grid-template-columns: 1fr auto 1fr; }
   .burger { display: block; }
   .menu-panel { display: flex; }
+  .menu-backdrop { display: block; }
 
   /* fades out rather than sliding, so the logo leaves like the text.
      On pages without a hero this is driven by scroll direction. */

@@ -73,6 +73,7 @@ function renderChrome() {
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
       <span class="burger-bars"><span></span><span></span><span></span></span>
     </button>
+    <div class="menu-backdrop"></div>
     <nav class="menu-panel" id="menu-panel" aria-label="Pages">
       ${elsewhere.map(p => `<a href="${p.href}">${p.label}</a>`).join('')}
     </nav>`);
@@ -129,6 +130,8 @@ function wireBurger() {
   burger.addEventListener('click', () =>
     setOpen(!document.body.classList.contains('menu-open')));
   panel.addEventListener('click', e => { if (e.target.tagName === 'A') setOpen(false); });
+  // tapping anywhere outside the panel closes it, as well as the X
+  $('.menu-backdrop')?.addEventListener('click', () => setOpen(false));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
   // leaving phone width should never strand the panel open
   matchMedia('(max-width: 680px)').addEventListener('change', e => { if (!e.matches) setOpen(false); });
