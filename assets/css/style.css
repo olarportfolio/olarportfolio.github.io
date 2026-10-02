@@ -126,12 +126,12 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* Once you are reading, the burger steps back: it tucks to the top,
    shrinks and goes translucent so it stops covering words, while
    staying findable. Full strength again at the top or once opened. */
-body.scrolled .burger {
-  top: 10px; width: 50px; height: 42px; opacity: .5;
-}
+body.scrolled .burger { width: 50px; height: 42px; opacity: .5; }
 body.scrolled .burger-bars { width: 19px; }
 body.scrolled .burger-bars span { width: 19px; height: 2px; margin: 4px 0; }
-body.menu-open .burger { opacity: 1; }
+body.menu-open .burger { opacity: 1; width: 66px; height: 54px; }
+body.menu-open .burger-bars { width: 26px; }
+body.menu-open .burger-bars span { width: 26px; height: 3px; margin: 5px 0; }
 
 .burger-bars {
   position: absolute; left: 50%; top: 50%;
@@ -144,6 +144,8 @@ body.menu-open .burger { opacity: 1; }
   background: var(--text); border-radius: 2px;
   transition: transform .28s var(--ease), opacity .2s var(--ease);
 }
+/* 8px, not 13: the bars' 5px margins collapse between siblings, so the
+   gap between centres is height 3 + one 5px margin */
 body.menu-open .burger-bars span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 body.menu-open .burger-bars span:nth-child(2) { opacity: 0; }
 body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
@@ -159,22 +161,27 @@ body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-8px) rota
 }
 body.menu-open .menu-backdrop { opacity: 1; pointer-events: auto; }
 
+/* A strip the same height as the pill, sliding in from the right edge
+   rather than dropping over the whole screen. */
 .menu-panel {
   display: none;
-  position: fixed; inset: 0 0 auto 0; z-index: 110;
+  position: fixed; top: var(--burger-top, 104px); right: 0; z-index: 108;
+  height: 54px; width: max-content;
   background: var(--surface-raised);
-  flex-direction: column; align-items: center; gap: 4px;
-  padding: 108px 0 40px;
-  opacity: 0; transform: translateY(-10px);
-  transition: opacity .26s var(--ease), transform .26s var(--ease);
+  border-radius: 999px 0 0 999px;
+  flex-direction: row; align-items: center; justify-content: flex-end;
+  gap: 26px;
+  padding: 0 82px 0 30px;        /* right pad clears the pill */
+  transform: translateX(100%);
+  transition: transform .36s var(--ease), top .38s var(--ease);
   pointer-events: none;
 }
 .menu-panel a {
-  display: block; width: 100%; text-align: center;
-  padding: 18px 0; font-size: 21px; color: var(--text);
+  display: block; width: auto; padding: 4px 2px;
+  font-size: 17px; white-space: nowrap; color: var(--text);
 }
 .menu-panel a:active { background: rgba(255, 255, 255, .09); }
-body.menu-open .menu-panel { opacity: 1; transform: none; pointer-events: auto; }
+body.menu-open .menu-panel { transform: translateX(0); pointer-events: auto; }
 body.menu-open { overflow: hidden; }
 
 /* ============================================================
@@ -612,7 +619,10 @@ body.menu-open { overflow: hidden; }
   /* Phone header: just the logo, centred. The page links live in the
      burger, which is fixed to the corner and is not part of this bar. */
   .site-header { grid-template-columns: 1fr auto 1fr; }
-  .burger { display: block; }
+  /* one source of truth for where the pill and its strip sit */
+  body { --burger-top: 104px; }
+  body.scrolled { --burger-top: 10px; }
+  .burger { display: block; top: var(--burger-top); }
   .menu-panel { display: flex; }
   .menu-backdrop { display: block; }
 
