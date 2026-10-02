@@ -98,7 +98,6 @@ function renderChrome() {
   // expands again at the top or on hover (the hover half is CSS).
   // On phones it goes further: it slides away entirely while you scroll
   // down and comes back the moment you scroll up.
-  let lastY = window.scrollY;
   const onScroll = () => {
     const y = window.scrollY;
     toTop.classList.toggle('is-visible', y > 600);
@@ -107,13 +106,9 @@ function renderChrome() {
 
     // Pages with a hero let the hero's own fade drive the header, so
     // the logo goes out exactly with the text. Everywhere else the
-    // header hides by scroll direction instead.
-    if (!$('#hero')) {
-      const down = y > lastY;
-      if (y < 60) header.classList.remove('is-hidden');
-      else if (Math.abs(y - lastY) > 4) header.classList.toggle('is-hidden', down);
-    }
-    lastY = y;
+    // header belongs to the top of the page only: it comes back when
+    // you reach the top, not the moment you scroll up a little.
+    if (!$('#hero')) header.classList.toggle('is-hidden', y > 40);
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
