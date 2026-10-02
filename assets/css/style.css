@@ -112,7 +112,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .burger {
   display: none;
   position: fixed; right: 0; top: 104px; z-index: 120;
-  width: 104px; height: 96px; padding: 0;
+  width: 100px; height: 96px; padding: 0;
   background: none;
   transition: top .38s var(--ease);
 }
@@ -129,7 +129,7 @@ body.scrolled .burger { top: 10px; }
 /* bars sit on the circle's centre, not the box's */
 /* centred on the big chamber, not on the box */
 .burger-bars {
-  position: absolute; left: 34px; top: 58%;
+  position: absolute; left: 38px; top: 50%;
   transform: translate(-50%, -50%);
   display: block; width: 28px;
 }
@@ -188,10 +188,10 @@ body.menu-open { overflow: hidden; }
    the desktop hero keeps its single hovering chevron. */
 .hero-arrows { display: none; flex-direction: column; align-items: center; }
 .hero-arrows svg {
-  width: 30px; height: 17px; color: var(--text-body);
-  margin-bottom: -3px;
+  display: block; width: 30px; height: 17px; color: var(--text-body);
   animation: arrow-chase 1.7s var(--ease) infinite;
 }
+.hero-arrows svg + svg { margin-top: -3px; }
 .hero-arrows svg:nth-child(1) { animation-delay: 0s; }
 .hero-arrows svg:nth-child(2) { animation-delay: .19s; }
 .hero-arrows svg:nth-child(3) { animation-delay: .38s; }
@@ -552,10 +552,13 @@ body.menu-open { overflow: hidden; }
 .to-top svg { width: 22px; height: 22px; }
 .to-top-arrows { display: none; flex-direction: column; align-items: center; }
 .to-top-arrows svg {
-  width: 24px; height: 14px; color: var(--text);
-  margin-bottom: -4px; transform: rotate(180deg);
+  display: block; width: 24px; height: 14px; color: var(--text);
+  transform: rotate(180deg);
   animation: arrow-chase-up 1.7s var(--ease) infinite;
 }
+/* overlap between arrows only - a trailing negative margin would
+   shrink the box below the glyphs and throw the centring off */
+.to-top-arrows svg + svg { margin-top: -4px; }
 /* bottom arrow first, so the chase travels upward */
 .to-top-arrows svg:nth-child(1) { animation-delay: .38s; }
 .to-top-arrows svg:nth-child(2) { animation-delay: .19s; }
