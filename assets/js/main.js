@@ -71,7 +71,13 @@ function renderChrome() {
     <!-- Outside the header on purpose: the header hides itself as you
          scroll, and the way back to the other pages must not go with it. -->
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
-      <span></span><span></span><span></span>
+      <svg class="burger-drop" viewBox="0 0 112 86" aria-hidden="true" focusable="false">
+        <circle cx="44" cy="43" r="34"/>
+        <!-- the neck: concave sides, so it reads as surface tension
+             holding the drop to the edge rather than a plain tab -->
+        <path d="M112 15C90 22 80 32 76 43c4 11 14 21 36 28z"/>
+      </svg>
+      <span class="burger-bars"><span></span><span></span><span></span></span>
     </button>
     <nav class="menu-panel" id="menu-panel" aria-label="Pages">
       ${elsewhere.map(p => `<a href="${p.href}">${p.label}</a>`).join('')}
@@ -79,8 +85,15 @@ function renderChrome() {
 
   wireBurger();
 
+  // Phones get the hero's three arrows again, pointing the other way;
+  // the plain arrow icon stays for desktop.
   document.body.insertAdjacentHTML('beforeend', `
-    <button class="to-top" aria-label="Back to top">${ICON.arrowUp}</button>`);
+    <button class="to-top" aria-label="Back to top">
+      <span class="to-top-icon">${ICON.arrowUp}</span>
+      <span class="to-top-arrows" aria-hidden="true">
+        ${ICON.chevron}${ICON.chevron}${ICON.chevron}
+      </span>
+    </button>`);
 
   const toTop = $('.to-top');
   const header = $('.site-header');
@@ -97,9 +110,14 @@ function renderChrome() {
     toTop.classList.toggle('is-visible', y > 600);
     header.classList.toggle('is-compact', y > 90);
 
-    const down = y > lastY;
-    if (y < 60) header.classList.remove('is-hidden');
-    else if (Math.abs(y - lastY) > 4) header.classList.toggle('is-hidden', down);
+    // Pages with a hero let the hero's own fade drive the header, so
+    // the logo goes out exactly with the text. Everywhere else the
+    // header hides by scroll direction instead.
+    if (!$('#hero')) {
+      const down = y > lastY;
+      if (y < 60) header.classList.remove('is-hidden');
+      else if (Math.abs(y - lastY) > 4) header.classList.toggle('is-hidden', down);
+    }
     lastY = y;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -151,6 +169,7 @@ function renderHero() {
 
   const hero = $('.hero', wrap);
   const work = $('#work-grid');
+  const header = $('.site-header');
   const fade = () => {
     const phone = matchMedia(MOBILE).matches;
     // A phone page is barely taller than its hero, so the handover has
@@ -167,6 +186,8 @@ function renderHero() {
         ? String(Math.min(1, Math.max(0, (t - 0.1) * 1.6)))
         : '';
     }
+    // the logo leaves with the text, on the same curve
+    if (header) header.style.opacity = phone ? String(1 - t) : '';
   };
   window.addEventListener('scroll', fade, { passive: true });
   fade();
@@ -203,7 +224,7 @@ function renderWorkGrid() {
         `<div class="track">${tiles}${tiles}${tiles}</div>
          <button class="car-btn car-prev" aria-label="Previous">${ICON.caretLeft}</button>
          <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>
-         <p class="work-note">Click to open gallery</p>`;
+         <p class="work-note">Scroll and click on the category you want to see</p>`;
       wireCarousel(el, CATEGORIES.length, '.tile');
     } else {
       el.classList.remove('is-carousel');

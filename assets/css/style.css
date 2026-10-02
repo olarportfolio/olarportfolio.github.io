@@ -111,27 +111,31 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    is what gives it the droplet shape.                              */
 .burger {
   display: none;
-  position: fixed; top: 0; right: 0; z-index: 120;
-  width: 92px; height: 92px; padding: 0;
-  background: var(--surface-raised);
-  border-radius: 0 0 0 100%;
-  transition: background .25s var(--ease);
+  position: fixed; right: 0; top: 104px; z-index: 120;
+  width: 112px; height: 86px; padding: 0;
+  background: none;
 }
-.burger:hover, .burger:active { background: #4A4A4A; }
-.burger span {
-  display: block; width: 26px; height: 3px;
-  margin: 6px 0 6px auto;
-  margin-right: 20px;
+.burger-drop {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: var(--surface-raised);
+  transition: fill .25s var(--ease);
+}
+.burger:hover .burger-drop, .burger:active .burger-drop { fill: #4A4A4A; }
+
+/* bars sit on the circle's centre, not the box's */
+.burger-bars {
+  position: absolute; left: 44px; top: 50%;
+  transform: translate(-50%, -50%);
+  display: block; width: 28px;
+}
+.burger-bars span {
+  display: block; width: 28px; height: 3px; margin: 6px 0;
   background: var(--text); border-radius: 2px;
   transition: transform .28s var(--ease), opacity .2s var(--ease);
 }
-/* nudged up-right so the bars sit inside the round, not under it */
-.burger span:nth-child(1) { transform: translateY(-14px); }
-.burger span:nth-child(2) { transform: translateY(-14px); width: 20px; }
-.burger span:nth-child(3) { transform: translateY(-14px); width: 14px; }
-body.menu-open .burger span:nth-child(1) { transform: translateY(-5px) rotate(45deg); width: 26px; }
-body.menu-open .burger span:nth-child(2) { opacity: 0; }
-body.menu-open .burger span:nth-child(3) { transform: translateY(-23px) rotate(-45deg); width: 26px; }
+body.menu-open .burger-bars span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+body.menu-open .burger-bars span:nth-child(2) { opacity: 0; }
+body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
 
 .menu-panel {
   display: none;
@@ -541,6 +545,20 @@ body.menu-open { overflow: hidden; }
 .to-top.is-visible { opacity: .85; visibility: visible; }
 .to-top:hover { opacity: 1; background: #4A4A4A; }
 .to-top svg { width: 22px; height: 22px; }
+.to-top-arrows { display: none; flex-direction: column; align-items: center; }
+.to-top-arrows svg {
+  width: 24px; height: 14px; color: var(--text);
+  margin-bottom: -4px; transform: rotate(180deg);
+  animation: arrow-chase-up 1.7s var(--ease) infinite;
+}
+/* bottom arrow first, so the chase travels upward */
+.to-top-arrows svg:nth-child(1) { animation-delay: .38s; }
+.to-top-arrows svg:nth-child(2) { animation-delay: .19s; }
+.to-top-arrows svg:nth-child(3) { animation-delay: 0s; }
+@keyframes arrow-chase-up {
+  0%, 62%, 100% { opacity: .20; transform: rotate(180deg) scale(.86); }
+  18%           { opacity: 1;   transform: rotate(180deg) scale(1.18); }
+}
 
 /* ============================================================
    RESPONSIVE
@@ -572,14 +590,14 @@ body.menu-open { overflow: hidden; }
   .burger { display: block; }
   .menu-panel { display: flex; }
 
-  /* slides away while scrolling down, returns on the way up */
-  .site-header.is-hidden { transform: translateY(-100%); opacity: 0; }
-  .site-header {
-    transition: height .32s var(--ease), transform .34s var(--ease),
-                opacity .28s var(--ease);
-  }
+  /* fades out rather than sliding, so the logo leaves like the text.
+     On pages without a hero this is driven by scroll direction. */
+  .site-header.is-hidden { opacity: 0; pointer-events: none; }
+  .site-header { transition: height .32s var(--ease), opacity .3s var(--ease); }
   .nav-main, .nav-social { display: none; }
-  .logo { display: grid; }
+  /* display:none drops those two out of the grid, so the logo must be
+     pinned to the middle column or it slides into the first one */
+  .logo { display: grid; grid-column: 2; }
   .logo-full { width: 116px; }
   .logo-mark { width: 30px; }
   .site-header.is-compact { height: 56px; }
@@ -603,10 +621,11 @@ body.menu-open { overflow: hidden; }
     min-height: 100svh;
     display: flex; flex-direction: column; justify-content: center;
   }
+  /* deliberately quiet - it is a hint, not a headline, and should not
+     pull attention off the arrows or the carousel */
   .work-note {
-    display: block; text-align: center; margin: 26px 0 0;
-    font-size: 13px; letter-spacing: .07em; text-transform: uppercase;
-    color: var(--text-muted);
+    display: block; text-align: center; margin: 24px auto 0; max-width: 30ch;
+    font-size: 12.5px; line-height: 1.45; color: #7C7C7C;
   }
   .work-grid.is-carousel .track {
     display: flex; gap: 16px;
@@ -634,7 +653,9 @@ body.menu-open { overflow: hidden; }
   .car-prev { left: 6px; }
   .car-next { right: 6px; }
   .also-strip { grid-template-columns: repeat(2, 1fr); }
-  .to-top { right: 20px; bottom: 20px; width: 48px; height: 48px; }
+  .to-top { right: 20px; bottom: 20px; width: 52px; height: 52px; }
+  .to-top-icon { display: none; }
+  .to-top-arrows { display: flex; }
   .play { width: 54px; height: 54px; }
 }
 
