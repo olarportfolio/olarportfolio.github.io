@@ -57,9 +57,6 @@ function renderChrome() {
 
   document.body.insertAdjacentHTML('afterbegin', `
     <header class="site-header">
-      <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
-        <span></span><span></span><span></span>
-      </button>
       <nav class="nav-main">
         <a href="index.html"${active('work')}>Work</a>
         <a href="about.html"${active('about')}>About me</a>
@@ -71,6 +68,11 @@ function renderChrome() {
         <a href="contact.html" aria-label="Contact">${ICON.mail}</a>
       </div>
     </header>
+    <!-- Outside the header on purpose: the header hides itself as you
+         scroll, and the way back to the other pages must not go with it. -->
+    <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
+      <span></span><span></span><span></span>
+    </button>
     <nav class="menu-panel" id="menu-panel" aria-label="Pages">
       ${elsewhere.map(p => `<a href="${p.href}">${p.label}</a>`).join('')}
     </nav>`);
@@ -87,9 +89,18 @@ function renderChrome() {
 
   // The header contracts to just the mark once you leave the top, and
   // expands again at the top or on hover (the hover half is CSS).
+  // On phones it goes further: it slides away entirely while you scroll
+  // down and comes back the moment you scroll up.
+  let lastY = window.scrollY;
   const onScroll = () => {
-    toTop.classList.toggle('is-visible', window.scrollY > 600);
-    header.classList.toggle('is-compact', window.scrollY > 90);
+    const y = window.scrollY;
+    toTop.classList.toggle('is-visible', y > 600);
+    header.classList.toggle('is-compact', y > 90);
+
+    const down = y > lastY;
+    if (y < 60) header.classList.remove('is-hidden');
+    else if (Math.abs(y - lastY) > 4) header.classList.toggle('is-hidden', down);
+    lastY = y;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
@@ -191,7 +202,8 @@ function renderWorkGrid() {
       el.innerHTML =
         `<div class="track">${tiles}${tiles}${tiles}</div>
          <button class="car-btn car-prev" aria-label="Previous">${ICON.caretLeft}</button>
-         <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>`;
+         <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>
+         <p class="work-note">Click to open gallery</p>`;
       wireCarousel(el, CATEGORIES.length, '.tile');
     } else {
       el.classList.remove('is-carousel');

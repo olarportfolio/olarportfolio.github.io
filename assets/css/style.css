@@ -105,23 +105,40 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-social a:hover { opacity: 1; }
 .nav-social svg { width: 23px; height: 23px; }
 
-/* ---- Burger + menu panel: phones only, hidden by default ---- */
-.burger { display: none; width: 40px; height: 40px; padding: 0; }
+/* ---- Burger: a droplet anchored in the top-right corner ----
+   Fixed to the screen, never part of the header, so it survives the
+   header sliding away. The quarter-round bleeds off both edges, which
+   is what gives it the droplet shape.                              */
+.burger {
+  display: none;
+  position: fixed; top: 0; right: 0; z-index: 120;
+  width: 92px; height: 92px; padding: 0;
+  background: var(--surface-raised);
+  border-radius: 0 0 0 100%;
+  transition: background .25s var(--ease);
+}
+.burger:hover, .burger:active { background: #4A4A4A; }
 .burger span {
-  display: block; width: 24px; height: 2px; margin: 5px auto;
-  background: var(--text);
+  display: block; width: 26px; height: 3px;
+  margin: 6px 0 6px auto;
+  margin-right: 20px;
+  background: var(--text); border-radius: 2px;
   transition: transform .28s var(--ease), opacity .2s var(--ease);
 }
-body.menu-open .burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+/* nudged up-right so the bars sit inside the round, not under it */
+.burger span:nth-child(1) { transform: translateY(-14px); }
+.burger span:nth-child(2) { transform: translateY(-14px); width: 20px; }
+.burger span:nth-child(3) { transform: translateY(-14px); width: 14px; }
+body.menu-open .burger span:nth-child(1) { transform: translateY(-5px) rotate(45deg); width: 26px; }
 body.menu-open .burger span:nth-child(2) { opacity: 0; }
-body.menu-open .burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+body.menu-open .burger span:nth-child(3) { transform: translateY(-23px) rotate(-45deg); width: 26px; }
 
 .menu-panel {
   display: none;
-  position: fixed; inset: var(--header-h) 0 auto 0; z-index: 99;
+  position: fixed; inset: 0 0 auto 0; z-index: 110;
   background: var(--bg);
   flex-direction: column; align-items: center; gap: 4px;
-  padding: 22px 0 34px;
+  padding: 108px 0 40px;
   opacity: 0; transform: translateY(-10px);
   transition: opacity .26s var(--ease), transform .26s var(--ease);
   pointer-events: none;
@@ -169,9 +186,11 @@ body.menu-open { overflow: hidden; }
 .hero-arrows svg:nth-child(1) { animation-delay: 0s; }
 .hero-arrows svg:nth-child(2) { animation-delay: .19s; }
 .hero-arrows svg:nth-child(3) { animation-delay: .38s; }
+/* the scale rides the same curve as the opacity, so each arrow swells
+   as it lights up */
 @keyframes arrow-chase {
-  0%, 62%, 100% { opacity: .20; }
-  18%           { opacity: 1; }
+  0%, 62%, 100% { opacity: .20; transform: scale(.86); }
+  18%           { opacity: 1;   transform: scale(1.18); }
 }
 
 .hero-chevron {
@@ -547,11 +566,18 @@ body.menu-open { overflow: hidden; }
 @media (max-width: 680px) {
   :root { --pad-x: 20px; --header-h: 84px; }
 
-  /* Phone header: burger left, logo centred, nothing else.
-     The three page links live in the burger panel instead. */
-  .site-header { grid-template-columns: 40px 1fr 40px; }
-  .burger { display: block; justify-self: start; }
+  /* Phone header: just the logo, centred. The page links live in the
+     burger, which is fixed to the corner and is not part of this bar. */
+  .site-header { grid-template-columns: 1fr auto 1fr; }
+  .burger { display: block; }
   .menu-panel { display: flex; }
+
+  /* slides away while scrolling down, returns on the way up */
+  .site-header.is-hidden { transform: translateY(-100%); opacity: 0; }
+  .site-header {
+    transition: height .32s var(--ease), transform .34s var(--ease),
+                opacity .28s var(--ease);
+  }
   .nav-main, .nav-social { display: none; }
   .logo { display: grid; }
   .logo-full { width: 116px; }
@@ -569,9 +595,18 @@ body.menu-open { overflow: hidden; }
      so the overlay is always on - same look as the desktop
      hover state, with the cover showing through behind it.   */
   .work-grid.is-carousel {
-    display: block; position: relative; padding: 0 0 70px;
+    position: relative; padding: 0;
     --slide-w: min(300px, 78vw);
     transition: opacity .4s var(--ease);
+    /* fills the screen below the hero so the carousel sits centred
+       rather than clinging to the bottom of the page */
+    min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .work-note {
+    display: block; text-align: center; margin: 26px 0 0;
+    font-size: 13px; letter-spacing: .07em; text-transform: uppercase;
+    color: var(--text-muted);
   }
   .work-grid.is-carousel .track {
     display: flex; gap: 16px;
