@@ -657,6 +657,18 @@ body.menu-open { overflow: hidden; }
   .car-prev { left: 6px; }
   .car-next { right: 6px; }
   .also-strip { grid-template-columns: repeat(2, 1fr); }
+  /* Lightbox: the arrows sat on top of the picture on a narrow screen,
+     so they move to a row underneath it. Swiping works too. */
+  .lightbox { padding: 60px 12px 96px; }
+  .lb-img { max-height: 66vh; max-width: 94vw; }
+  .lb-nav {
+    top: auto; bottom: 22px; transform: none;
+    width: 50px; height: 50px;
+  }
+  .lb-prev { left: 50%; margin-left: -60px; }
+  .lb-next { right: 50%; margin-right: -60px; }
+  .lb-close { top: 14px; right: 14px; }
+
   .to-top { right: 20px; bottom: 20px; width: 52px; height: 52px; }
   .to-top-icon { display: none; }
   .to-top-arrows { display: flex; }

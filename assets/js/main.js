@@ -388,6 +388,23 @@ function openLightbox(src, caption) {
       if (e.key === 'ArrowRight') stepLightbox(1);
     });
 
+    // swipe sideways to move through the set on touch
+    let sx = 0, sy = 0, tracking = false;
+    lb.addEventListener('touchstart', e => {
+      if (e.touches.length !== 1) return;
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
+    }, { passive: true });
+    lb.addEventListener('touchend', e => {
+      if (!tracking) return;
+      tracking = false;
+      const t = e.changedTouches[0];
+      const dx = t.clientX - sx, dy = t.clientY - sy;
+      // must be clearly horizontal, so a vertical flick never counts
+      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+        stepLightbox(dx < 0 ? 1 : -1);
+      }
+    }, { passive: true });
+
     // scrolling inside the enlarged view moves through the set
     let cooling = false;
     lb.addEventListener('wheel', e => {
