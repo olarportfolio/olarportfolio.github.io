@@ -117,17 +117,27 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   width: 66px; height: 54px; padding: 0;
   background: var(--surface-raised);
   border-radius: 999px 0 0 999px;
-  transition: top .38s var(--ease), background .25s var(--ease);
+  transition: top .38s var(--ease), background .25s var(--ease),
+              width .3s var(--ease), height .3s var(--ease),
+              opacity .3s var(--ease);
 }
 .burger:hover, .burger:active { background: #4A4A4A; }
-/* tucks up out of the way once the carousel takes the middle of the
-   screen, so it never sits on top of a thumbnail */
-body.scrolled .burger { top: 10px; }
+
+/* Once you are reading, the burger steps back: it tucks to the top,
+   shrinks and goes translucent so it stops covering words, while
+   staying findable. Full strength again at the top or once opened. */
+body.scrolled .burger {
+  top: 10px; width: 50px; height: 42px; opacity: .5;
+}
+body.scrolled .burger-bars { width: 19px; }
+body.scrolled .burger-bars span { width: 19px; height: 2px; margin: 4px 0; }
+body.menu-open .burger { opacity: 1; }
 
 .burger-bars {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   display: block; width: 26px;
+  transition: width .3s var(--ease);
 }
 .burger-bars span {
   display: block; width: 26px; height: 3px; margin: 5px 0;
@@ -668,6 +678,15 @@ body.menu-open { overflow: hidden; }
   .lb-prev { left: 50%; margin-left: -60px; }
   .lb-next { right: 50%; margin-right: -60px; }
   .lb-close { top: 14px; right: 14px; }
+
+  /* About: the desktop indent made this line look centred on a phone */
+  .about-intro { padding-left: 0; }
+  /* justified reads better in a narrow column; hyphenation stops it
+     opening rivers between words */
+  .about-text p {
+    text-align: justify;
+    hyphens: auto; -webkit-hyphens: auto;
+  }
 
   .to-top { right: 20px; bottom: 20px; width: 52px; height: 52px; }
   .to-top-icon { display: none; }
