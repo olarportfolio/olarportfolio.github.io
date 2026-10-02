@@ -109,38 +109,34 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
    Fixed to the screen, never part of the header, so it survives the
    header sliding away. The quarter-round bleeds off both edges, which
    is what gives it the droplet shape.                              */
+/* A pill sliced down the middle by the screen edge: rounded cap on
+   the left, flat against the border on the right. */
 .burger {
   display: none;
   position: fixed; right: 0; top: 104px; z-index: 120;
-  width: 100px; height: 96px; padding: 0;
-  background: none;
-  transition: top .38s var(--ease);
+  width: 66px; height: 54px; padding: 0;
+  background: var(--surface-raised);
+  border-radius: 999px 0 0 999px;
+  transition: top .38s var(--ease), background .25s var(--ease);
 }
+.burger:hover, .burger:active { background: #4A4A4A; }
 /* tucks up out of the way once the carousel takes the middle of the
    screen, so it never sits on top of a thumbnail */
 body.scrolled .burger { top: 10px; }
-.burger-drop {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  fill: var(--surface-raised);
-  transition: fill .25s var(--ease);
-}
-.burger:hover .burger-drop, .burger:active .burger-drop { fill: #4A4A4A; }
 
-/* bars sit on the circle's centre, not the box's */
-/* centred on the big chamber, not on the box */
 .burger-bars {
-  position: absolute; left: 38px; top: 50%;
+  position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);
-  display: block; width: 28px;
+  display: block; width: 26px;
 }
 .burger-bars span {
-  display: block; width: 28px; height: 3px; margin: 6px 0;
+  display: block; width: 26px; height: 3px; margin: 5px 0;
   background: var(--text); border-radius: 2px;
   transition: transform .28s var(--ease), opacity .2s var(--ease);
 }
-body.menu-open .burger-bars span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+body.menu-open .burger-bars span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
 body.menu-open .burger-bars span:nth-child(2) { opacity: 0; }
-body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+body.menu-open .burger-bars span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
 .menu-panel {
   display: none;

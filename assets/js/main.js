@@ -71,13 +71,6 @@ function renderChrome() {
     <!-- Outside the header on purpose: the header hides itself as you
          scroll, and the way back to the other pages must not go with it. -->
     <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
-      <!-- Two circles joined by a bridge, in the Ciel manner, sliced at
-           the bridge by the screen edge: the chamber holding the icon
-           stays, the second circle is off-screen. The concave bridge
-           walls are what make the two read as one fused form. -->
-      <svg class="burger-drop" viewBox="0 0 100 96" aria-hidden="true" focusable="false">
-        <path d="M64 27Q86 36 100 33L100 63Q86 60 64 69A34 34 0 1 1 64 27Z"/>
-      </svg>
       <span class="burger-bars"><span></span><span></span><span></span></span>
     </button>
     <nav class="menu-panel" id="menu-panel" aria-label="Pages">
