@@ -105,6 +105,35 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .nav-social a:hover { opacity: 1; }
 .nav-social svg { width: 23px; height: 23px; }
 
+/* ---- Burger + menu panel: phones only, hidden by default ---- */
+.burger { display: none; width: 40px; height: 40px; padding: 0; }
+.burger span {
+  display: block; width: 24px; height: 2px; margin: 5px auto;
+  background: var(--text);
+  transition: transform .28s var(--ease), opacity .2s var(--ease);
+}
+body.menu-open .burger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.menu-open .burger span:nth-child(2) { opacity: 0; }
+body.menu-open .burger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.menu-panel {
+  display: none;
+  position: fixed; inset: var(--header-h) 0 auto 0; z-index: 99;
+  background: var(--bg);
+  flex-direction: column; align-items: center; gap: 4px;
+  padding: 22px 0 34px;
+  opacity: 0; transform: translateY(-10px);
+  transition: opacity .26s var(--ease), transform .26s var(--ease);
+  pointer-events: none;
+}
+.menu-panel a {
+  display: block; width: 100%; text-align: center;
+  padding: 18px 0; font-size: 21px; color: var(--text);
+}
+.menu-panel a:active { background: #2C2C2C; }
+body.menu-open .menu-panel { opacity: 1; transform: none; pointer-events: auto; }
+body.menu-open { overflow: hidden; }
+
 /* ============================================================
    HERO  (full viewport, fades out on scroll)
    ============================================================ */
@@ -128,6 +157,22 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .hero-social a:hover { background: #2E2E2E; transform: translateY(-2px); }
 .hero-social svg { width: 19px; height: 19px; }
+
+/* Three arrows lighting up one after another, downwards. Phones only -
+   the desktop hero keeps its single hovering chevron. */
+.hero-arrows { display: none; flex-direction: column; align-items: center; }
+.hero-arrows svg {
+  width: 30px; height: 17px; color: var(--text-body);
+  margin-bottom: -3px;
+  animation: arrow-chase 1.7s var(--ease) infinite;
+}
+.hero-arrows svg:nth-child(1) { animation-delay: 0s; }
+.hero-arrows svg:nth-child(2) { animation-delay: .19s; }
+.hero-arrows svg:nth-child(3) { animation-delay: .38s; }
+@keyframes arrow-chase {
+  0%, 62%, 100% { opacity: .20; }
+  18%           { opacity: 1; }
+}
 
 .hero-chevron {
   position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%);
@@ -501,10 +546,49 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 @media (max-width: 680px) {
   :root { --pad-x: 20px; --header-h: 84px; }
-  .nav-main { gap: 18px; font-size: 15px; }
-  .nav-social { gap: 16px; }
-  .nav-social svg { width: 20px; height: 20px; }
-  .logo svg { width: 118px; }
+
+  /* Phone header: burger left, logo centred, nothing else.
+     The three page links live in the burger panel instead. */
+  .site-header { grid-template-columns: 40px 1fr 40px; }
+  .burger { display: block; justify-self: start; }
+  .menu-panel { display: flex; }
+  .nav-main, .nav-social { display: none; }
+  .logo { display: grid; }
+  .logo-full { width: 116px; }
+  .logo-mark { width: 30px; }
+  .site-header.is-compact { height: 56px; }
+
+  /* hero: arrows replace the mail icon and the bottom chevron */
+  .hero-social, .hero-chevron { display: none; }
+  .hero-arrows { display: flex; }
+  .hero { height: 100svh; }          /* ignores the address bar, so nothing jumps */
+  .hero-sub { margin-bottom: 1.8em; }
+
+  /* ---- Categories as a swipeable carousel -------------------
+     The labels can no longer wait for a hover that never comes,
+     so the overlay is always on - same look as the desktop
+     hover state, with the cover showing through behind it.   */
+  .work-grid.is-carousel {
+    display: block; position: relative; padding: 0 0 70px;
+    --slide-w: min(300px, 78vw);
+    transition: opacity .4s var(--ease);
+  }
+  .work-grid.is-carousel .track {
+    display: flex; gap: 16px;
+    overflow-x: auto; overscroll-behavior-x: contain;
+    padding: 6px calc((100% - var(--slide-w)) / 2) 14px;
+    perspective: 1200px; perspective-origin: 50% 45%;
+    scrollbar-width: none;
+  }
+  .work-grid.is-carousel .track::-webkit-scrollbar { display: none; }
+  .work-grid.is-carousel .tile {
+    flex: 0 0 var(--slide-w);
+    transform-style: preserve-3d; will-change: transform, opacity;
+  }
+  .work-grid.is-carousel .tile-overlay { opacity: .93; }
+  .work-grid.is-carousel .car-btn { top: 50%; }
+  .work-grid.is-carousel .car-prev { left: 4px; }
+  .work-grid.is-carousel .car-next { right: 4px; }
   .work-grid { grid-template-columns: 1fr; gap: 16px; }
   .gallery { --gallery-cols: 1; padding: 0 20px; row-gap: 34px; }
   .gallery.is-compact { row-gap: 64px; }
@@ -521,8 +605,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* Phones: the centred logo no longer fits between nav and icons. */
 @media (max-width: 520px) {
-  .site-header { grid-template-columns: 1fr auto; }
-  .logo { display: none; }
-  .nav-main { gap: 14px; font-size: 14px; }
+  /* the logo now stays: the burger freed up the room it needed */
+  .logo-full { width: 104px; }
   .about h1, .page-head h1 { font-size: 34px; }
 }

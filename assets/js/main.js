@@ -26,6 +26,13 @@ const LOGO_SVG = `
   <img class="logo-full" src="assets/img/logo-olar.webp" alt="OLAR" width="700" height="288">
   <img class="logo-mark" src="assets/img/logo-mark.webp" alt="" aria-hidden="true" width="320" height="324">`;
 
+/* The three pages, used to build the burger menu contextually. */
+const PAGES = [
+  { id: 'work',    href: 'index.html',   label: 'Work' },
+  { id: 'about',   href: 'about.html',   label: 'About me' },
+  { id: 'contact', href: 'contact.html', label: 'Contact' }
+];
+
 /* ---------- Helpers ---------- */
 const $ = (sel, root = document) => root.querySelector(sel);
 const getCategory = (id) => CATEGORIES.find(c => c.id === id);
@@ -44,8 +51,15 @@ function renderChrome() {
   const active = (p) => p === page ? ' class="is-active"' : '';
   const ig = SITE.contact.links.instagram;
 
+  // On phones the three links collapse into the burger, which lists
+  // only the pages you are NOT on.
+  const elsewhere = PAGES.filter(p => p.id !== page);
+
   document.body.insertAdjacentHTML('afterbegin', `
     <header class="site-header">
+      <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel">
+        <span></span><span></span><span></span>
+      </button>
       <nav class="nav-main">
         <a href="index.html"${active('work')}>Work</a>
         <a href="about.html"${active('about')}>About me</a>
@@ -56,7 +70,12 @@ function renderChrome() {
         ${ig ? `<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram">${ICON.instagram}</a>` : ''}
         <a href="contact.html" aria-label="Contact">${ICON.mail}</a>
       </div>
-    </header>`);
+    </header>
+    <nav class="menu-panel" id="menu-panel" aria-label="Pages">
+      ${elsewhere.map(p => `<a href="${p.href}">${p.label}</a>`).join('')}
+    </nav>`);
+
+  wireBurger();
 
   document.body.insertAdjacentHTML('beforeend', `
     <button class="to-top" aria-label="Back to top">${ICON.arrowUp}</button>`);
@@ -76,6 +95,26 @@ function renderChrome() {
   onScroll();
 }
 
+/* ---------- Burger menu (phones) ---------- */
+function wireBurger() {
+  const burger = $('.burger');
+  const panel  = $('.menu-panel');
+  if (!burger || !panel) return;
+
+  const setOpen = (open) => {
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', String(open));
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+
+  burger.addEventListener('click', () =>
+    setOpen(!document.body.classList.contains('menu-open')));
+  panel.addEventListener('click', e => { if (e.target.tagName === 'A') setOpen(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+  // leaving phone width should never strand the panel open
+  matchMedia('(max-width: 680px)').addEventListener('change', e => { if (!e.matches) setOpen(false); });
+}
+
 /* ---------- Hero (fades out as you scroll) ---------- */
 function renderHero() {
   const wrap = $('#hero');
@@ -91,32 +130,78 @@ function renderHero() {
           ${ig ? `<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram">${ICON.instagram}</a>` : ''}
           <a href="contact.html" aria-label="Contact">${ICON.mail}</a>
         </div>
+        <!-- phones get a chase of three arrows instead of the mail icon -->
+        <div class="hero-arrows" aria-hidden="true">
+          ${ICON.chevron}${ICON.chevron}${ICON.chevron}
+        </div>
       </section>
       <div class="hero-chevron">${ICON.chevron}</div>
     </div>`;
 
   const hero = $('.hero', wrap);
+  const work = $('#work-grid');
   const fade = () => {
-    const t = Math.min(window.scrollY / (window.innerHeight * 0.7), 1);
+    const phone = matchMedia(MOBILE).matches;
+    // A phone page is barely taller than its hero, so the handover has
+    // to finish inside roughly a third of a screen - over 0.7 it never
+    // completes and both halves sit permanently half-faded.
+    const span = window.innerHeight * (phone ? 0.32 : 0.7);
+    const t = Math.min(window.scrollY / span, 1);
     hero.style.opacity = String(1 - t);
     $('.hero-chevron', wrap).style.opacity = String(0.8 * (1 - t));
+    // On phones the categories fade in as the hero fades out, so the
+    // two never sit on screen at half strength together.
+    if (work) {
+      work.style.opacity = phone
+        ? String(Math.min(1, Math.max(0, (t - 0.1) * 1.6)))
+        : '';
+    }
   };
   window.addEventListener('scroll', fade, { passive: true });
   fade();
 }
 
-/* ---------- Work grid: one tile per category ---------- */
+/* ---------- Work grid: one tile per category ----------
+   A grid on desktop; on phones the same tiles become a looping,
+   swipeable carousel, since a seven-tile column is a long scroll.  */
+const MOBILE = '(max-width: 680px)';
+
+const tileHTML = c => `
+  <a class="tile" href="category.html?c=${c.id}">
+    ${thumb(c.cover, 'ratio-4x3', c.title + ' - cover')}
+    <div class="tile-overlay">
+      <h3>${c.title}</h3>
+      <span>${c.year}</span>
+    </div>
+  </a>`;
+
 function renderWorkGrid() {
   const el = $('#work-grid');
   if (!el) return;
-  el.innerHTML = CATEGORIES.map(c => `
-    <a class="tile" href="category.html?c=${c.id}">
-      ${thumb(c.cover, 'ratio-4x3', c.title + ' - cover')}
-      <div class="tile-overlay">
-        <h3>${c.title}</h3>
-        <span>${c.year}</span>
-      </div>
-    </a>`).join('');
+
+  const paint = () => {
+    const phone = matchMedia(MOBILE).matches;
+    const mode  = phone ? 'carousel' : 'grid';
+    if (el.dataset.mode === mode) return;        // nothing to rebuild
+    el.dataset.mode = mode;
+
+    const tiles = CATEGORIES.map(tileHTML).join('');
+    if (phone) {
+      el.classList.add('is-carousel');
+      el.innerHTML =
+        `<div class="track">${tiles}${tiles}${tiles}</div>
+         <button class="car-btn car-prev" aria-label="Previous">${ICON.caretLeft}</button>
+         <button class="car-btn car-next" aria-label="Next">${ICON.caretRight}</button>`;
+      wireCarousel(el, CATEGORIES.length, '.tile');
+    } else {
+      el.classList.remove('is-carousel');
+      el.innerHTML = tiles;
+    }
+  };
+
+  paint();
+  let t;
+  window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(paint, 200); });
 }
 
 /* ---------- Category page ---------- */
@@ -317,9 +402,9 @@ function stepLightbox(dir) {
    how far it sits from the centre, so neighbours tuck behind the piece
    in focus and fade out. Driven entirely by scroll position, so the
    wheel, a swipe and the arrows all produce the same motion.          */
-function wireCarousel(el, realCount) {
+function wireCarousel(el, realCount, sel = '.g-item') {
   const track  = $('.track', el);
-  const slides = [...track.querySelectorAll('.g-item')];
+  const slides = [...track.querySelectorAll(sel)];
   const prev   = $('.car-prev', el);
   const next   = $('.car-next', el);
   if (!slides.length) return;
@@ -400,7 +485,7 @@ function wireCarousel(el, realCount) {
   // Only the centred slide can be opened. Clicking any other one turns
   // the carousel to it instead.
   track.addEventListener('click', e => {
-    const item = e.target.closest('.g-item');
+    const item = e.target.closest(sel);
     if (!item || item.classList.contains('is-focus')) return;
     e.preventDefault();
     e.stopPropagation();
