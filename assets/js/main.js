@@ -613,11 +613,52 @@ function placeZoomDock() {
     ` scale(${1 / vv.scale})`;
 }
 
+/* Zooming out leaves the page sitting crooked: while you are zoomed the
+   browser pans the VISUAL viewport inside the layout one, and on the way
+   back to 1x it does not always fold that offset into the page's own
+   scroll - so the content lands away from where it was and has to be
+   dragged back. Folding it in by hand is the whole fix. Safari settles
+   the viewport a frame or two late, hence the repeats. */
+function settleZoom() {
+  const vv = window.visualViewport;
+  if (!vv) return;
+  const to = y => {
+    try { window.scrollTo({ left: 0, top: y, behavior: 'instant' }); }
+    catch { window.scrollTo(0, y); }        // the page scrolls smoothly by
+  };                                        // default; this must not glide
+
+  // put the leftover visual offset back into the page's own scroll
+  const fold = () => {
+    if (Math.abs(vv.scale - 1) > 0.02) return;        // zoomed again already
+    if (!vv.offsetTop && !vv.offsetLeft && !window.scrollX) return;
+    to(Math.max(0, Math.round(window.scrollY + vv.offsetTop)));
+  };
+
+  // iOS also leaves fixed things - the header, the burger - where the zoom
+  // left them until something scrolls. One pixel down and back is enough to
+  // make it lay them out again, and is invisible.
+  const jog = () => {
+    const y = window.scrollY;
+    to(y > 0 ? y - 1 : 1);
+    requestAnimationFrame(() => to(y));
+  };
+
+  fold();
+  requestAnimationFrame(() => { fold(); jog(); });
+  setTimeout(() => { fold(); jog(); }, 220);
+}
+
 function watchPageZoom() {
   const vv = window.visualViewport;
   if (!vv) return;                      // nothing reports the zoom level
   let queued = false;
+  let wasZoomed = false;
   const check = () => {
+    // the moment the zoom lets go, put the page back where it belongs
+    const zoomed = isPageZoomed();
+    if (wasZoomed && !zoomed) settleZoom();
+    wasZoomed = zoomed;
+
     if (queued) return;                 // a pinch fires these in bursts
     queued = true;
     requestAnimationFrame(() => {
