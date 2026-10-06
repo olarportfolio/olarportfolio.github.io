@@ -475,6 +475,127 @@ function wireMedia(root) {
 let ZOOMS = [];       // [{src, caption}] for the category on screen
 let zoomAt = 0;
 
+/* The page itself does not zoom on a phone - pinching it pushed the fixed
+   header and burger off screen and left people looking at a blank strip.
+   The enlarged image does, so the lightbox runs its own pinch below. */
+const LBZOOM = { scale: 1, x: 0, y: 0 };
+
+function paintLbZoom() {
+  const img = $('.lb-img');
+  if (!img) return;
+  img.style.transform = LBZOOM.scale === 1
+    ? ''
+    : `translate(${LBZOOM.x}px, ${LBZOOM.y}px) scale(${LBZOOM.scale})`;
+  img.classList.toggle('is-zoomed', LBZOOM.scale > 1);
+}
+
+function resetLbZoom() {
+  LBZOOM.scale = 1; LBZOOM.x = 0; LBZOOM.y = 0;
+  paintLbZoom();
+}
+
+/* Keeps the enlarged picture from being dragged off the screen: the most
+   it can move is however far it now overflows its own unzoomed box. */
+function clampLbPan(img) {
+  const mx = Math.max(0, (img.offsetWidth  * LBZOOM.scale - img.offsetWidth))  / 2;
+  const my = Math.max(0, (img.offsetHeight * LBZOOM.scale - img.offsetHeight)) / 2;
+  LBZOOM.x = Math.min(mx, Math.max(-mx, LBZOOM.x));
+  LBZOOM.y = Math.min(my, Math.max(-my, LBZOOM.y));
+}
+
+function wireLightboxZoom(lb) {
+  const img = $('.lb-img', lb);
+  const gap = t => Math.hypot(
+    t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+
+  let startGap = 0, startScale = 1, grabX = 0, grabY = 0, panning = false;
+  // a tap only counts for the double-tap if one finger went down, nothing
+  // moved and it came straight back up - otherwise the end of a pinch and
+  // the end of a drag read as a double tap between them
+  let wasTap = false, lastTap = 0;
+
+  img.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      wasTap = false;
+      startGap = gap(e.touches); startScale = LBZOOM.scale; panning = false;
+    } else if (e.touches.length === 1) {
+      wasTap = true;
+      if (LBZOOM.scale > 1) {
+        panning = true;
+        grabX = e.touches[0].clientX - LBZOOM.x;
+        grabY = e.touches[0].clientY - LBZOOM.y;
+      }
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchmove', e => {
+    wasTap = false;
+    if (e.touches.length === 2 && startGap) {
+      e.preventDefault();
+      LBZOOM.scale = Math.min(4, Math.max(1, startScale * gap(e.touches) / startGap));
+      if (LBZOOM.scale === 1) { LBZOOM.x = 0; LBZOOM.y = 0; }
+      else clampLbPan(img);
+      paintLbZoom();
+    } else if (panning && e.touches.length === 1) {
+      e.preventDefault();
+      LBZOOM.x = e.touches[0].clientX - grabX;
+      LBZOOM.y = e.touches[0].clientY - grabY;
+      clampLbPan(img);
+      paintLbZoom();
+    }
+  }, { passive: false });
+
+  img.addEventListener('touchend', e => {
+    if (e.touches.length < 2) startGap = 0;
+    if (e.touches.length) return;
+    panning = false;
+
+    if (wasTap) {
+      const now = Date.now();
+      if (now - lastTap < 320) {            // double tap: fit <-> close look
+        e.preventDefault();
+        if (LBZOOM.scale > 1) resetLbZoom();
+        else { LBZOOM.scale = 2.5; paintLbZoom(); }
+        lastTap = 0;
+        return;
+      }
+      lastTap = now;
+    }
+    wasTap = false;
+    if (LBZOOM.scale <= 1.02) resetLbZoom();
+  }, { passive: false });
+}
+
+/* Stops the browser's own zoom everywhere except inside the lightbox.
+   The viewport meta covers Chrome; iOS ignores it, so the gesture events
+   and any second finger have to be caught here. */
+function guardPageZoom() {
+  const spared = t => t && t.closest && t.closest('.lightbox');
+
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => {
+    document.addEventListener(ev, e => {
+      if (!spared(e.target)) e.preventDefault();
+    }, { passive: false });
+  });
+
+  document.addEventListener('touchmove', e => {
+    if (e.touches.length > 1 && !spared(e.target)) e.preventDefault();
+  }, { passive: false });
+
+  // double tap to zoom - only when both taps land in the same spot, so
+  // two quick taps on different thumbnails still both register
+  let last = 0, lx = 0, ly = 0;
+  document.addEventListener('touchend', e => {
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const now = Date.now();
+    const samePlace = Math.abs(t.clientX - lx) < 30 && Math.abs(t.clientY - ly) < 30;
+    if (now - last < 320 && samePlace && !spared(e.target)) e.preventDefault();
+    last = now; lx = t.clientX; ly = t.clientY;
+  }, { passive: false });
+}
+
 function openLightbox(src, caption) {
   let lb = $('#lightbox');
   if (!lb) {
@@ -493,6 +614,7 @@ function openLightbox(src, caption) {
     const close = () => {
       lb.classList.remove('is-open');
       document.documentElement.style.overflow = '';
+      resetLbZoom();
     };
     lb.addEventListener('click', e => {
       if (e.target === lb || e.target.closest('.lb-close')) close();
@@ -510,11 +632,11 @@ function openLightbox(src, caption) {
     // swipe sideways to move through the set on touch
     let sx = 0, sy = 0, tracking = false;
     lb.addEventListener('touchstart', e => {
-      if (e.touches.length !== 1) return;
+      if (e.touches.length !== 1 || LBZOOM.scale > 1) return;
       sx = e.touches[0].clientX; sy = e.touches[0].clientY; tracking = true;
     }, { passive: true });
     lb.addEventListener('touchend', e => {
-      if (!tracking) return;
+      if (!tracking || LBZOOM.scale > 1) { tracking = false; return; }
       tracking = false;
       const t = e.changedTouches[0];
       const dx = t.clientX - sx, dy = t.clientY - sy;
@@ -533,6 +655,8 @@ function openLightbox(src, caption) {
       setTimeout(() => { cooling = false; }, 320);
       stepLightbox((e.deltaY || e.deltaX) > 0 ? 1 : -1);
     }, { passive: false });
+
+    wireLightboxZoom(lb);
   }
 
   const i = ZOOMS.findIndex(z => z.src === src);
@@ -550,6 +674,7 @@ function openLightbox(src, caption) {
 
 function paintLightbox(src, caption) {
   const lb = $('#lightbox');
+  resetLbZoom();
   $('.lb-img', lb).src = src;
   $('.lb-caption', lb).textContent = caption;
 }
@@ -700,7 +825,9 @@ function renderAbout() {
         ${a.paragraphs.map(p => `<p>${p}</p>`).join('')}
       </div>
       <div class="about-photo">
-        ${thumb(a.photo, 'ratio-3x4', 'Portrait')}
+        <div class="photo-band">
+          ${thumb(a.photo, 'ratio-3x4', 'Portrait')}
+        </div>
       </div>
     </div>`;
 }
@@ -745,6 +872,7 @@ function renderContact() {
 
 /* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  guardPageZoom();
   renderChrome();
   renderHero();
   renderWorkGrid();

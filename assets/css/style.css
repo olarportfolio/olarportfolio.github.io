@@ -509,7 +509,12 @@ body.menu-open { overflow: hidden; }
 .lb-img {
   max-width: min(1400px, 94vw); max-height: 82vh;
   width: auto; height: auto; margin: 0 auto;
+  /* the lightbox does its own pinch and pan, so the browser must not
+     claim the gesture first */
+  touch-action: none;
+  transform-origin: center center;
 }
+.lb-img.is-zoomed { cursor: grab; }
 .lb-caption { margin-top: 16px; color: var(--text-body); font-size: 15px; }
 .lb-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
@@ -569,28 +574,33 @@ body.menu-open { overflow: hidden; }
    a thin dark ring, a thick mid-grey one, and a light mat innermost.
    Widths are variables so the phone can scale the whole frame down
    in one place and keep the proportion. */
-/* The dark ring is this element's own padding rather than a shadow on the
-   thumb: a shadow's corners are the thumb's radius PLUS its spread, which
-   made the outer bands read rounder than the light one. Each band now
-   carries the radius it should actually show. */
+/* Three bands of the same width and the same corner, darkest outside.
+   Each is a nested box with its own padding and background rather than a
+   border or a shadow: a border squares off its own inner corner and a
+   shadow adds its spread to the radius, so neither can hold one curve
+   across all three. */
 .about-photo {
   width: 100%; max-width: 360px; position: relative;
-  --ring-outer: 9px;    /* darkest, outermost */
-  --ring-mid: 16px;     /* thickest */
-  --ring-inner: 8px;    /* lightest, against the picture */
-  padding: var(--ring-outer);
-  background: #4F4F4F;
-  border-radius: 10px;
+  --band: 11px;
+  --band-r: 9px;
+  padding: var(--band);
+  background: #4F4F4F;                /* outermost, darkest */
+  border-radius: var(--band-r);
+}
+.about-photo .photo-band {
+  padding: var(--band);
+  background: #9A9A9A;                /* middle */
+  border-radius: var(--band-r);
 }
 .about-photo .thumb {
-  padding: var(--ring-inner);
-  background: #C9C9C9;
-  border: var(--ring-mid) solid #9A9A9A;
-  border-radius: 6px;
+  padding: var(--band);
+  background: #C9C9C9;                /* innermost, lightest */
+  border: 0;
+  border-radius: var(--band-r);
   overflow: hidden;
 }
-/* square-round, not a pill - the picture sits in the same family as the bands */
-.about-photo .thumb img { border-radius: 9px; }
+/* square-round, not a pill - the picture carries the same corner */
+.about-photo .thumb img { border-radius: var(--band-r); }
 
 /* ============================================================
    CONTACT
@@ -676,18 +686,19 @@ body.menu-open { overflow: hidden; }
   .gallery { --gallery-cols: 2; }
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
-  /* the box loses 60px here, so the frame and its corners come down with it */
+  /* the box loses 60px here, so the bands come down with it */
   .about-photo {
     max-width: 300px; margin-inline: auto;
-    --ring-outer: 7px; --ring-mid: 13px; --ring-inner: 7px;
-    border-radius: 8px;
+    --band: 9px; --band-r: 7px;
   }
-  .about-photo .thumb { border-radius: 5px; }
-  .about-photo .thumb img { border-radius: 7px; }
 }
 
 @media (max-width: 680px) {
   :root { --pad-x: 20px; --header-h: 84px; }
+
+  /* no double-tap zoom: zooming the page dragged the fixed header and
+     burger out of view. Pictures still zoom, inside the lightbox. */
+  html { touch-action: manipulation; }
 
   /* Phone header: just the logo, centred. The page links live in the
      burger, which is fixed to the corner and is not part of this bar. */
