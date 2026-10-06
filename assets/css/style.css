@@ -208,9 +208,9 @@ body.menu-open { overflow: hidden; }
 /* in, dip, back up, then gone - scaling the whole way through */
 @keyframes star-drift {
   0%   { opacity: 0;                        transform: translate(-50%, -50%) scale(.55); }
-  14%  { opacity: var(--peak);              }
-  46%  { opacity: calc(var(--peak) * .55);  }
-  78%  { opacity: var(--peak);              }
+  7%   { opacity: var(--peak);              }
+  40%  { opacity: calc(var(--peak) * .55);  }
+  84%  { opacity: var(--peak);              }
   100% { opacity: 0;                        transform: translate(-50%, -50%) scale(1.3); }
 }
 /* the greeting and the cue sit above the drift */
@@ -224,6 +224,27 @@ body.menu-open { overflow: hidden; }
 }
 .hero h1 { font-size: var(--fs-hero); margin-bottom: .35em; }
 .hero-sub { font-size: var(--fs-lead); color: var(--text-body); margin-bottom: 2.6em; }
+/* A highlight sweeping left to right, so the eye is drawn to the cue
+   that there is more below. Falls back to plain text where
+   background-clip:text is unsupported. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .hero-sub {
+    background-image: linear-gradient(100deg,
+      var(--text-body) 38%, #FFFFFF 50%, var(--text-body) 62%);
+    background-size: 260% 100%;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    animation: sub-sheen 4.2s linear infinite;
+  }
+}
+@keyframes sub-sheen {
+  from { background-position: 100% 0; }
+  to   { background-position: 0% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-sub { animation: none; }
+}
 
 .hero-social { display: flex; gap: 16px; }
 .hero-social a {
@@ -541,13 +562,14 @@ body.menu-open { overflow: hidden; }
    side, after the cardinal markers on the Mexica sun stone. */
 .about-photo { width: 100%; max-width: 360px; position: relative; }
 .about-photo .thumb {
-  border: 5px solid var(--text-muted);
+  border: 11px solid #4F4F4F;      /* a band wide enough to carry the rays */
   border-radius: 12px;
   overflow: hidden;
 }
 .aztec-arrow {
-  position: absolute; color: var(--text-muted);
-  width: 56px; height: 39px; pointer-events: none;
+  position: absolute; z-index: 2;   /* sits on top of the band */
+  color: #DCDCDC;                   /* light, so it reads on the band and off it */
+  width: 58px; height: 40px; pointer-events: none;
 }
 .aztec-arrow svg { width: 100%; height: 100%; display: block; fill: currentColor; }
 /* each sits centred on its side, straddling the border */

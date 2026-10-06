@@ -213,7 +213,20 @@ function startHeroStars(stage) {
 
   const phone = matchMedia(MOBILE).matches;
   const slots = phone ? 3 : 5;
-  let last = -1;
+
+  // Draw from a shuffled bag, so no piece comes round again until all
+  // of them have been shown.
+  let bag = [];
+  const nextSrc = () => {
+    if (!bag.length) {
+      bag = pool.slice();
+      for (let i = bag.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [bag[i], bag[j]] = [bag[j], bag[i]];
+      }
+    }
+    return bag.pop();
+  };
 
   const headerBottom = () => {
     const h = document.querySelector('.site-header');
@@ -261,9 +274,7 @@ function startHeroStars(stage) {
     const rest = () => setTimeout(play, 1800 + Math.random() * 2600);
 
     function play() {
-      let n = Math.floor(Math.random() * pool.length);
-      if (pool.length > 1 && n === last) n = (n + 1) % pool.length;
-      last = n;
+      const src = nextSrc();
 
       // measure first: the box takes the picture's own shape, so
       // nothing is ever cropped
@@ -274,19 +285,19 @@ function startHeroStars(stage) {
         const spot = findSpot(el, w, h);
         if (!spot) return rest();              // no room; try again later
 
-        img.src = pool[n];
+        img.src = src;
         el.dataset.w = w; el.dataset.h = h;
         el.style.width = w + 'px';
         el.style.left = spot.x + 'px';
         el.style.top = spot.y + 'px';
-        el.style.animationDuration = (5.85 + Math.random() * 2.7) + 's';
+        el.style.animationDuration = (4.4 + Math.random() * 1.1) + 's';
 
         el.classList.remove('is-running');
         void el.offsetWidth;                   // restart the animation
         el.classList.add('is-running');
       };
       probe.onerror = rest;
-      probe.src = pool[n];
+      probe.src = src;
     }
 
     el.addEventListener('animationend', () => {
