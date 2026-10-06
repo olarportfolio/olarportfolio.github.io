@@ -243,7 +243,7 @@ const CATEGORIES = [
     title: "Corporate Design",
     cols: 3,
     year: "2021 – 2023",
-    cover: "assets/img/corporate-design/paigo-riverty.webp",
+    cover: "assets/img/corporate-design/lse-intro-riverty.webp",
     dividers: [
       {
         after: 2,
