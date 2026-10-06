@@ -571,10 +571,15 @@ function wireLightboxZoom(lb) {
 
 /* ---------- Zoom ----------
    The page zooms freely between the bounds in the viewport meta. Whenever
-   it is not at 1x a pill offers the way back, because once zoomed the
-   fixed header and burger sit outside the visual viewport and there is
-   nothing else on screen to reach for.                                  */
-let zoomPill = null;
+   it is not at 1x a hint names the gesture that brings it back, because
+   once zoomed the fixed header and burger sit outside the visual viewport
+   and there is nothing on screen to orient by.
+
+   It is a label, not a control: Safari refuses to rescale a pinched page
+   from script, so nothing here could have done the job on tap. The gesture
+   does, and it has to land on the page itself - so the hint never takes a
+   tap, anywhere on it.                                                   */
+let zoomHint = null;
 // set by watchPageZoom; called whenever either zoom level changes
 const ZOOMWATCH = { check: () => {} };
 
@@ -582,83 +587,30 @@ const pageZoom = () => (window.visualViewport ? window.visualViewport.scale : 1)
 const isPageZoomed = () => Math.abs(pageZoom() - 1) > 0.02;
 
 function zoomDock() {
-  if (zoomPill) return zoomPill;
+  if (zoomHint) return zoomHint;
   document.body.insertAdjacentHTML('beforeend', `
-    <div class="zoom-dock">
-      <button class="zoom-reset" type="button">Reset zoom</button>
+    <div class="zoom-dock" role="status">
+      <p class="zoom-note">Double-tap to zoom out</p>
     </div>`);
-  zoomPill = $('.zoom-dock');
-  $('.zoom-reset', zoomPill).addEventListener('click', () => {
-    // an enlarged picture is ours to undo; the page's own zoom is not
-    if (LBZOOM.scale > 1) resetLbZoom();
-    if (isPageZoomed()) resetPageZoom();
-    else showZoomPill(false);
-  });
-  return zoomPill;
+  zoomHint = $('.zoom-dock');
+  return zoomHint;
 }
 
 function showZoomPill(on) {
-  const dock = on ? zoomDock() : zoomPill;
-  if (!dock) return;
-  dock.classList.toggle('is-visible', on);
-  if (!on) zoomPillText('Reset zoom');     // back to the offer for next time
-}
-
-function zoomPillText(label) {
-  const btn = zoomPill && $('.zoom-reset', zoomPill);
-  if (btn && btn.textContent !== label) btn.textContent = label;
+  const dock = on ? zoomDock() : zoomHint;
+  if (dock) dock.classList.toggle('is-visible', on);
 }
 
 /* A fixed element is pinned to the layout viewport, so once the page is
-   zoomed it can sit off screen entirely - the very bug being fixed. The
-   dock is therefore moved onto the visual viewport by hand and scaled
-   back down, so the pill stays the same size wherever the zoom is. */
+   zoomed it can sit off screen entirely - the very thing being flagged.
+   The dock is therefore moved onto the visual viewport by hand and scaled
+   back down, so the hint keeps its size wherever the zoom is. */
 function placeZoomDock() {
   const vv = window.visualViewport;
-  if (!vv || !zoomPill) return;
-  zoomPill.style.transform =
+  if (!vv || !zoomHint) return;
+  zoomHint.style.transform =
     `translate(${vv.offsetLeft + vv.width / 2}px, ${vv.offsetTop + vv.height}px)` +
     ` scale(${1 / vv.scale})`;
-}
-
-/* Nothing in the platform sets the zoom level, and a reload does not clear
-   it either - browsers deliberately keep the scale across one. Briefly
-   pinning the viewport to a fixed scale is the only thing that brings a
-   pinched page back, so that is what this does: one change, released the
-   moment the page reports it is back at 1x rather than on a blind timer,
-   and never two in flight at once. The earlier version flipped the meta
-   twice inside 80ms, which is what took Safari down. */
-const VIEWPORT_BASE = (() => {
-  const m = $('meta[name="viewport"]');
-  return m ? m.content : '';
-})();
-const VIEWPORT_PINNED =
-  'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1';
-
-let zoomPinned = false;
-
-function resetPageZoom() {
-  const meta = $('meta[name="viewport"]');
-  if (!meta || !VIEWPORT_BASE || zoomPinned) return;
-  const vv = window.visualViewport;
-  zoomPinned = true;
-
-  const release = () => {
-    if (!zoomPinned) return;
-    zoomPinned = false;
-    clearTimeout(timer);
-    if (vv) vv.removeEventListener('resize', settled);
-    try { meta.content = VIEWPORT_BASE; } catch { /* leave it pinned */ }
-    ZOOMWATCH.check();
-    // Some builds of Safari refuse to be rescaled from script at all. If
-    // the page is still zoomed, say the one thing that always works.
-    if (isPageZoomed()) zoomPillText('Double-tap to zoom out');
-  };
-  const settled = () => { if (Math.abs(vv.scale - 1) <= 0.02) release(); };
-  const timer = setTimeout(release, 900);
-
-  if (vv) vv.addEventListener('resize', settled);
-  try { meta.content = VIEWPORT_PINNED; } catch { release(); }
 }
 
 function watchPageZoom() {
