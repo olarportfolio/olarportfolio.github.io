@@ -492,6 +492,7 @@ function paintLbZoom() {
 function resetLbZoom() {
   LBZOOM.scale = 1; LBZOOM.x = 0; LBZOOM.y = 0;
   paintLbZoom();
+  ZOOMWATCH.check();
 }
 
 /* Keeps the enlarged picture from being dragged off the screen: the most
@@ -537,6 +538,7 @@ function wireLightboxZoom(lb) {
       if (LBZOOM.scale === 1) { LBZOOM.x = 0; LBZOOM.y = 0; }
       else clampLbPan(img);
       paintLbZoom();
+      ZOOMWATCH.check();
     } else if (panning && e.touches.length === 1) {
       e.preventDefault();
       LBZOOM.x = e.touches[0].clientX - grabX;
@@ -567,33 +569,74 @@ function wireLightboxZoom(lb) {
   }, { passive: false });
 }
 
-/* Stops the browser's own zoom everywhere except inside the lightbox.
-   The viewport meta covers Chrome; iOS ignores it, so the gesture events
-   and any second finger have to be caught here. */
-function guardPageZoom() {
-  const spared = t => t && t.closest && t.closest('.lightbox');
+/* ---------- Zoom ----------
+   The page zooms again, between the bounds in the viewport meta. Hitting
+   either bound raises a pill offering the way back, because at full zoom
+   the fixed header and burger are outside the visual viewport and there
+   is nothing else on screen to tap.                                     */
+const ZOOM_MIN = 0.5, ZOOM_MAX = 3;   // must match the viewport meta
+const LB_ZOOM_MAX = 4;                // must match wireLightboxZoom
 
-  ['gesturestart', 'gesturechange', 'gestureend'].forEach(ev => {
-    document.addEventListener(ev, e => {
-      if (!spared(e.target)) e.preventDefault();
-    }, { passive: false });
+let zoomPill = null;
+// set by watchPageZoom; called whenever either zoom level changes
+const ZOOMWATCH = { check: () => {} };
+
+function zoomDock() {
+  if (zoomPill) return zoomPill;
+  document.body.insertAdjacentHTML('beforeend', `
+    <div class="zoom-dock" aria-live="polite">
+      <button class="zoom-reset" type="button">Reset zoom</button>
+    </div>`);
+  zoomPill = $('.zoom-dock');
+  $('.zoom-reset', zoomPill).addEventListener('click', () => {
+    if (LBZOOM.scale > 1) resetLbZoom();
+    resetPageZoom();
+    showZoomPill(false);
   });
+  return zoomPill;
+}
 
-  document.addEventListener('touchmove', e => {
-    if (e.touches.length > 1 && !spared(e.target)) e.preventDefault();
-  }, { passive: false });
+function showZoomPill(on) {
+  const dock = on ? zoomDock() : zoomPill;
+  if (dock) dock.classList.toggle('is-visible', on);
+}
 
-  // double tap to zoom - only when both taps land in the same spot, so
-  // two quick taps on different thumbnails still both register
-  let last = 0, lx = 0, ly = 0;
-  document.addEventListener('touchend', e => {
-    const t = e.changedTouches[0];
-    if (!t) return;
-    const now = Date.now();
-    const samePlace = Math.abs(t.clientX - lx) < 30 && Math.abs(t.clientY - ly) < 30;
-    if (now - last < 320 && samePlace && !spared(e.target)) e.preventDefault();
-    last = now; lx = t.clientX; ly = t.clientY;
-  }, { passive: false });
+/* A fixed element is pinned to the layout viewport, so once the page is
+   zoomed it can sit off screen entirely - the very bug being fixed. The
+   dock is therefore moved onto the visual viewport by hand and scaled
+   back down, so the pill stays the same size wherever the zoom is. */
+function placeZoomDock() {
+  const vv = window.visualViewport;
+  if (!vv || !zoomPill) return;
+  zoomPill.style.transform =
+    `translate(${vv.offsetLeft + vv.width / 2}px, ${vv.offsetTop + vv.height}px)` +
+    ` scale(${1 / vv.scale})`;
+}
+
+/* There is no API for the zoom level, but rewriting the viewport meta to
+   a locked scale and releasing it snaps the page back to 1. */
+function resetPageZoom() {
+  const meta = $('meta[name="viewport"]');
+  if (!meta) return;
+  const base = meta.content;
+  meta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1';
+  setTimeout(() => { meta.content = base; }, 80);
+}
+
+function watchPageZoom() {
+  const vv = window.visualViewport;
+  if (!vv) return;                      // no zoom to report on
+  const check = () => {
+    const atBound = vv.scale >= ZOOM_MAX - 0.05 || vv.scale <= ZOOM_MIN + 0.05;
+    const imageMaxed = LBZOOM.scale >= LB_ZOOM_MAX - 0.05;
+    showZoomPill(atBound || imageMaxed);
+    placeZoomDock();
+  };
+  vv.addEventListener('resize', check);
+  vv.addEventListener('scroll', placeZoomDock);
+  window.addEventListener('orientationchange', check);
+  ZOOMWATCH.check = check;
+  check();
 }
 
 function openLightbox(src, caption) {
@@ -872,11 +915,11 @@ function renderContact() {
 
 /* ---------- Boot ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  guardPageZoom();
   renderChrome();
   renderHero();
   renderWorkGrid();
   renderCategory();
   renderAbout();
   renderContact();
+  watchPageZoom();
 });

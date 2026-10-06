@@ -516,6 +516,34 @@ body.menu-open { overflow: hidden; }
 }
 .lb-img.is-zoomed { cursor: grab; }
 .lb-caption { margin-top: 16px; color: var(--text-body); font-size: 15px; }
+
+/* ---- Reset zoom ----
+   Raised when the page (or an enlarged picture) reaches a zoom bound.
+   The dock is placed by JS onto the visual viewport and counter-scaled,
+   so the pill keeps its size and stays on screen at any zoom. */
+.zoom-dock {
+  position: fixed; left: 0; top: 0; z-index: 240;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.zoom-reset {
+  position: absolute; left: 0; top: 0;
+  transform: translate(-50%, calc(-100% - 22px));
+  pointer-events: auto;
+  padding: 11px 22px;
+  border: 0; border-radius: 999px;
+  background: var(--surface-raised); color: var(--text);
+  font: inherit; font-size: 14px; font-weight: 600; white-space: nowrap;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .45);
+  opacity: 0; visibility: hidden;
+  transition: opacity .22s var(--ease), visibility .22s var(--ease);
+}
+.zoom-dock.is-visible .zoom-reset { opacity: 1; visibility: visible; }
+.zoom-reset:hover { background: #3A3A3A; }
+
+@media (prefers-reduced-motion: reduce) {
+  .zoom-reset { transition: none; }
+}
 .lb-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   width: 54px; height: 54px; border-radius: 50%;
@@ -695,10 +723,6 @@ body.menu-open { overflow: hidden; }
 
 @media (max-width: 680px) {
   :root { --pad-x: 20px; --header-h: 84px; }
-
-  /* no double-tap zoom: zooming the page dragged the fixed header and
-     burger out of view. Pictures still zoom, inside the lightbox. */
-  html { touch-action: manipulation; }
 
   /* Phone header: just the logo, centred. The page links live in the
      burger, which is fixed to the corner and is not part of this bar. */
