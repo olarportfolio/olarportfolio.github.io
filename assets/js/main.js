@@ -12,7 +12,9 @@ const ICON = {
   arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"/><path d="M5 11l7-7 7 7"/></svg>',
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
   caretLeft:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/></svg>',
-  caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>'
+  caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>',
+  // Stepped ray point, after the cardinal markers on the sun stone
+  ray: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M20 0 36 17h-6v4h-5v7h-10v-7h-5v-4h-6z"/></svg>'
 };
 
 /* ---------- Logo -------------------------------------------------
@@ -145,6 +147,7 @@ function renderHero() {
 
   wrap.innerHTML = `
     <div class="hero-wrap">
+      <div class="hero-bg" aria-hidden="true"></div>
       <section class="hero">
         <h1>${SITE.heroTitle}</h1>
         <p class="hero-sub">${SITE.heroSubtitle}</p>
@@ -181,9 +184,64 @@ function renderHero() {
     }
     // the logo leaves with the text, on the same curve
     if (header) header.style.opacity = phone ? String(1 - t) : '';
+    // and so does the drifting work behind it
+    const stage = $('.hero-bg', wrap);
+    if (stage) stage.style.opacity = String(1 - t);
   };
   window.addEventListener('scroll', fade, { passive: true });
   fade();
+
+  startHeroStars($('.hero-bg', wrap));
+}
+
+/* ---------- Hero background ----------
+   Work drifting behind the greeting like stars: each slot picks a
+   random piece and a random spot, swells as it plays, then rests
+   before going again. Kept faint on purpose - it must not compete
+   with the greeting or the scroll cue.                              */
+function startHeroStars(stage) {
+  if (!stage) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  // every cover, plus any project art, with duplicates removed
+  const pool = [...new Set(
+    CATEGORIES.flatMap(c => [c.cover, ...c.projects.map(p => p.image)])
+  )].filter(Boolean);
+  if (!pool.length) return;
+
+  const phone = matchMedia(MOBILE).matches;
+  const slots = phone ? 3 : 5;
+  let last = -1;
+
+  for (let i = 0; i < slots; i++) {
+    const el = document.createElement('div');
+    el.className = 'star';
+    stage.appendChild(el);
+
+    const play = () => {
+      // never the same picture twice running
+      let n = Math.floor(Math.random() * pool.length);
+      if (pool.length > 1 && n === last) n = (n + 1) % pool.length;
+      last = n;
+
+      el.style.backgroundImage = `url("${pool[n]}")`;
+      el.style.left = (8 + Math.random() * 84) + '%';
+      el.style.top  = (10 + Math.random() * 78) + '%';
+      el.style.setProperty('--star-w', (phone ? 90 : 150) + Math.random() * (phone ? 70 : 130) + 'px');
+      el.style.animationDuration = (6.5 + Math.random() * 3) + 's';
+
+      el.classList.remove('is-running');
+      void el.offsetWidth;                // restart the animation
+      el.classList.add('is-running');
+    };
+
+    el.addEventListener('animationend', () => {
+      el.classList.remove('is-running');
+      setTimeout(play, 1800 + Math.random() * 2600);   // cooldown
+    });
+
+    setTimeout(play, i * 1400 + Math.random() * 900);  // stagger the first run
+  }
 }
 
 /* ---------- Work grid: one tile per category ----------
@@ -579,6 +637,8 @@ function renderAbout() {
         ${a.paragraphs.map(p => `<p>${p}</p>`).join('')}
       </div>
       <div class="about-photo">
+        ${['top', 'right', 'bottom', 'left']
+          .map(side => `<span class="aztec-arrow is-${side}">${ICON.ray}</span>`).join('')}
         ${thumb(a.photo, 'ratio-3x4', 'Portrait')}
       </div>
     </div>`;
