@@ -12,9 +12,7 @@ const ICON = {
   arrowUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V4"/><path d="M5 11l7-7 7 7"/></svg>',
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
   caretLeft:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/></svg>',
-  caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>',
-  // The sun stone's cardinal marker: a V whose tips curl outward
-  ray: '<svg viewBox="0 0 52 36" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 9 26 31 42 9"/><path d="M10 9C5 3.5 1 6.5 3.2 12"/><path d="M42 9c5-5.5 9-2.5 6.8 3"/></svg>'
+  caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>'
 };
 
 /* ---------- Logo -------------------------------------------------
@@ -271,7 +269,7 @@ function startHeroStars(stage) {
     el.appendChild(img);
     stage.appendChild(el);
 
-    const rest = () => setTimeout(play, 1800 + Math.random() * 2600);
+    const rest = () => setTimeout(play, 700 + Math.random() * 1500);
 
     function play() {
       const src = nextSrc();
@@ -290,7 +288,7 @@ function startHeroStars(stage) {
         el.style.width = w + 'px';
         el.style.left = spot.x + 'px';
         el.style.top = spot.y + 'px';
-        el.style.animationDuration = (4.4 + Math.random() * 1.1) + 's';
+        el.style.animationDuration = (2.3 + Math.random() * 0.7) + 's';
 
         el.classList.remove('is-running');
         void el.offsetWidth;                   // restart the animation
@@ -305,7 +303,7 @@ function startHeroStars(stage) {
       rest();
     });
 
-    setTimeout(play, i * 1300 + Math.random() * 800);
+    setTimeout(play, i * 650 + Math.random() * 500);
   }
 }
 
@@ -702,8 +700,6 @@ function renderAbout() {
         ${a.paragraphs.map(p => `<p>${p}</p>`).join('')}
       </div>
       <div class="about-photo">
-        ${['top', 'right', 'bottom', 'left']
-          .map(side => `<span class="aztec-arrow is-${side}">${ICON.ray}</span>`).join('')}
         ${thumb(a.photo, 'ratio-3x4', 'Portrait')}
       </div>
     </div>`;

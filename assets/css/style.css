@@ -206,12 +206,13 @@ body.menu-open { overflow: hidden; }
 .star img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .star.is-running { animation-name: star-drift; animation-timing-function: var(--ease); }
 /* in, dip, back up, then gone - scaling the whole way through */
+/* One rise and one fall - the mid-animation dip was reading as the
+   piece appearing twice. */
 @keyframes star-drift {
-  0%   { opacity: 0;                        transform: translate(-50%, -50%) scale(.55); }
-  7%   { opacity: var(--peak);              }
-  40%  { opacity: calc(var(--peak) * .55);  }
-  84%  { opacity: var(--peak);              }
-  100% { opacity: 0;                        transform: translate(-50%, -50%) scale(1.3); }
+  0%   { opacity: 0;            transform: translate(-50%, -50%) scale(.6); }
+  16%  { opacity: var(--peak);  }
+  68%  { opacity: var(--peak);  }
+  100% { opacity: 0;            transform: translate(-50%, -50%) scale(1.26); }
 }
 /* the greeting and the cue sit above the drift */
 .hero, .hero-chevron { position: relative; z-index: 1; }
@@ -230,12 +231,12 @@ body.menu-open { overflow: hidden; }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
   .hero-sub {
     background-image: linear-gradient(100deg,
-      var(--text-body) 38%, #FFFFFF 50%, var(--text-body) 62%);
-    background-size: 260% 100%;
+      #8C8C8C 42%, #FFFFFF 50%, #8C8C8C 58%);
+    background-size: 320% 100%;
     background-repeat: no-repeat;
     -webkit-background-clip: text; background-clip: text;
     color: transparent;
-    animation: sub-sheen 4.2s linear infinite;
+    animation: sub-sheen 2.8s linear infinite;
   }
 }
 @keyframes sub-sheen {
@@ -558,27 +559,15 @@ body.menu-open { overflow: hidden; }
   margin: 0 0 2.2em; padding-left: 76px;
 }
 .about-text p { max-width: 62ch; }
-/* Aztec frame: a plain grey border with a ray point centred on each
-   side, after the cardinal markers on the Mexica sun stone. */
+/* Two rings, both lighter than the page: a thick light inner band and
+   a thinner dark outer one. */
 .about-photo { width: 100%; max-width: 360px; position: relative; }
 .about-photo .thumb {
-  border: 11px solid #4F4F4F;      /* a band wide enough to carry the rays */
+  border: 16px solid #9A9A9A;              /* inner, thicker */
+  box-shadow: 0 0 0 9px #4F4F4F;           /* outer, thinner, darker */
   border-radius: 12px;
   overflow: hidden;
 }
-.aztec-arrow {
-  position: absolute; z-index: 2;   /* sits on top of the band */
-  color: #DCDCDC;                   /* light, so it reads on the band and off it */
-  width: 58px; height: 40px; pointer-events: none;
-}
-.aztec-arrow svg { width: 100%; height: 100%; display: block; fill: currentColor; }
-/* each sits centred on its side, straddling the border */
-/* centred on the border line, so each ray straddles it */
-/* each V points inward, like the markers around the stone's face */
-.aztec-arrow.is-top    { top: -20px;    left: 50%; transform: translateX(-50%) rotate(180deg); }
-.aztec-arrow.is-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
-.aztec-arrow.is-left   { left: -28px;   top: 50%;  transform: translateY(-50%) rotate(90deg); }
-.aztec-arrow.is-right  { right: -28px;  top: 50%;  transform: translateY(-50%) rotate(-90deg); }
 
 /* ============================================================
    CONTACT
