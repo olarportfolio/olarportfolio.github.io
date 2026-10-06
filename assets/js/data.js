@@ -16,7 +16,7 @@
 const SITE = {
   name: "Oliver Armando",
   heroTitle: "Hi, I’m Oliver Armando!",
-  heroSubtitle: "Scroll down to see some of my work",
+  heroSubtitle: "Check out some of my work below",
 
   /* Contact page. Any link left as null is simply not rendered,
      so the page stays clean until you fill things in. */
