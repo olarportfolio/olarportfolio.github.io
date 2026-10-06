@@ -13,8 +13,8 @@ const ICON = {
   copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>',
   caretLeft:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4 7 12l8 8"/></svg>',
   caretRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4l8 8-8 8"/></svg>',
-  // Stepped ray point, after the cardinal markers on the sun stone
-  ray: '<svg viewBox="0 0 40 28" aria-hidden="true"><path d="M20 0 36 17h-6v4h-5v7h-10v-7h-5v-4h-6z"/></svg>'
+  // The sun stone's cardinal marker: a V whose tips curl outward
+  ray: '<svg viewBox="0 0 52 36" fill="none" stroke="currentColor" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 9 26 31 42 9"/><path d="M10 9C5 3.5 1 6.5 3.2 12"/><path d="M42 9c5-5.5 9-2.5 6.8 3"/></svg>'
 };
 
 /* ---------- Logo -------------------------------------------------
@@ -203,44 +203,98 @@ function startHeroStars(stage) {
   if (!stage) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // every cover, plus any project art, with duplicates removed
+  // Title cards show a word, not a piece of work, so they are left out.
+  const TITLE_CARDS = ['lse-intro-riverty', 'paigo-riverty'];
+
   const pool = [...new Set(
     CATEGORIES.flatMap(c => [c.cover, ...c.projects.map(p => p.image)])
-  )].filter(Boolean);
+  )].filter(src => src && !TITLE_CARDS.some(t => src.includes(t)));
   if (!pool.length) return;
 
   const phone = matchMedia(MOBILE).matches;
   const slots = phone ? 3 : 5;
   let last = -1;
 
+  const headerBottom = () => {
+    const h = document.querySelector('.site-header');
+    return h ? h.getBoundingClientRect().height + 14 : 14;
+  };
+
+  /* A spot where this piece covers no more than 30% of any piece
+     already on screen, and clears the header. Everything is measured
+     at PEAK scale, because the pieces grow as they play - comparing
+     current sizes lets a pair that starts apart end up overlapping. */
+  const PEAK = 1.3;
+  const findSpot = (el, w, h) => {
+    const box = stage.getBoundingClientRect();
+    const top0 = headerBottom();
+    const pw = w * PEAK, ph = h * PEAK;
+
+    const others = [...stage.querySelectorAll('.star.is-running')]
+      .filter(s => s !== el && s.dataset.w)
+      .map(s => ({
+        cx: parseFloat(s.style.left), cy: parseFloat(s.style.top),
+        w: +s.dataset.w * PEAK, h: +s.dataset.h * PEAK
+      }));
+
+    for (let i = 0; i < 80; i++) {
+      const cx = pw / 2 + Math.random() * Math.max(1, box.width - pw);
+      const cy = top0 + ph / 2 + Math.random() * Math.max(1, box.height - top0 - ph);
+      const worst = others.reduce((m, o) => {
+        const ow = Math.max(0, Math.min(cx + pw / 2, o.cx + o.w / 2) - Math.max(cx - pw / 2, o.cx - o.w / 2));
+        const oh = Math.max(0, Math.min(cy + ph / 2, o.cy + o.h / 2) - Math.max(cy - ph / 2, o.cy - o.h / 2));
+        return Math.max(m, (ow * oh) / Math.min(pw * ph, o.w * o.h));
+      }, 0);
+      if (worst <= 0.30) return { x: cx, y: cy };
+    }
+    return null;
+  };
+
   for (let i = 0; i < slots; i++) {
     const el = document.createElement('div');
     el.className = 'star';
+    const img = document.createElement('img');
+    img.alt = '';
+    el.appendChild(img);
     stage.appendChild(el);
 
-    const play = () => {
-      // never the same picture twice running
+    const rest = () => setTimeout(play, 1800 + Math.random() * 2600);
+
+    function play() {
       let n = Math.floor(Math.random() * pool.length);
       if (pool.length > 1 && n === last) n = (n + 1) % pool.length;
       last = n;
 
-      el.style.backgroundImage = `url("${pool[n]}")`;
-      el.style.left = (8 + Math.random() * 84) + '%';
-      el.style.top  = (10 + Math.random() * 78) + '%';
-      el.style.setProperty('--star-w', (phone ? 90 : 150) + Math.random() * (phone ? 70 : 130) + 'px');
-      el.style.animationDuration = (6.5 + Math.random() * 3) + 's';
+      // measure first: the box takes the picture's own shape, so
+      // nothing is ever cropped
+      const probe = new Image();
+      probe.onload = () => {
+        const w = (phone ? 86 : 140) + Math.random() * (phone ? 64 : 120);
+        const h = w * (probe.naturalHeight / probe.naturalWidth);
+        const spot = findSpot(el, w, h);
+        if (!spot) return rest();              // no room; try again later
 
-      el.classList.remove('is-running');
-      void el.offsetWidth;                // restart the animation
-      el.classList.add('is-running');
-    };
+        img.src = pool[n];
+        el.dataset.w = w; el.dataset.h = h;
+        el.style.width = w + 'px';
+        el.style.left = spot.x + 'px';
+        el.style.top = spot.y + 'px';
+        el.style.animationDuration = (5.85 + Math.random() * 2.7) + 's';
+
+        el.classList.remove('is-running');
+        void el.offsetWidth;                   // restart the animation
+        el.classList.add('is-running');
+      };
+      probe.onerror = rest;
+      probe.src = pool[n];
+    }
 
     el.addEventListener('animationend', () => {
       el.classList.remove('is-running');
-      setTimeout(play, 1800 + Math.random() * 2600);   // cooldown
+      rest();
     });
 
-    setTimeout(play, i * 1400 + Math.random() * 900);  // stagger the first run
+    setTimeout(play, i * 1300 + Math.random() * 800);
   }
 }
 

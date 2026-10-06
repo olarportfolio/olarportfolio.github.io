@@ -195,16 +195,15 @@ body.menu-open { overflow: hidden; }
   pointer-events: none; z-index: 0;
 }
 .star {
-  --star-w: 200px;
   --peak: .30;                  /* ceiling, so the text always wins */
   position: absolute;
-  width: var(--star-w); aspect-ratio: 4 / 3;
-  background-size: cover; background-position: center;
-  border-radius: 6px;
   opacity: 0;
   transform: translate(-50%, -50%) scale(.55);
   will-change: opacity, transform;
 }
+/* the box takes the picture's own proportions, so square stickers and
+   wide stills alike are shown whole rather than cropped to a ratio */
+.star img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .star.is-running { animation-name: star-drift; animation-timing-function: var(--ease); }
 /* in, dip, back up, then gone - scaling the whole way through */
 @keyframes star-drift {
@@ -542,21 +541,22 @@ body.menu-open { overflow: hidden; }
    side, after the cardinal markers on the Mexica sun stone. */
 .about-photo { width: 100%; max-width: 360px; position: relative; }
 .about-photo .thumb {
-  border: 3px solid var(--text-muted);
-  border-radius: 10px;
+  border: 5px solid var(--text-muted);
+  border-radius: 12px;
   overflow: hidden;
 }
 .aztec-arrow {
   position: absolute; color: var(--text-muted);
-  width: 36px; height: 25px; pointer-events: none;
+  width: 56px; height: 39px; pointer-events: none;
 }
 .aztec-arrow svg { width: 100%; height: 100%; display: block; fill: currentColor; }
 /* each sits centred on its side, straddling the border */
 /* centred on the border line, so each ray straddles it */
-.aztec-arrow.is-top    { top: -13px;    left: 50%; transform: translateX(-50%); }
-.aztec-arrow.is-bottom { bottom: -13px; left: 50%; transform: translateX(-50%) rotate(180deg); }
-.aztec-arrow.is-left   { left: -18px;   top: 50%;  transform: translateY(-50%) rotate(-90deg); }
-.aztec-arrow.is-right  { right: -18px;  top: 50%;  transform: translateY(-50%) rotate(90deg); }
+/* each V points inward, like the markers around the stone's face */
+.aztec-arrow.is-top    { top: -20px;    left: 50%; transform: translateX(-50%) rotate(180deg); }
+.aztec-arrow.is-bottom { bottom: -20px; left: 50%; transform: translateX(-50%); }
+.aztec-arrow.is-left   { left: -28px;   top: 50%;  transform: translateY(-50%) rotate(90deg); }
+.aztec-arrow.is-right  { right: -28px;  top: 50%;  transform: translateY(-50%) rotate(-90deg); }
 
 /* ============================================================
    CONTACT
