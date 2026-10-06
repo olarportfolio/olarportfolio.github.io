@@ -259,7 +259,13 @@ body.menu-open { overflow: hidden; }
 
 /* Three arrows lighting up one after another, downwards. Phones only -
    the desktop hero keeps its single hovering chevron. */
-.hero-arrows { display: none; flex-direction: column; align-items: center; }
+.hero-arrows {
+  display: none; flex-direction: column; align-items: center;
+  /* a finger-sized target, taken back out with margin so the arrows do
+     not move; manipulation keeps a quick second tap from zooming */
+  padding: 12px 30px; margin: -12px -30px;
+  touch-action: manipulation;
+}
 .hero-arrows svg {
   display: block; width: 30px; height: 17px; color: var(--text-body);
   animation: arrow-chase 1.7s var(--ease) infinite;
@@ -276,8 +282,10 @@ body.menu-open { overflow: hidden; }
 }
 
 .hero-chevron {
-  position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
   color: var(--text-body); opacity: .8;
+  padding: 12px 26px;                /* bottom adjusted to match */
+  touch-action: manipulation;
   animation: bob 2.4s var(--ease) infinite;
 }
 .hero-chevron svg { width: 52px; height: 30px; }

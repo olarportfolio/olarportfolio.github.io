@@ -153,17 +153,34 @@ function renderHero() {
           ${ig ? `<a href="${ig}" target="_blank" rel="noopener" aria-label="Instagram">${ICON.instagram}</a>` : ''}
           <a href="contact.html" aria-label="Contact">${ICON.mail}</a>
         </div>
-        <!-- phones get a chase of three arrows instead of the mail icon -->
-        <div class="hero-arrows" aria-hidden="true">
+        <!-- phones get a chase of three arrows instead of the mail icon.
+             Both cues are buttons: pointing down says where the work is,
+             but on a phone that reads to some people as a swipe to make,
+             and swiping down goes the wrong way. Tapping always works. -->
+        <button class="hero-arrows" type="button" aria-label="Go to my work">
           ${ICON.chevron}${ICON.chevron}${ICON.chevron}
-        </div>
+        </button>
       </section>
-      <div class="hero-chevron">${ICON.chevron}</div>
+      <button class="hero-chevron" type="button" aria-label="Go to my work">${ICON.chevron}</button>
     </div>`;
 
   const hero = $('.hero', wrap);
   const work = $('#work-grid');
   const header = $('.site-header');
+  const arrows = $('.hero-arrows', wrap);
+  const chevron = $('.hero-chevron', wrap);
+
+  const goToWork = () => {
+    if (!work) return;
+    work.scrollIntoView({
+      behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto' : 'smooth',
+      // the phone carousel is centred in a screen of its own
+      block: matchMedia(MOBILE).matches ? 'center' : 'start'
+    });
+  };
+  arrows.addEventListener('click', goToWork);
+  chevron.addEventListener('click', goToWork);
   const fade = () => {
     const phone = matchMedia(MOBILE).matches;
     // A phone page is barely taller than its hero, so the handover has
@@ -172,7 +189,12 @@ function renderHero() {
     const span = window.innerHeight * (phone ? 0.32 : 0.7);
     const t = Math.min(window.scrollY / span, 1);
     hero.style.opacity = String(1 - t);
-    $('.hero-chevron', wrap).style.opacity = String(0.8 * (1 - t));
+    chevron.style.opacity = String(0.8 * (1 - t));
+    // once faded they are only a ghost over the carousel - do not let
+    // them swallow a tap meant for a category
+    const gone = t > 0.6 ? 'none' : '';
+    hero.style.pointerEvents = gone;
+    chevron.style.pointerEvents = gone;
     // On phones the categories fade in as the hero fades out, so the
     // two never sit on screen at half strength together.
     if (work) {
