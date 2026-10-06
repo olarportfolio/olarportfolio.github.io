@@ -485,6 +485,12 @@ body.menu-open { overflow: hidden; }
 /* only the piece in focus is fully legible */
 .gallery.is-carousel .g-item:not(.is-focus) .g-caption { opacity: .45; }
 
+/* Controls made to be tapped in a row. Without this, two quick taps read
+   as a double tap and the browser zooms the page in under the user -
+   "manipulation" keeps the tap and the scroll, and drops only that. It
+   does not touch pinch zoom, which starts on the page, not on a button. */
+.car-btn, .lb-nav, .lb-close, .to-top { touch-action: manipulation; }
+
 .car-btn {
   position: absolute; top: 40%; transform: translateY(-50%); z-index: 5;
   width: 52px; height: 52px; border-radius: 50%;
