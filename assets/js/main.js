@@ -570,28 +570,31 @@ function wireLightboxZoom(lb) {
 }
 
 /* ---------- Zoom ----------
-   The page zooms again, between the bounds in the viewport meta. Hitting
-   either bound raises a pill offering the way back, because at full zoom
-   the fixed header and burger are outside the visual viewport and there
-   is nothing else on screen to tap.                                     */
-const ZOOM_MIN = 0.5, ZOOM_MAX = 3;   // must match the viewport meta
-const LB_ZOOM_MAX = 4;                // must match wireLightboxZoom
+   The page zooms freely between the bounds in the viewport meta. Whenever
+   it is not at 1x a pill offers the way back, because once zoomed the
+   fixed header and burger sit outside the visual viewport and there is
+   nothing else on screen to reach for.                                  */
+const ZOOM_KEY = 'olar:zoom-reset';
 
 let zoomPill = null;
 // set by watchPageZoom; called whenever either zoom level changes
 const ZOOMWATCH = { check: () => {} };
 
+const pageZoom = () => (window.visualViewport ? window.visualViewport.scale : 1);
+const isPageZoomed = () => Math.abs(pageZoom() - 1) > 0.02;
+
 function zoomDock() {
   if (zoomPill) return zoomPill;
   document.body.insertAdjacentHTML('beforeend', `
-    <div class="zoom-dock" aria-live="polite">
+    <div class="zoom-dock">
       <button class="zoom-reset" type="button">Reset zoom</button>
     </div>`);
   zoomPill = $('.zoom-dock');
   $('.zoom-reset', zoomPill).addEventListener('click', () => {
+    // an enlarged picture is ours to undo; the page's own zoom is not
     if (LBZOOM.scale > 1) resetLbZoom();
-    resetPageZoom();
-    showZoomPill(false);
+    if (isPageZoomed()) resetPageZoom();
+    else showZoomPill(false);
   });
   return zoomPill;
 }
@@ -613,24 +616,52 @@ function placeZoomDock() {
     ` scale(${1 / vv.scale})`;
 }
 
-/* There is no API for the zoom level, but rewriting the viewport meta to
-   a locked scale and releasing it snaps the page back to 1. */
+/* Nothing in the platform sets the zoom level. Rewriting the viewport meta
+   to force it back is the usual trick and it crashed Safari outright, so
+   this reloads instead: every browser comes back at initial-scale=1. The
+   place the page was in is handed across so it returns, not restarts. */
 function resetPageZoom() {
-  const meta = $('meta[name="viewport"]');
-  if (!meta) return;
-  const base = meta.content;
-  meta.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1';
-  setTimeout(() => { meta.content = base; }, 80);
+  try {
+    const lb = $('#lightbox');
+    const open = lb && lb.classList.contains('is-open');
+    sessionStorage.setItem(ZOOM_KEY, JSON.stringify({
+      y: Math.round(window.scrollY),
+      src: open ? $('.lb-img', lb).getAttribute('src') : '',
+      caption: open ? $('.lb-caption', lb).textContent : '',
+      search: location.search
+    }));
+    history.scrollRestoration = 'manual';
+  } catch { /* private browsing: the reload still clears the zoom */ }
+  location.reload();
+}
+
+function restoreAfterZoomReset() {
+  let saved = null;
+  try {
+    saved = JSON.parse(sessionStorage.getItem(ZOOM_KEY) || 'null');
+    sessionStorage.removeItem(ZOOM_KEY);
+    history.scrollRestoration = 'auto';
+  } catch { return; }
+  if (!saved || saved.search !== location.search) return;
+  // the page scrolls smoothly by default, which would glide down from the
+  // top on arrival instead of simply being where it was
+  try { window.scrollTo({ top: saved.y || 0, behavior: 'instant' }); }
+  catch { window.scrollTo(0, saved.y || 0); }
+  if (saved.src) openLightbox(saved.src, saved.caption || '');
 }
 
 function watchPageZoom() {
   const vv = window.visualViewport;
-  if (!vv) return;                      // no zoom to report on
+  if (!vv) return;                      // nothing reports the zoom level
+  let queued = false;
   const check = () => {
-    const atBound = vv.scale >= ZOOM_MAX - 0.05 || vv.scale <= ZOOM_MIN + 0.05;
-    const imageMaxed = LBZOOM.scale >= LB_ZOOM_MAX - 0.05;
-    showZoomPill(atBound || imageMaxed);
-    placeZoomDock();
+    if (queued) return;                 // a pinch fires these in bursts
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      showZoomPill(isPageZoomed() || LBZOOM.scale > 1.02);
+      placeZoomDock();
+    });
   };
   vv.addEventListener('resize', check);
   vv.addEventListener('scroll', placeZoomDock);
@@ -922,4 +953,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAbout();
   renderContact();
   watchPageZoom();
+  restoreAfterZoomReset();
 });
