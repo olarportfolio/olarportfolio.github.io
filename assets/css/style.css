@@ -558,16 +558,31 @@ body.menu-open { overflow: hidden; }
   font-size: clamp(20px, 1.7vw, 29px); color: var(--text);
   margin: 0 0 2.2em; padding-left: 76px;
 }
-.about-text p { max-width: 62ch; }
-/* Two rings, both lighter than the page: a thick light inner band and
-   a thinner dark outer one. */
+/* justified reads as a block of type rather than a ragged note;
+   hyphenation stops it opening rivers between words */
+.about-text p {
+  max-width: 62ch;
+  text-align: justify;
+  hyphens: auto; -webkit-hyphens: auto;
+}
+/* Three bands, all lighter than the page, darkest on the outside:
+   a thin dark ring, a thick mid-grey one, and a light mat innermost.
+   Widths are variables so the phone can scale the whole frame down
+   in one place and keep the proportion. */
 .about-photo { width: 100%; max-width: 360px; position: relative; }
 .about-photo .thumb {
-  border: 16px solid #9A9A9A;              /* inner, thicker */
-  box-shadow: 0 0 0 9px #4F4F4F;           /* outer, thinner, darker */
-  border-radius: 12px;
+  --ring-outer: 9px;    /* darkest, outermost */
+  --ring-mid: 16px;     /* thickest */
+  --ring-inner: 8px;    /* lightest, against the picture */
+  padding: var(--ring-inner);
+  background: #C9C9C9;
+  border: var(--ring-mid) solid #9A9A9A;
+  box-shadow: 0 0 0 var(--ring-outer) #4F4F4F;
+  border-radius: 20px;
   overflow: hidden;
 }
+/* square-round, not a pill - the picture echoes the frame's corners */
+.about-photo .thumb img { border-radius: 14px; }
 
 /* ============================================================
    CONTACT
@@ -653,7 +668,13 @@ body.menu-open { overflow: hidden; }
   .gallery { --gallery-cols: 2; }
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
-  .about-photo { max-width: 300px; }
+  .about-photo { max-width: 300px; margin-inline: auto; }
+  /* the box loses 60px here, so the frame comes down with it */
+  .about-photo .thumb {
+    --ring-outer: 7px; --ring-mid: 13px; --ring-inner: 7px;
+    border-radius: 17px;
+  }
+  .about-photo .thumb img { border-radius: 12px; }
 }
 
 @media (max-width: 680px) {
@@ -746,12 +767,6 @@ body.menu-open { overflow: hidden; }
 
   /* About: the desktop indent made this line look centred on a phone */
   .about-intro { padding-left: 0; }
-  /* justified reads better in a narrow column; hyphenation stops it
-     opening rivers between words */
-  .about-text p {
-    text-align: justify;
-    hyphens: auto; -webkit-hyphens: auto;
-  }
 
   .to-top { right: 20px; bottom: 20px; width: 52px; height: 52px; }
   .to-top-icon { display: none; }
