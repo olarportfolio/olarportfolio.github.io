@@ -574,8 +574,6 @@ function wireLightboxZoom(lb) {
    it is not at 1x a pill offers the way back, because once zoomed the
    fixed header and burger sit outside the visual viewport and there is
    nothing else on screen to reach for.                                  */
-const ZOOM_KEY = 'olar:zoom-reset';
-
 let zoomPill = null;
 // set by watchPageZoom; called whenever either zoom level changes
 const ZOOMWATCH = { check: () => {} };
@@ -601,7 +599,14 @@ function zoomDock() {
 
 function showZoomPill(on) {
   const dock = on ? zoomDock() : zoomPill;
-  if (dock) dock.classList.toggle('is-visible', on);
+  if (!dock) return;
+  dock.classList.toggle('is-visible', on);
+  if (!on) zoomPillText('Reset zoom');     // back to the offer for next time
+}
+
+function zoomPillText(label) {
+  const btn = zoomPill && $('.zoom-reset', zoomPill);
+  if (btn && btn.textContent !== label) btn.textContent = label;
 }
 
 /* A fixed element is pinned to the layout viewport, so once the page is
@@ -616,38 +621,44 @@ function placeZoomDock() {
     ` scale(${1 / vv.scale})`;
 }
 
-/* Nothing in the platform sets the zoom level. Rewriting the viewport meta
-   to force it back is the usual trick and it crashed Safari outright, so
-   this reloads instead: every browser comes back at initial-scale=1. The
-   place the page was in is handed across so it returns, not restarts. */
-function resetPageZoom() {
-  try {
-    const lb = $('#lightbox');
-    const open = lb && lb.classList.contains('is-open');
-    sessionStorage.setItem(ZOOM_KEY, JSON.stringify({
-      y: Math.round(window.scrollY),
-      src: open ? $('.lb-img', lb).getAttribute('src') : '',
-      caption: open ? $('.lb-caption', lb).textContent : '',
-      search: location.search
-    }));
-    history.scrollRestoration = 'manual';
-  } catch { /* private browsing: the reload still clears the zoom */ }
-  location.reload();
-}
+/* Nothing in the platform sets the zoom level, and a reload does not clear
+   it either - browsers deliberately keep the scale across one. Briefly
+   pinning the viewport to a fixed scale is the only thing that brings a
+   pinched page back, so that is what this does: one change, released the
+   moment the page reports it is back at 1x rather than on a blind timer,
+   and never two in flight at once. The earlier version flipped the meta
+   twice inside 80ms, which is what took Safari down. */
+const VIEWPORT_BASE = (() => {
+  const m = $('meta[name="viewport"]');
+  return m ? m.content : '';
+})();
+const VIEWPORT_PINNED =
+  'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1';
 
-function restoreAfterZoomReset() {
-  let saved = null;
-  try {
-    saved = JSON.parse(sessionStorage.getItem(ZOOM_KEY) || 'null');
-    sessionStorage.removeItem(ZOOM_KEY);
-    history.scrollRestoration = 'auto';
-  } catch { return; }
-  if (!saved || saved.search !== location.search) return;
-  // the page scrolls smoothly by default, which would glide down from the
-  // top on arrival instead of simply being where it was
-  try { window.scrollTo({ top: saved.y || 0, behavior: 'instant' }); }
-  catch { window.scrollTo(0, saved.y || 0); }
-  if (saved.src) openLightbox(saved.src, saved.caption || '');
+let zoomPinned = false;
+
+function resetPageZoom() {
+  const meta = $('meta[name="viewport"]');
+  if (!meta || !VIEWPORT_BASE || zoomPinned) return;
+  const vv = window.visualViewport;
+  zoomPinned = true;
+
+  const release = () => {
+    if (!zoomPinned) return;
+    zoomPinned = false;
+    clearTimeout(timer);
+    if (vv) vv.removeEventListener('resize', settled);
+    try { meta.content = VIEWPORT_BASE; } catch { /* leave it pinned */ }
+    ZOOMWATCH.check();
+    // Some builds of Safari refuse to be rescaled from script at all. If
+    // the page is still zoomed, say the one thing that always works.
+    if (isPageZoomed()) zoomPillText('Double-tap to zoom out');
+  };
+  const settled = () => { if (Math.abs(vv.scale - 1) <= 0.02) release(); };
+  const timer = setTimeout(release, 900);
+
+  if (vv) vv.addEventListener('resize', settled);
+  try { meta.content = VIEWPORT_PINNED; } catch { release(); }
 }
 
 function watchPageZoom() {
@@ -953,5 +964,4 @@ document.addEventListener('DOMContentLoaded', () => {
   renderAbout();
   renderContact();
   watchPageZoom();
-  restoreAfterZoomReset();
 });
