@@ -569,20 +569,28 @@ body.menu-open { overflow: hidden; }
    a thin dark ring, a thick mid-grey one, and a light mat innermost.
    Widths are variables so the phone can scale the whole frame down
    in one place and keep the proportion. */
-.about-photo { width: 100%; max-width: 360px; position: relative; }
-.about-photo .thumb {
+/* The dark ring is this element's own padding rather than a shadow on the
+   thumb: a shadow's corners are the thumb's radius PLUS its spread, which
+   made the outer bands read rounder than the light one. Each band now
+   carries the radius it should actually show. */
+.about-photo {
+  width: 100%; max-width: 360px; position: relative;
   --ring-outer: 9px;    /* darkest, outermost */
   --ring-mid: 16px;     /* thickest */
   --ring-inner: 8px;    /* lightest, against the picture */
+  padding: var(--ring-outer);
+  background: #4F4F4F;
+  border-radius: 10px;
+}
+.about-photo .thumb {
   padding: var(--ring-inner);
   background: #C9C9C9;
   border: var(--ring-mid) solid #9A9A9A;
-  box-shadow: 0 0 0 var(--ring-outer) #4F4F4F;
-  border-radius: 20px;
+  border-radius: 6px;
   overflow: hidden;
 }
-/* square-round, not a pill - the picture echoes the frame's corners */
-.about-photo .thumb img { border-radius: 14px; }
+/* square-round, not a pill - the picture sits in the same family as the bands */
+.about-photo .thumb img { border-radius: 9px; }
 
 /* ============================================================
    CONTACT
@@ -668,13 +676,14 @@ body.menu-open { overflow: hidden; }
   .gallery { --gallery-cols: 2; }
   .also-strip { grid-template-columns: repeat(3, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
-  .about-photo { max-width: 300px; margin-inline: auto; }
-  /* the box loses 60px here, so the frame comes down with it */
-  .about-photo .thumb {
+  /* the box loses 60px here, so the frame and its corners come down with it */
+  .about-photo {
+    max-width: 300px; margin-inline: auto;
     --ring-outer: 7px; --ring-mid: 13px; --ring-inner: 7px;
-    border-radius: 17px;
+    border-radius: 8px;
   }
-  .about-photo .thumb img { border-radius: 12px; }
+  .about-photo .thumb { border-radius: 5px; }
+  .about-photo .thumb img { border-radius: 7px; }
 }
 
 @media (max-width: 680px) {
