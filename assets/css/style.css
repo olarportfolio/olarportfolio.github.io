@@ -787,7 +787,19 @@ body.menu-open { overflow: hidden; }
     flex: 0 0 var(--slide-w);
     transform-style: preserve-3d; will-change: transform, opacity;
   }
-  .work-grid.is-carousel .tile-overlay { opacity: .93; }
+  /* The wash is carried by the background rather than the element's own
+     opacity, so the artwork shows through while the label stays at full
+     strength - fading the whole layer would have taken the text with it.
+     The halo keeps the title readable over a light patch of cover. */
+  .work-grid.is-carousel .tile-overlay {
+    opacity: 1;
+    background: rgba(234, 234, 234, .58);
+  }
+  .work-grid.is-carousel .tile-overlay h3,
+  .work-grid.is-carousel .tile-overlay span {
+    text-shadow: 0 1px 12px rgba(255, 255, 255, .9),
+                 0 0 4px rgba(255, 255, 255, .8);
+  }
   .work-grid.is-carousel .car-btn { top: 50%; }
   .work-grid.is-carousel .car-prev { left: 4px; }
   .work-grid.is-carousel .car-next { right: 4px; }
