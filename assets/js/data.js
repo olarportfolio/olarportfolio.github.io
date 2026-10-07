@@ -18,6 +18,28 @@ const SITE = {
   heroTitle: "Hi, I’m Oliver Armando!",
   heroSubtitle: "Check out some of my work below",
 
+  /* ============================================================
+     IMPRESSUM  -  FILL THESE FOUR LINES IN
+     ------------------------------------------------------------
+     German law (§ 5 DDG) wants a real name and a postal address
+     where post can actually reach you. A P.O. box is not enough.
+     Until `street` and `city` are filled in, both legal pages show
+     a notice instead of a half-finished Impressum.
+
+     `phone` may be left null. A phone number is the safe reading
+     of the law; the European Court has accepted other routes that
+     allow fast, direct contact, so an answered inbox can do - but
+     a number is the choice that never has to be argued.
+     ============================================================ */
+  legal: {
+    name:   "Oliver Armando",      // your full legal name
+    street: null,                  // e.g. "Musterstraße 12"
+    city:   null,                  // e.g. "33602 Bielefeld"
+    country: "Deutschland",
+    email:  "oliver.sat@hotmail.com",
+    phone:  null                   // e.g. "+49 151 23456789"
+  },
+
   /* Contact page. Any link left as null is simply not rendered,
      so the page stays clean until you fill things in. */
   contact: {

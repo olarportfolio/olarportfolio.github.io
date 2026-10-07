@@ -649,6 +649,42 @@ body.menu-open { overflow: hidden; }
 .about-photo .thumb img { border-radius: var(--band-r); }
 
 /* ============================================================
+   LEGAL PAGES  (Impressum, Datenschutzerklärung)
+   Plain, narrow and quiet - these are read, not looked at.
+   ============================================================ */
+.legal {
+  padding: calc(var(--header-h) + 40px) var(--pad-x) 120px;
+  max-width: 760px; margin: 0 auto;
+}
+.legal h1 { font-size: clamp(30px, 3.4vw, 46px); margin-bottom: 1.2em; }
+.legal h2 {
+  font-size: clamp(16px, 1.3vw, 19px); margin: 2.2em 0 .6em;
+  color: var(--text);
+}
+.legal p { color: var(--text-body); line-height: 1.75; margin-bottom: 1em; }
+.legal a { color: var(--text); border-bottom: 1px solid #555; }
+.legal a:hover { border-bottom-color: var(--text); }
+.legal code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .92em; color: var(--text);
+}
+.legal-address { line-height: 1.9; }
+.legal-missing {
+  padding: 14px 18px; border-radius: 10px;
+  background: var(--surface); color: var(--text);
+}
+
+/* The way to the Impressum, on every page. Deliberately unobtrusive -
+   it is a legal necessity, not part of the work. */
+.site-footer {
+  display: flex; justify-content: center; align-items: center; gap: 10px;
+  padding: 34px var(--pad-x) 40px;
+  font-size: 13px; color: var(--text-muted);
+}
+.site-footer a { color: var(--text-muted); }
+.site-footer a:hover { color: var(--text); }
+
+/* ============================================================
    CONTACT
    ============================================================ */
 .contact { padding: calc(var(--header-h) + 90px) var(--pad-x) 160px; text-align: center; }

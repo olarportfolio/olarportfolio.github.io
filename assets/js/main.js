@@ -90,6 +90,15 @@ function renderChrome() {
       </span>
     </button>`);
 
+  // German law wants the Impressum reachable from every page in two
+  // clicks at most, so it lives in a footer rather than the nav.
+  document.body.insertAdjacentHTML('beforeend', `
+    <footer class="site-footer">
+      <a href="impressum.html">Impressum</a>
+      <span aria-hidden="true">·</span>
+      <a href="datenschutz.html">Datenschutz</a>
+    </footer>`);
+
   const toTop = $('.to-top');
   const header = $('.site-header');
   toTop.addEventListener('click', () =>
@@ -932,6 +941,159 @@ function renderAbout() {
     </div>`;
 }
 
+/* ---------- Impressum and Datenschutzerklärung ----------
+   Both are German, deliberately: they exist to satisfy German law and
+   are what a German reader - or a lawyer sending an Abmahnung - will
+   look for. The rest of the site stays English.                      */
+function legalAddress() {
+  const l = SITE.legal;
+  if (!l || !l.street || !l.city) return null;
+  return [l.name, l.street, l.city, l.country].filter(Boolean);
+}
+
+function addressMissing(what) {
+  return `
+    <p class="legal-missing">
+      Diese Seite ist noch nicht vollständig. Die Anschrift fehlt
+      ${what}. Sie wird in <code>assets/js/data.js</code> unter
+      <code>legal</code> eingetragen.
+    </p>`;
+}
+
+function renderImpressum() {
+  const el = $('#impressum');
+  if (!el) return;
+  const l = SITE.legal;
+  const addr = legalAddress();
+
+  el.innerHTML = `
+    <h1>Impressum</h1>
+    ${addr ? `
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p class="legal-address">${addr.join('<br>')}</p>` : addressMissing('noch')}
+
+    <h2>Kontakt</h2>
+    <p>
+      E-Mail: <a href="mailto:${l.email}">${l.email}</a>
+      ${l.phone ? `<br>Telefon: <a href="tel:${l.phone.replace(/\s/g, '')}">${l.phone}</a>` : ''}
+    </p>
+
+    <h2>Verantwortlich für den Inhalt</h2>
+    <p>${l.name}${addr ? ', Anschrift wie oben' : ''}</p>
+
+    <h2>Art des Angebots</h2>
+    <p>
+      Diese Website ist ein persönliches Portfolio und dient allein der
+      Darstellung eigener gestalterischer Arbeiten. Es werden keine Waren
+      oder Dienstleistungen angeboten und keine Verträge geschlossen.
+    </p>
+
+    <h2>Verbraucherstreitbeilegung</h2>
+    <p>
+      Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungs­verfahren
+      vor einer Verbraucherschlichtungsstelle teilzunehmen.
+    </p>
+
+    <h2>Urheberrecht</h2>
+    <p>
+      Sämtliche auf dieser Website gezeigten Arbeiten, Bilder und Texte sind
+      urheberrechtlich geschützt. Eine Verwendung außerhalb der Grenzen des
+      Urheberrechts bedarf meiner vorherigen schriftlichen Zustimmung.
+    </p>`;
+}
+
+function renderDatenschutz() {
+  const el = $('#datenschutz');
+  if (!el) return;
+  const l = SITE.legal;
+  const addr = legalAddress();
+
+  el.innerHTML = `
+    <h1>Datenschutzerklärung</h1>
+
+    <h2>1. Verantwortlicher</h2>
+    ${addr
+      ? `<p class="legal-address">${addr.join('<br>')}</p>`
+      : addressMissing('noch')}
+    <p>E-Mail: <a href="mailto:${l.email}">${l.email}</a></p>
+
+    <h2>2. Grundsätzliches</h2>
+    <p>
+      Diese Website ist eine statische Seite. Sie setzt keine Cookies, bindet
+      keine Analyse- oder Tracking-Dienste ein, speichert nichts im Browser
+      der Besucherinnen und Besucher und führt keine Benutzerkonten. Eine
+      Einwilligungsabfrage („Cookie-Banner“) ist deshalb nicht erforderlich.
+    </p>
+
+    <h2>3. Hosting und Server-Logfiles</h2>
+    <p>
+      Die Website wird bei GitHub Pages gehostet, einem Dienst der GitHub,
+      Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA
+      (Tochterunternehmen der Microsoft Corporation). Beim Aufruf der Seite
+      verarbeitet GitHub technisch notwendige Zugriffsdaten, insbesondere
+      IP-Adresse, Datum und Uhrzeit des Zugriffs, die angeforderte Datei
+      sowie Angaben zu Browser und Betriebssystem.
+    </p>
+    <p>
+      Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Das berechtigte Interesse
+      liegt im sicheren und stabilen Betrieb der Website. Die Verarbeitung
+      findet auch in den USA statt; GitHub stützt den Datentransfer auf das
+      EU-US Data Privacy Framework sowie auf Standardvertragsklauseln.
+      Auf Umfang und Dauer der Speicherung durch GitHub habe ich keinen
+      Einfluss. Näheres unter
+      <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement"
+         target="_blank" rel="noopener">docs.github.com</a>.
+    </p>
+
+    <h2>4. Eingebettete Videos (YouTube)</h2>
+    <p>
+      Einzelne Arbeiten werden als Video gezeigt. Diese Videos sind
+      <strong>nicht automatisch eingebunden</strong>: Zu sehen ist zunächst
+      nur ein Vorschaubild, das von diesem Server geladen wird. Erst wenn Sie
+      ein Video ausdrücklich anklicken, wird eine Verbindung zu
+      <code>youtube-nocookie.com</code> aufgebaut (Google Ireland Limited,
+      Gordon House, Barrow Street, Dublin 4, Irland). Dabei werden Ihre
+      IP-Adresse und Angaben zu Ihrem Gerät an Google übertragen; sind Sie
+      bei Google angemeldet, kann der Abruf Ihrem Konto zugeordnet werden.
+    </p>
+    <p>
+      Rechtsgrundlage ist Ihre Einwilligung nach Art. 6 Abs. 1 lit. a DSGVO,
+      die Sie durch das Anklicken des Videos erteilen. Solange Sie kein Video
+      starten, werden keine Daten an Google übermittelt. Näheres unter
+      <a href="https://policies.google.com/privacy" target="_blank"
+         rel="noopener">policies.google.com/privacy</a>.
+    </p>
+
+    <h2>5. Schriftarten</h2>
+    <p>
+      Die Schrift „Quicksand“ wird von Google Fonts geladen (Google Ireland
+      Limited). Dabei wird beim Seitenaufruf Ihre IP-Adresse an Google
+      übertragen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; das
+      berechtigte Interesse liegt in der einheitlichen Darstellung der Seite.
+    </p>
+
+    <h2>6. Ihre Rechte</h2>
+    <p>
+      Sie haben das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung
+      (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung
+      (Art. 18), Datenübertragbarkeit (Art. 20) sowie das Recht, einer
+      Verarbeitung zu widersprechen (Art. 21). Eine erteilte Einwilligung
+      können Sie jederzeit mit Wirkung für die Zukunft widerrufen
+      (Art. 7 Abs. 3 DSGVO).
+    </p>
+    <p>
+      Unabhängig davon steht Ihnen ein Beschwerderecht bei einer
+      Datenschutz-Aufsichtsbehörde zu (Art. 77 DSGVO). Zuständig ist die
+      Behörde Ihres Wohnsitzes oder meines Sitzes.
+    </p>
+
+    <h2>7. Kontakt</h2>
+    <p>
+      Für Fragen zum Datenschutz erreichen Sie mich unter
+      <a href="mailto:${l.email}">${l.email}</a>.
+    </p>`;
+}
+
 /* ---------- Contact ---------- */
 function renderContact() {
   const el = $('#contact');
@@ -978,5 +1140,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCategory();
   renderAbout();
   renderContact();
+  renderImpressum();
+  renderDatenschutz();
   watchPageZoom();
 });
